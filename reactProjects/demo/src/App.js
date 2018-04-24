@@ -3,6 +3,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Datepicker from 'material-ui/DatePicker';
 import { Toggle } from 'material-ui';
 import { Card, CardHeader } from 'material-ui/Card';
+import Paper from 'material-ui/Paper'
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn, } from 'material-ui/Table'
 import FlatButton from 'material-ui/FlatButton';
 import moment from 'moment';
@@ -11,7 +12,7 @@ import axios from 'axios';
 function Row(props) {
   return (
     <TableRow key={props.index}>
-      <TableRowColumn>{props.index}</TableRowColumn>
+      <TableRowColumn>{props.record.CARD_ID}</TableRowColumn>
       <TableRowColumn>{props.record.PDATE}</TableRowColumn>
       <TableRowColumn>{props.record.PFIRST}</TableRowColumn>
       <TableRowColumn>{props.record.PLAST}</TableRowColumn>
@@ -121,8 +122,7 @@ class App extends React.Component {
               </Card>
             </div>
             <div style={{ marginLeft: '50px', float: 'left', width: '70%' }}>
-              <Card>
-                <CardHeader title="记录列表" />
+              <Paper zDepth={5} >
                 <Table height='600px'>
                   <TableHeader displaySelectAll={false}>
                     <TableRow>
@@ -140,7 +140,7 @@ class App extends React.Component {
                     {rows}
                   </TableBody>
                 </Table>
-              </Card>
+              </Paper>
             </div>
           </div>
         </MuiThemeProvider>
