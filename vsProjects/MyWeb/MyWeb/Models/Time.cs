@@ -7,11 +7,7 @@ namespace MyWeb.Models
 {
     public class Time
     {
-        public string startYear { get; set; }
-        public string startMonth { get; set; }
-        public string startDay { get; set; }
-        public string endYear { get; set; }
-        public string endMonth { get; set; }
-        public string endDay { get; set; }
+        public string startDate { get; set; }
+        public string endDate { get; set; }
     }
 }

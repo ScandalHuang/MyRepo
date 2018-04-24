@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import axios from 'axios';
 import Datepicker from "./App";
 import Table from './table';
-import { AxiosProvider, Request, Get, Delete, Head, Post, Put, Patch, withAxios } from 'react-axios'
+
 
 class Container extends Component {
     constructor(props) {
@@ -30,7 +30,7 @@ class Container extends Component {
     }
 
     componentDidMount(){
-        axios.defaults.baseURL='http://10.214.9.109:8080/api/Record';
+        axios.defaults.baseURL='http://localhost:52536/api/Record';
         axios.get('')
             .then(res=>{
                 const array=JSON.parse(res.data);
