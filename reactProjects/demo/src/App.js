@@ -11,7 +11,7 @@ import axios from 'axios';
 
 function Row(props) {
   return (
-    <TableRow key={props.index}>
+    <TableRow key={props.index} displaySelectAll>
       <TableRowColumn>{props.record.CARD_ID}</TableRowColumn>
       <TableRowColumn>{props.record.PDATE}</TableRowColumn>
       <TableRowColumn>{props.record.PFIRST}</TableRowColumn>
@@ -124,7 +124,7 @@ class App extends React.Component {
             <div style={{ marginLeft: '50px', float: 'left', width: '70%' }}>
               <Paper zDepth={5} >
                 <Table height='600px'>
-                  <TableHeader displaySelectAll={false}>
+                  <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                     <TableRow>
                       <TableHeaderColumn>CARD_ID</TableHeaderColumn>
                       <TableHeaderColumn>PDATE</TableHeaderColumn>
