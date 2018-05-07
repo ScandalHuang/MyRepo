@@ -40,3 +40,46 @@ c:\users\wenfeng.huang\documents\visual studio 2013\Projects\MyWeb\MyWeb\bin\Sys
 c:\users\wenfeng.huang\documents\visual studio 2013\Projects\MyWeb\MyWeb\bin\Antlr3.Runtime.pdb
 c:\users\wenfeng.huang\documents\visual studio 2013\Projects\MyWeb\MyWeb\obj\Release\MyWeb.dll
 c:\users\wenfeng.huang\documents\visual studio 2013\Projects\MyWeb\MyWeb\obj\Release\MyWeb.pdb
+D:\repo\vsProjects\MyWeb\MyWeb\bin\MyWeb.dll.config
+D:\repo\vsProjects\MyWeb\MyWeb\bin\MyWeb.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\MyWeb.pdb
+D:\repo\vsProjects\MyWeb\MyWeb\bin\Antlr3.Runtime.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\EntityFramework.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\EntityFramework.SqlServer.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\Microsoft.Web.Infrastructure.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\Newtonsoft.Json.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\Oracle.ManagedDataAccess.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\Oracle.ManagedDataAccess.EntityFramework.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\Swashbuckle.Core.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Net.Http.Formatting.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Cors.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Helpers.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Http.Cors.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Http.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Http.WebHost.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Mvc.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Optimization.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Razor.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.WebPages.Deployment.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.WebPages.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.WebPages.Razor.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\WebActivatorEx.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\WebGrease.dll
+D:\repo\vsProjects\MyWeb\MyWeb\bin\EntityFramework.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\EntityFramework.SqlServer.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\Newtonsoft.Json.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Net.Http.Formatting.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Http.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Http.Cors.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Helpers.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Http.WebHost.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Mvc.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Optimization.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.Razor.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.WebPages.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.WebPages.Deployment.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\System.Web.WebPages.Razor.xml
+D:\repo\vsProjects\MyWeb\MyWeb\bin\Antlr3.Runtime.pdb
+D:\repo\vsProjects\MyWeb\MyWeb\obj\Release\MyWeb.csprojResolveAssemblyReference.cache
+D:\repo\vsProjects\MyWeb\MyWeb\obj\Release\MyWeb.dll
+D:\repo\vsProjects\MyWeb\MyWeb\obj\Release\MyWeb.pdb
