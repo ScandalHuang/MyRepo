@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Extract method &apos;private String getLtSql(String itemnum, String description)&apos; from &apos;mro.app.reportView.dao.R2LTListDao.getList()&apos; to &apos;mro.app.reportView.dao.R2LTListDao&apos;&#x0D;&#x0A;- Original project: &apos;MRO&apos;&#x0D;&#x0A;- Method name: &apos;getLtSql&apos;&#x0D;&#x0A;- Destination type: &apos;mro.app.reportView.dao.R2LTListDao&apos;&#x0D;&#x0A;- Declared visibility: &apos;private&apos;" comments="false" description="Extract method &apos;getLtSql&apos;" destination="0" exceptions="false" flags="786434" id="org.eclipse.jdt.ui.extract.method" input="/src&lt;mro.app.reportView.dao{R2LTListDao.java" name="getLtSql" replace="false" selection="597 582" stamp="1511334605166" version="1.0" visibility="2"/>
-</session>

@@ -1,3 +1,0 @@
-INDEX VERSION 1.130
-D:\workspaces\MRO\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\721427876.index
-\MRO\src
