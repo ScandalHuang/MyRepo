@@ -1,0 +1,24 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<p:tabView scrollable="true" dynamic="true" cache="true">
+			<p:tab id="tab1">
+				<f:facet name="title">
+					<i18n:outputText value="item.search.report.buyer" />
+				</f:facet>
+				<ui:include src="buyerItemSupplierList.xhtml" />
+			</p:tab>
+			<p:tab id="tab2">
+				<f:facet name="title">
+					<i18n:outputText value="ipm.r2.predict" />
+				</f:facet>
+				<ui:include src="ipmBuyerPreductReport.xhtml" />
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>

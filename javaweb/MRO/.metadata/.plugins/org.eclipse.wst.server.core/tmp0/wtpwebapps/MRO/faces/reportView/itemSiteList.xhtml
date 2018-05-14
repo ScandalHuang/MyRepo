@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form prependId="false">
+		<c:set var="bean" value="#{ItemSiteListBean}" />
+		<div align="center">
+			<p:panelGrid  style="width:100%;word-break:break-all;"
+				columns="6">
+				<f:facet name="header">
+								料號SITE資訊
+							</f:facet>
+				<p:column>料號：
+						</p:column>
+				<p:column>
+					<p:inputText value="#{bean.itemnum}" />
+				</p:column>
+				<p:column>
+					<font color="red">※</font>是否啟用：
+						</p:column>
+				<p:column>
+					<p:selectOneMenu filter="true" filterMatchMode="contains"
+						scrollHeight="100" style="width:180px;text-align: left;"
+						value="#{bean.enableFlag}" required="true" id="enableFlag"
+						label="是否啟用">
+						<f:selectItem itemLabel="請選擇" itemValue="" />
+						<f:selectItem itemLabel="凍結" itemValue="is null" />
+						<f:selectItem itemLabel="啟用" itemValue="Y" />
+					</p:selectOneMenu>
+					<p:message for="enableFlag" />
+				</p:column>
+				<p:column>
+							SITE：
+						</p:column>
+				<p:column>
+					<p:selectOneMenu filter="true" filterMatchMode="contains"
+						scrollHeight="100" style="width:180px;text-align: left;"
+						value="#{bean.locationSite}">
+						<f:selectItem itemLabel="請選擇" itemValue="" />
+						<f:selectItems value="#{SystemConfigBean.lSiteOption}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+							PLANT：
+						</p:column>
+				<p:column>
+					<p:selectOneMenu filter="true" filterMatchMode="contains"
+						scrollHeight="100" style="width:180px;text-align: left;"
+						value="#{bean.plant}">
+						<f:selectItem itemLabel="請選擇" itemValue="" />
+						<f:selectItems value="#{SystemConfigBean.lOption}" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>
+							更新起始區間：
+						</p:column>
+				<p:column>
+							<p:calendar navigator="true"  id="strDate" label="更新起始區間"
+								value="#{bean.strDate}" size="13" showOn="button" />
+					<p:message for="strDate" />
+				</p:column>
+				<p:column>
+							更新截止區間：
+						</p:column>
+				<p:column>
+							<p:calendar navigator="true"  id="endDate" label="更新截止區間"
+								value="#{bean.endDate}" size="13" showOn="button" />
+					<p:message for="endDate" />
+				</p:column>
+				<f:facet name="footer">
+					<div align="center">
+						<p:commandButton icon="ui-icon-search" value="Search"
+							actionListener="#{bean.search}" update="@form"
+							style="margin-top:5px" />
+					</div>
+				</f:facet>
+			</p:panelGrid>
+			<BR />
+			<p:dataTable paginatorPosition="bottom" id="iSiteQuery"
+				paginator="true" var="listQuery" rows="10" value="#{bean.list}">
+				<f:facet name="header">
+						搜尋筆數：#{bean.list.size()}
+				</f:facet>
+				<p:columns value="#{bean.columns}" var="column"
+					sortBy="#{listQuery[column.property]}" columnIndexVar="colIndex"
+					style="text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="#{column.header}" />
+					</f:facet>
+					<h:outputText value="#{listQuery[column.property]}" />
+				</p:columns>
+			</p:dataTable>
+		</div>
+		<p:panelGrid columns="2">
+			<p:panel header="Export All Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="iSiteQuery"
+						fileName="#{currentDate.getTime()}E" />
+				</h:commandLink>
+			</p:panel>
+		</p:panelGrid>
+	</h:form>
+</ui:composition>

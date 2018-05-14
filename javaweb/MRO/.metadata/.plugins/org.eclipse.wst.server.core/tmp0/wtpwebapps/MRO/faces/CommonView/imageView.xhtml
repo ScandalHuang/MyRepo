@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template.xhtml">
+	<ui:define name="page-content">
+		<h:form id="imageForm" prependId="false">
+			<p:dataList value="#{ImageViewBean.fileUploadForm.listAttachment}"
+				var="listAttachmentImage" id="listAttachmentImage" type="ordered">
+				<h:commandLink
+					actionListener="#{ImageViewBean.download(listAttachmentImage)}"
+					style="margin-right:20px;" 
+					>  
+				<font color="blue">#{listAttachmentImage.fileName}</font>
+				</h:commandLink> <br/><br/>
+						<p:graphicImage value="#{SystemConfigBean.photo}" >
+							<f:param name="fileId" value="#{listAttachmentImage.fileId}" />
+						</p:graphicImage>
+			</p:dataList>
+		</h:form>
+	</ui:define>
+</ui:composition>

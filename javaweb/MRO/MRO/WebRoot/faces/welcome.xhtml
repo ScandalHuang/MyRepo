@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:cmi="http://innolux.com/menu/i18n"
+                template="/faces/template/template.xhtml">
+
+	<ui:define name="page-content">
+
+    
+    
+   <p:layout style="width:99%;height:100%; " id="layout">  
+
+      <!-- <p:layoutUnit position="north"  resizable="true" size="100" minSize="120" maxSize="120" closable="true" collapsible="true"> 
+        		<h:form>
+			<h:outputText value="Welcome."/><br/>
+			<h:outputText value="#{CMI_i18n.get('lang')}:" />
+			<div>
+			#<cmi:i18n value="langName"/>#
+			</div>
+			*<cmi:i18n value="langName" lang="zh_TW"/>*
+			<br/>
+			@<cmi:i18n value="langName" lang="zh_CN"/>@
+			<br/>
+			$<cmi:i18n value="langName" lang="en_US"/>$
+			<br/>
+			<p:selectOneMenu value="#{CMI_i18n.language}">
+				<f:selectItem itemLabel="請選擇" itemValue="" />
+				<f:selectItem itemLabel="#{CMI_i18n.get('zh_TW', 'langName')}" itemValue="zh_TW" />
+				<f:selectItem itemLabel="#{CMI_i18n.get('zh_CN', 'langName')}" itemValue="zh_CN" />
+				<f:selectItem itemLabel="#{CMI_i18n.get('en_US', 'langName')}" itemValue="en_US" />
+			</p:selectOneMenu>
+			<h:commandButton value="#{CMI_i18n.get('confirm')}" /><br/>
+	        <h:outputText value="#{CMI_i18n.get('lang')}"/><br/>
+    	    <h:outputText value="#{CMI_i18n.get('confirm')}"/><br/>
+       		<h:outputText value="#{CMI_i18n.get('enter')}"/><br/>
+        	<h:outputText value="#{CMI_i18n.get('langName')}"/><br/>
+		</h:form> 
+ .    </p:layoutUnit>   -->
+ 
+  <p:layoutUnit position="west" resizable="true"    minSize="100" maxSize="720">  
+  <p:dialog modal="true" widgetVar="statusDialog" header="Status"   
+		        draggable="false" closable="false" appendTo="@(body)">  
+		    <p:graphicImage value="../resources/images/ajaxloadingbar.gif" />  
+		</p:dialog>  
+    
+             
+        <h:form>  
+      
+             <ui:include src="../faces/todo/toDoList.xhtml" />  
+         </h:form>   
+        
+     </p:layoutUnit>  
+   
+        <p:layoutUnit position="center">  
+  
+        
+          <ui:include src="../faces/bbs/BBSShow.xhtml" />  
+     </p:layoutUnit>  
+ </p:layout>  
+ </ui:define>   
+    
+    
+</ui:composition>

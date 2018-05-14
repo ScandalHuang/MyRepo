@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="ExclusiveReturnReportMDForm" prependId="false">
+		<div align="center">
+			<p:panelGrid id="searchMD" style="width:100%;word-break:break-all;">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="6">
+							<i18n:outputText value="Exclusive.rate" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row><p:column>區域：
+					</p:column>
+					<p:column>
+						<p:selectOneMenu filter="true" filterMatchMode="contains"
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.slocationSite2}">
+							<f:selectItem itemValue="" itemLabel="請選擇" />
+							<f:selectItem itemValue="失效區域" itemLabel="失效區域" />
+							<f:selectItems value="#{SystemConfigBean.lSiteOption}" />
+							<!-- <p:ajax update="sOrganizationCode2" process="@this" /> -->
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<!--<i18n:outputText value="siteid" />-->
+					</p:column>
+					<p:column>
+						<!-- <p:selectOneMenu filter="true" filterMatchMode="contains" id="sOrganizationCode2"
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.organizationCode2}"
+							style="text-align:left;width:200px;">
+							<f:selectItem itemValue="" itemLabel="請選擇" />
+										<f:selectItems value="#{SystemConfigBean.getLocationMaps(ExclusiveReturnReportBean.exclusiveReturnReportForm.slocationSite2)}" 
+											var="maps" itemLabel="#{maps.organizationName}"  itemValue="#{maps.organizationCode}" />
+						</p:selectOneMenu> -->
+					</p:column>
+					<p:column>
+						<i18n:outputText value="dept_code" />
+					</p:column>
+					<p:column >
+						<p:inputText
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.deptNo2}" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<i18n:outputText style="color:red;" value="NonNullMark" />
+						<i18n:outputText value="start.date" />
+					</p:column>
+					<p:column>
+						<p:calendar
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.stDate2}"
+							size="15" showOn="button" readonlyInput="true" />
+					</p:column>
+					<p:column>
+						<i18n:outputText style="color:red;" value="NonNullMark" />
+						<i18n:outputText value="issue.ed.date" />
+					</p:column>
+					<p:column>
+						<p:calendar
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.issueEdDate2}"
+							size="15" showOn="button" readonlyInput="true" />
+					</p:column>
+					<p:column>
+						<i18n:outputText style="color:red;" value="NonNullMark" />
+						<i18n:outputText value="return.ed.date" />
+					</p:column>
+					<p:column>
+						<p:calendar
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.returnEdDate2}"
+							size="15" showOn="button" readonlyInput="true" />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column colspan="8" style="text-align:center;">
+						<p:commandButton icon="ui-icon-search" value="Search"
+							update="errMDlist"
+							actionListener="#{ExclusiveReturnReportBean.searchMD}" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<BR />
+			<p:dataTable var="errMDlist" paginatorPosition="bottom"
+				id="errMDlist" paginator="true" rows="10"
+				value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.list2}">
+				<f:facet name="header">
+						搜尋筆數：#{ExclusiveReturnReportBean.exclusiveReturnReportForm.list2.size()}
+				</f:facet>
+				<!-- <h:outputText value="#{SystemConfigBean.locationMap[errMDlist['ORGANIZATION_CODE']].locationSiteMap.locationSite}" />
+				 -->
+				 <!--
+			<p:column style="text-align:center">
+				<f:facet name="header">區域</f:facet>				
+				 <h:outputText value="#{errMDlist['lOCATION_SITE']}" />
+			</p:column>
+				 <p:column style="text-align:center">
+					<f:facet name="header">廠區</f:facet>
+					<h:outputText value="#{errMDlist['ORGANIZATION_CODE']}" />
+				</p:column> -->
+				<p:column style="text-align:center">
+					<f:facet name="header">部門</f:facet>
+					<h:outputText value="#{errMDlist['MANAGE_BINNUM']}" />
+				</p:column>
+				<p:column style="text-align:center">
+					<f:facet name="header">ISSUE_CNT</f:facet>
+					<h:outputText value="#{errMDlist['ITEM_COUNT']}" />
+				</p:column>
+				<p:column style="text-align:center">
+					<f:facet name="header">BAL_CNT</f:facet>
+					<h:outputText value="#{errMDlist['ITEM_RATE']}" />
+				</p:column>
+				<p:column style="text-align:center">
+					<f:facet name="header">RTN_RATIO</f:facet>
+					<h:outputText value="#{errMDlist['ALL_RATE']}" />
+				</p:column>
+			</p:dataTable>
+		</div>
+		<p:panelGrid columns="2">
+			<p:panel header="Export All Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="errMDlist"
+						fileName="#{currentDate.getTime()}E" />
+				</h:commandLink>
+			</p:panel>
+		</p:panelGrid>
+	</h:form>
+</ui:composition>

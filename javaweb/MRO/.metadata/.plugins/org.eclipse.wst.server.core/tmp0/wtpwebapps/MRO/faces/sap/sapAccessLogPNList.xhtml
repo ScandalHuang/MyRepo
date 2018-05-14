@@ -1,0 +1,116 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="sapAccessLogPNListForm" prependId="false">
+		<div align="center">
+			<p:panelGrid  style="width:100%;word-break:break-all;">
+				<f:facet name="header">
+					<p:row>
+						<p:column>
+							<h:outputText value="料號" />
+						</p:column>
+						<p:column>
+							<h:outputText value="傳檔狀態" />
+						</p:column>
+						<p:column>
+							<h:outputText value="料號PN狀態" />
+						</p:column>
+						<p:column>
+							<h:outputText value="傳檔區間" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column style="text-align:center">
+						<p:inputText value="#{SapAccessQueryBean.sapForm.material2}" size="20" />
+					</p:column>
+					<p:column style="text-align:center">
+						<p:selectOneMenu value="#{SapAccessQueryBean.sapForm.status2}"
+							style="width:90px;text-align:left;">
+							<f:selectItem itemValue="" itemLabel="請選擇" />
+							<f:selectItem itemValue="S" itemLabel="傳檔成功" />
+							<f:selectItem itemValue="E" itemLabel="傳檔失敗" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column style="text-align:center">
+						<p:selectOneMenu value="#{SapAccessQueryBean.sapForm.in21}"
+							style="width:90px;text-align:left;">
+							<f:selectItem itemValue="" itemLabel="請選擇" />
+							<f:selectItem itemValue="Y" itemLabel="已拋轉PN成功" />
+							<f:selectItem itemValue="N" itemLabel="未拋轉" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column style="text-align:center">
+						<p:calendar id="beginDate2"
+							value="#{SapAccessQueryBean.sapForm.beginDate2}" size="13"
+							showOn="button" readonlyInput="true" />
+						<p:commandButton icon="ui-icon-close" update="beginDate2"
+							style="width:24px;height:24px;">
+							<f:setPropertyActionListener
+								target="#{SapAccessQueryBean.sapForm.beginDate2}" value="" />
+						</p:commandButton>
+											 ~ 
+						<p:calendar id="endDate2" value="#{SapAccessQueryBean.sapForm.endDate2}"
+							size="13" showOn="button" readonlyInput="true" />
+						<p:commandButton icon="ui-icon-close" update="endDate2"
+							style="width:24px;height:24px;">
+							<f:setPropertyActionListener
+								target="#{SapAccessQueryBean.sapForm.endDate2}" value="" />
+						</p:commandButton>
+					</p:column>
+				</p:row>
+				<f:facet name="footer">
+					<p:row>
+						<p:column colspan="7" style="text-align: center">
+							<p:commandButton value="Search" 
+								
+								actionListener="#{SapAccessQueryBean.onSearchPN}"
+								update="listSapAccessLogPn"
+								style="margin-top:5px" />
+						</p:column>
+					</p:row>
+				</f:facet>
+			</p:panelGrid>
+		</div>
+		<br />
+		<p:dataTable var="listSapAccessLogPn"  id="listSapAccessLogPn" paginatorPosition="bottom"
+			value="#{SapAccessQueryBean.sapForm.listSapAccessLogPn}" paginator="true"
+			rows="10">
+			<p:column sortBy="#{listSapAccessLogPn[0].material}">
+				<f:facet name="header">
+					<h:outputText value="料號" />
+				</f:facet>
+				<h:outputText value="#{listSapAccessLogPn[0].material}" />
+			</p:column>
+			<p:column sortBy="#{listSapAccessLogPn[0].type}">
+				<f:facet name="header">
+					<h:outputText value="傳檔狀態" />
+				</f:facet>
+				<h:outputText value="#{listSapAccessLogPn[0].type=='E'?'傳檔失敗':'傳檔成功'}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="訊息" />
+				</f:facet>
+				<h:outputText value="#{listSapAccessLogPn[0].loginfo}" />
+			</p:column>
+			<p:column sortBy="#{listSapAccessLogPn[0].accessTime}">
+				<f:facet name="header">
+					<h:outputText value="傳檔日期" />
+				</f:facet>
+				<h:outputText value="#{listSapAccessLogPn[0].accessTime}">
+					<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+				</h:outputText>
+			</p:column>
+			<p:column sortBy="#{listSapAccessLogPn[1].in21}" style="text-align:center;">
+				<f:facet name="header">
+					<h:outputText value="料號主檔PN拋轉狀態" />
+				</f:facet>
+				<h:outputText value="#{listSapAccessLogPn[1].in21=='Y'?'已拋轉PN成功':'未拋轉'}" />
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</ui:composition>

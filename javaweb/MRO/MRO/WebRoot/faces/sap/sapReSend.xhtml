@@ -1,0 +1,90 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="sapReSend" prependId="false">
+		<div align="center">
+			<p:panelGrid id="reSend" style="width:500px;word-break:break-all;">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="2">
+							<h:outputText value="料號SAP重傳" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column>
+						請輸入需重傳之料號: 
+					</p:column>
+					<p:column>
+						<p:inputText value="#{SapAccessQueryBean.sapForm.addItemnum}" id="addItemnum" size="20"
+									readonly="true" />
+								<p:commandButton icon="ui-icon-search"
+									oncomplete="PF('listItemCommonFormDialog').show();" >
+									<f:setPropertyActionListener
+										target="#{ListItemCommonBean.object}"
+										value="#{SapAccessQueryBean}" />
+									<f:setPropertyActionListener
+										target="#{ListItemCommonBean.updateView}"
+										value="tabView:addItemnum" />
+								</p:commandButton>
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						ACTION: 
+					</p:column>
+					<p:column>
+						<p:selectOneMenu value="#{SapAccessQueryBean.sapForm.addType}"
+							style="width:150px;text-align:left;">
+							<f:selectItem itemValue="" itemLabel="請選擇" />
+							<f:selectItem itemValue="byPlant" itemLabel="ByPlant拋轉" />
+							<f:selectItem itemValue="bySite" itemLabel="BySite拋轉" />
+							<p:ajax update="reSend" process="@form" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row rendered="#{SapAccessQueryBean.sapForm.addType=='byPlant'}">
+					<p:column>
+						PLANT_CODE: 
+					</p:column>
+					<p:column>
+						<p:selectOneMenu value="#{SapAccessQueryBean.sapForm.addPlantCode}"
+							filter="true"
+							filterMatchMode="contains"
+							style="width:90px;text-align:left;">
+							<f:selectItems value="#{SapAccessQueryBean.sapForm.plantCodeMap}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row rendered="#{SapAccessQueryBean.sapForm.addType=='bySite'}">
+					<p:column>
+						Site: 
+					</p:column>
+					<p:column>
+						<p:selectOneMenu value="#{SapAccessQueryBean.sapForm.addSite}"
+							filter="true"
+							filterMatchMode="contains"
+							style="width:90px;text-align:left;">
+							<f:selectItems value="#{SystemConfigBean.siteMap}" />
+						</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<f:facet name="footer">
+					<p:row>
+						<p:column colspan="2" style="text-align: center">
+							<p:commandButton value="重傳SAP" 
+								
+								actionListener="#{SapAccessQueryBean.addItemSiteTransferLog}"
+								style="margin-top:5px" />
+						</p:column>
+					</p:row>
+				</f:facet>
+			</p:panelGrid>
+		</div>
+
+
+	</h:form>
+</ui:composition>

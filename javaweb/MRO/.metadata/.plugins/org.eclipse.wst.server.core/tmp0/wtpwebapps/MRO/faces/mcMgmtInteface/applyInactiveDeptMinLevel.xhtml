@@ -1,0 +1,105 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+				<h:form id="invbalancesListForm" prependId="false">
+					<p:dataTable var="invbalancesList" paginatorPosition="bottom"
+						id="invbalancesList" paginator="true" rows="10"
+						value="#{ApplyInactiveDeptMinLevelBean.invbalancesList}">
+						<f:facet name="header" style="text-align:left;">  
+		           搜索結果：  #{ApplyInactiveDeptMinLevelBean.invbalancesList.size()} 筆
+		           
+		           <p:commandButton value="三年內下修記錄" icon="ui-icon-disk"
+								update=":inactiveMinLevelForm:inactiveRecord"
+								actionListener="#{ListInvbalancesInactiveRecodeBean.getInactiveDeptList}"
+								oncomplete="PF('inactiveMinLevelDialog').show();"
+								 
+					/>
+		        </f:facet>
+						<p:column value="#{invbalancesList.itemnum}"
+							sortBy="#{invbalancesList.itemnum}" style="text-align:center;">
+							<f:facet name="header">
+								<i18n:outputText value="itemnum" />
+							</f:facet>
+							<h:outputText value="#{invbalancesList.itemnum}" />
+						</p:column><p:column value="#{SystemConfigBean.locationMap[invbalancesList.siteid].organizationCode}"
+							sortBy="#{invbalancesList.itemnum}" style="text-align:center;">
+							<f:facet name="header">
+								<i18n:outputText value="siteid" />
+							</f:facet>
+							<h:outputText value="#{SystemConfigBean.locationMap[invbalancesList.siteid].organizationCode}" />
+						</p:column>
+						<p:column value="#{invbalancesList.binnum}"
+							sortBy="#{invbalancesList.binnum}" style="text-align:center;">
+							<f:facet name="header">
+								<i18n:outputText value="binnum" />
+							</f:facet>
+							<h:outputText value="#{invbalancesList.binnum}" />
+						</p:column>
+						<p:column value="#{invbalancesList.location}"
+							sortBy="#{invbalancesList.location}" style="text-align:center;">
+							<f:facet name="header">
+								<i18n:outputText value="store_room" />
+							</f:facet>
+							<h:outputText value="#{invbalancesList.location}" />
+						</p:column>
+						<p:column value="#{invbalancesList.minlevel}"
+							sortBy="#{invbalancesList.minlevel}" style="text-align:center;">
+							<f:facet name="header">
+								R2平均月耗用量
+							</f:facet>
+							<h:outputText value="#{invbalancesList.minlevel}" />
+						</p:column>
+						<p:column value="#{invbalancesList.sstock}"
+							sortBy="#{invbalancesList.minlevel}" style="text-align:center;">
+							<f:facet name="header">
+								R2最低安全庫存
+							</f:facet>
+							<h:outputText value="#{invbalancesList.sstock}" />
+						</p:column>
+						<p:column style="width:100px">
+							<f:facet name="header">
+								R1月用量/R2重訂購
+							</f:facet>
+							<p:commandButton value="月用量下修為0" icon="ui-icon-disk"
+								update=":tabView:updateMinLevelDialogForm"
+								process="@form" oncomplete="PF('updateMinLevelDialog').show();" >
+								<f:setPropertyActionListener 
+								target="#{ApplyInactiveDeptMinLevelBean.invbalances}" 
+								value="#{invbalancesList}" />
+								<f:setPropertyActionListener 
+								target="#{ApplyInactiveDeptMinLevelBean.inactiveRemark}" 
+								value="失效部門月用量下修為0" />
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</h:form>
+		<p:confirmDialog id="updateMinLevelDialog" message="確定月用量下修為0?" width="300" 
+			     header="月用量下修" widgetVar="updateMinLevelDialog" appendTo="@(body)">  
+			 <h:form id="updateMinLevelDialogForm" prependId="false">  <div align="center">
+				<p:panelGrid style="width:100%;text-align:center;word-break:break-all;">
+					<p:row>
+						<p:column colspan="3"> 失效說明 : </p:column> 
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+						 <p:inputTextarea rows="3" cols="60" maxlength="350"  
+								value="#{ApplyInactiveDeptMinLevelBean.inactiveRemark}"  
+								style="width:100%" >
+						</p:inputTextarea>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			      <p:commandButton  value="Yes Sure" oncomplete="PF('updateMinLevelDialog').hide();" 
+			                actionListener="#{ApplyInactiveDeptMinLevelBean.updateMinLevel}" 
+			                update=":tabView:invbalancesListForm"
+			                 
+			                  icon="ui-icon-circle-check"/>  
+			      <p:commandButton  value="Not Yet" onclick="PF('updateMinLevelDialog').hide();" 
+			      			type="button" icon="ui-icon-close"/>   
+			   </div>
+			 </h:form>       
+		</p:confirmDialog>
+</ui:composition>

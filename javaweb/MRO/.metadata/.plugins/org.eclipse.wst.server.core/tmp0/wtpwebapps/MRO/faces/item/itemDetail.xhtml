@@ -1,0 +1,872 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:i18n="http://innolux.com/i18n">
+	<p:panelGrid style="width:100%;word-break:break-all;" id="itemDetail">
+		<c:set var="form" value="#{ListItemBean.listItemForm}" />
+		<c:set var="item" value="#{form.listItemBeanItem}" />
+		<c:set var="attribute" value="#{form.itemAttribute}" />
+		<p:row>
+			<p:column style="vertical-align:top;width:50%">
+				<!-- 申請項目 -->
+				<p:panelGrid  style="width:100%;word-break:break-all;">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="2">
+								<i18n:outputText value="Apply.Detail" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="itemnum" style="font-weight: bold;" />  :
+									</p:column>
+						<p:column>
+							<h:outputText value="#{item.itemnum}" />
+						</p:column>
+					</p:row>
+					<p:row
+						rendered="#{form.listItemMapping!=null and 
+									   form.listItemMapping.size()>0}">
+						<p:column>
+							<i18n:outputText value="old.itemnum" style="font-weight: bold;" />  :
+									</p:column>
+						<p:column>
+							<ui:repeat value="#{form.listItemMapping}" var="itemMapping">
+								#{itemMapping.oldMatnr} <br />
+							</ui:repeat>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="item.description"
+								style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{item.description}" />
+						</p:column>
+					</p:row>
+					<p:row>
+							<p:column>
+								<i18n:outputText value="validate.description"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+								<h:outputText
+									value="#{item.validateDescription}" />
+							</p:column>
+						</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="class_structure_id"
+								style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{item.classstructureid}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="Store.category"
+								style="font-weight: bold;" /> :
+											</p:column>
+						<p:column>
+							<h:outputText
+								value="#{ListItemBean.itemForm.storageCategory}"
+								style="color:red"
+								rendered="#{item.classstructureid!=null}" />
+						</p:column>
+					</p:row>
+					<p:row>
+							<p:column>
+								<i18n:outputText value="class.structure1"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{ListItemBean.itemForm.sStructs1}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="class.structure2"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{ListItemBean.itemForm.sStructs2}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="class.structure3"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{ListItemBean.itemForm.sStructs3}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="class_structure_id"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{ListItemBean.itemForm.sStructs4}
+									</p:column>
+						</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="stroage.condition"
+								style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[item.storageCondition]}" />
+						</p:column>
+					</p:row>
+					<p:row rendered="#{item.commoditygroup==SystemConfigBean.materialR1}">
+						<p:column>
+							<h:outputText value="Total Shelf Life(Days)"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText
+								value="#{item.totalShelfLife}" />
+							<!-- 需要追加 -->
+						</p:column>
+					</p:row>
+					<p:row rendered="#{item.commoditygroup==SystemConfigBean.materialR1}">
+						<p:column>
+							<h:outputText value="Min Shelf Life(Days)"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText
+								value="#{item.minShelfLife}" />
+							<!-- 需要追加 -->
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="item_type" style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText value="#{item.itemtype}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="item_status" style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[item.status]}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="apply.by" style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{item.displayName}" />
+						</p:column>
+					</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="apply.deptno" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+								<h:outputText value="#{item.createByDeptNo}" />
+							</p:column>
+						</p:row>
+					<p:row
+						rendered="#{item.commoditygroup==SystemConfigBean.materialR2 or 
+						item.commoditygroup==SystemConfigBean.materialR94}">
+						<p:column>
+							<i18n:outputText value="facility.num" style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{attribute.facilityNum}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column>
+							<i18n:outputText value="use.msg" style="font-weight: bold;" />
+							<i18n:outputText value="command" style="font-weight: bold;" />  :
+									</p:column>
+						<p:column>
+							<h:outputText value="#{item.remark}"
+								style="white-space: pre-wrap; word-wrap: break-word; " />
+							<!-- 需要追加 -->
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="inpsection.type"
+								style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[
+										attribute.inspectionType]}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="apply.date" style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{item.createDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+									timeZone="GMT+8" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="change_date" style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{item.changeLastUpdate}">
+								<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+									timeZone="GMT+8" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							Oracle<i18n:outputText value="item.disable.flag"
+								style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{item.disableFlag}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							Oracle<i18n:outputText value="item.disable.flag"
+								style="font-weight: bold;" />
+								<i18n:outputText value="command"
+								style="font-weight: bold;" />  :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{item.disableFlagRemark}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:130px">
+							<i18n:outputText value="enable.item.site"
+								style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<ui:repeat value="#{form.listItemSite}"
+								var="listItemSite">  
+	  										#{listItemSite.locationSite} <br />
+							</ui:repeat>
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:130px">
+							<i18n:outputText value="disable.item.site"
+								style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<ui:repeat value="#{form.listItemSiteStop}"
+								var="listItemSiteStop">  
+	  										#{listItemSiteStop.locationSite} <br />
+							</ui:repeat>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<br />
+				<!-- 計量單位 -->
+				<p:panelGrid style="width:100%;word-break:break-all;" id="BasicUnit">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">
+								<i18n:outputText value="Basic.Unit" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:130px">
+							<i18n:outputText value="min.Basic.Unit"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column  colspan="3" >
+							<h:outputText value="#{attribute.minBasicUnit}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:130px">
+							<i18n:outputText value="package.Unit" style="font-weight: bold;" /> :
+							</p:column>
+						<p:column  colspan="3" >
+							<h:outputText value="#{attribute.packageUnit}" />
+						</p:column>
+					</p:row>
+					<p:row
+						rendered="#{attribute.packageUnit!=null and 
+											attribute.packageUnit!=''}">
+						<p:column style="width:130px">
+							<i18n:outputText value="transfer.quantity"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column colspan="3" >
+								#{attribute.transferQuantity}
+							</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="mc.OrderQuantity"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText
+								value="#{attribute.mcOrderQuantity}" />
+						</p:column>
+						<p:column>
+							<i18n:outputText value="mc.MinPackage.Quantity"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText
+								value="#{attribute.mcMinPackageQuantity}" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<br />
+				<!-- 替代料號 -->
+				<p:panelGrid style="width:100%;word-break:break-all;" id="altitemnum">
+					<c:set var="secondSource" value="#{ItemView.secondSource(attribute.secondItemType)}" />
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">
+								<i18n:outputText value="alt_itemnum" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:130px">
+							<i18n:outputText value="second.item.flag"
+								style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<h:outputText
+								value="#{attribute.secondItemFlag}" />
+						</p:column>
+					</p:row>
+						<c:if test="#{attribute.secondItemFlag=='Y'}">
+						<p:row >
+								<p:column style="width:130px">
+									<i18n:outputText value="second.item.type"
+										style="font-weight: bold;" /> :
+								</p:column>
+								<p:column>
+									<h:outputText rendered="#{!editButton}"
+										value="#{SystemConfigBean.parameterMap[attribute.secondItemType]}" />
+								</p:column>
+							</p:row>
+					<p:row rendered="#{!secondSource}">
+						<p:column style="width:130px">
+							<i18n:outputText value="alt_itemnum" style="font-weight: bold;" /> :
+									</p:column>
+						<p:column>
+							<p:dataTable var="altitemlist"
+								style="width:100%;text-align:center"
+								value="#{form.altitemlist}" id="altitemlist">
+								<p:column>
+									<f:facet name="header">
+										<i18n:outputText value="alt_itemnum" />
+									</f:facet>
+									<h:outputText value="#{altitemlist.itemnum}" />
+								</p:column>
+							</p:dataTable>
+						</p:column>
+					</p:row>
+							<p:row rendered="#{secondSource}">
+								<p:column style="width:130px">
+									<i18n:outputText value="2nd.remark02" style="font-weight: bold;" /> :
+								</p:column>
+								<p:column>
+									<h:outputText
+										value="#{attribute.secondSourceItemnum}" />
+								</p:column>
+							</p:row> 
+					</c:if>
+				</p:panelGrid>
+			</p:column>
+			<!-- 供應商 -->
+			<p:column style="vertical-align:top;width:50%">
+				<p:dataTable var="listItemBeanInvvendorVO" style="width:100%"
+					value="#{form.listItemBeanInvvendorVO}"
+					paginatorPosition="bottom" paginator="true" rows="10"
+					id="listItemBeanInvvendorVO">
+
+					<f:facet name="header">
+						<i18n:outputText value="vendor" />
+					</f:facet>
+
+					<p:column>
+						<f:facet name="header">
+							<i18n:outputText value="basic.vendor.company" />
+						</f:facet>
+						<h:outputText value="#{listItemBeanInvvendorVO.vendor}" />
+
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<i18n:outputText value="basic.vendor.name" />
+
+						</f:facet>
+						<h:outputText value="#{listItemBeanInvvendorVO.name}" />
+
+					</p:column>
+
+				</p:dataTable>
+				<br />
+				<p:dataTable var="listZZpoMroVendorItem" style="width:100%"
+					value="#{form.listZZpoMroVendorItem}"
+					paginatorPosition="bottom" paginator="true" rows="10"
+					id="listZZpoMroVendorItem">
+
+					<f:facet name="header">
+						<i18n:outputText value="erp.basic.vendor.company" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<i18n:outputText value="basic.vendor.name" />
+						</f:facet>
+						<h:outputText value="#{listZZpoMroVendorItem.vendorName}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<i18n:outputText value="item.site" />
+						</f:facet>
+						<h:outputText value="#{listZZpoMroVendorItem.orgName}" />
+
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							LAST_YEAR
+						</f:facet>
+						<h:outputText value="#{listZZpoMroVendorItem.lastPoYear}" />
+
+					</p:column>
+				</p:dataTable>
+				<br />
+				<!-- 附檔  -->
+				<p:panelGrid id="file" style="width:100%;word-break:break-all;">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="2">
+								<i18n:outputText value="file" style="font-weight: bold;" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:100px">
+							<i18n:outputText value="quotation" style="font-weight: bold;" />  :
+									</p:column>
+						<p:column>
+							<p:commandButton icon="ui-icon-disk"
+								value="(#{form.dowloadFileMap[SystemConfigBean.fileMap['ITEM_ATTACHMENT']]})"
+								action="#{FileUploadBean.view(
+									item.itemnum,
+									SystemConfigBean.fileMap['ITEM_ATTACHMENT'])}"
+								rendered="#{item.itemnum!=null}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:100px">
+							<i18n:outputText value="spec.file" style="font-weight: bold;" />  :
+									</p:column>
+						<p:column>
+							<p:commandButton icon="ui-icon-disk"
+								value="(#{form.dowloadFileMap[SystemConfigBean.fileMap['ITEM_SPEC']]})"
+								action="#{FileUploadBean.view(
+									item.itemnum,
+									SystemConfigBean.fileMap['ITEM_SPEC'])}"
+								rendered="#{item.itemnum!=null}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:100px">
+							<i18n:outputText value="photo" style="font-weight: bold;" />  :
+									</p:column>
+						<p:column>
+							<p:commandButton icon="ui-icon-disk"
+								value="(#{form.dowloadFileMap[SystemConfigBean.fileMap['ITEM_PHOTO']]})"
+								action="#{FileUploadBean.view(
+									item.itemnum,
+									SystemConfigBean.fileMap['ITEM_PHOTO'])}"
+								rendered="#{item.itemnum!=null}" />
+						</p:column>
+					</p:row>
+					<p:row
+						rendered="#{item.commoditygroup==SystemConfigBean.materialR2 or 
+						item.commoditygroup==SystemConfigBean.materialR94}">
+						<p:column style="width:100px">
+							<i18n:outputText value="supplier.remark"
+								style="font-weight: bold;" />  :
+									</p:column>
+						<p:column>
+							<p:commandButton icon="ui-icon-disk"
+								value="(#{form.dowloadFileMap[SystemConfigBean.fileMap['ITEM_VENDOR_REMARK']]})"
+								action="#{FileUploadBean.view(
+									item.itemnum,
+									SystemConfigBean.fileMap['ITEM_VENDOR_REMARK'])}"
+								rendered="#{item.itemnum!=null}"/>
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<br />
+				<!-- 成本資訊 -->
+				<p:panelGrid style="width:100%;word-break:break-all;">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">
+								<i18n:outputText value="cost.info" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:100px">
+							<i18n:outputText value="ori.transfer.price"
+								style="font-weight: bold;" />  :
+													</p:column>
+						<p:column>
+							<h:outputText value="#{attribute.oriUnitcost}" >
+								<f:convertNumber groupingUsed="true" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:100px">
+							<i18n:outputText value="ori.transfer.currency"
+								style="font-weight: bold;" /> :
+													</p:column>
+						<p:column>
+							<h:outputText value="#{attribute.oriCurrency}" />
+						</p:column>
+					</p:row>
+
+					<p:row>
+						<p:column style="width:100px">
+							<i18n:outputText value="reference.price"
+								style="font-weight: bold;" />  :
+										</p:column>
+						<p:column>
+							<h:outputText value="#{attribute.unitcost}" >
+								<f:convertNumber groupingUsed="true" />
+							</h:outputText>
+										</p:column>
+						<p:column style="width:100px">
+							<i18n:outputText value="currency_code" style="font-weight: bold;" />  :
+										</p:column>
+						<p:column>
+											#{attribute.currencyCode}
+										</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="lead.time" style="font-weight: bold;" />  :
+										</p:column>
+						<p:column colspan="3">
+											#{attribute.deliverytime}
+										</p:column>
+					</p:row>
+				</p:panelGrid>
+				<br />
+				<!-- Green Product管控資訊  -->
+				<p:panelGrid style="width:100%;word-break:break-all;" id="gpInfo" >
+					<c:set var="gpFlag"
+						value="#{ItemView.vGpType2(attribute.gpProductCategory)}" />
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">
+								<i18n:outputText value="gp.control.info" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:150px">
+							<i18n:outputText value="gp.product.category"
+								style="font-weight: bold;" /> :
+										</p:column>
+						<p:column>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[attribute.gpProductCategory]}" />
+						</p:column>
+					</p:row>
+					<p:row rendered="#{gpFlag}">
+						<p:column>
+							<i18n:outputText value="gp.Delivery.Type"
+								style="font-weight: bold;" /> :
+										</p:column>
+						<p:column>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[attribute.gpDeliveryType]}" />
+						</p:column>
+					</p:row>
+					<p:row rendered="#{gpFlag}">
+						<p:column>
+							<i18n:outputText value="gp.Remain.Type"
+								style="font-weight: bold;" /> :
+										</p:column>
+						<p:column>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[attribute.gpRemainType]}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="gp.Control.Flag"
+								style="font-weight: bold;" /> :
+										</p:column>
+						<p:column>
+							<h:outputText id="gpControlFlag"
+								value="#{attribute.gpControlFlag}" />
+						</p:column>
+					</p:row>
+					<p:row rendered="#{gpFlag}">
+							<p:column>
+								<i18n:outputText value="gp.risk.lv"
+									style="font-weight: bold;" /> :
+										</p:column>
+							<p:column>
+								<h:outputText value="#{attribute.gpRiskLv}" />
+							</p:column>
+						</p:row>
+					<p:row rendered="#{gpFlag}">
+							<p:column>
+								<i18n:outputText value="gp.ev.lv"
+									style="font-weight: bold;" /> :
+										</p:column>
+							<p:column>
+								<h:outputText value="#{attribute.gpEvLv}" />
+							</p:column>
+					</p:row>
+					<p:row rendered="#{gpFlag}">
+						<p:column>
+							<i18n:outputText value="gp.Report.Date"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText value="#{attribute.gpReportDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+							</h:outputText>
+						</p:column>
+					</p:row>
+					<p:row rendered="#{gpFlag}">
+						<p:column style="width:100px">
+							<i18n:outputText value="gp.Measure.Report"
+								style="font-weight: bold;" />  :
+									</p:column>
+						<p:column>
+							<p:commandButton icon="ui-icon-disk"
+								value="(#{form.dowloadFileMap[SystemConfigBean.fileMap['ITEM_GP_REPORT']]})"
+								action="#{FileUploadBean.view(
+									item.itemnum,
+									SystemConfigBean.fileMap['ITEM_GP_REPORT'])}" />
+						</p:column>
+					</p:row>
+					<p:row rendered="#{gpFlag}">
+						<p:column style="width:100px">
+							<h:outputText value="MSDS" style="font-weight: bold;" />  :
+									</p:column>
+						<p:column>
+							<p:commandButton icon="ui-icon-disk"
+								value="(#{form.dowloadFileMap[SystemConfigBean.fileMap['ITEM_GP_MSDS']]})"
+								action="#{FileUploadBean.view(
+									item.itemnum,
+									SystemConfigBean.fileMap['ITEM_GP_MSDS'])}" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<br />
+				<!-- 物料控管資訊 -->
+				<p:panelGrid style="width:100%;word-break:break-all;" id="mcInfo">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">
+								<i18n:outputText value="mc.control.Info" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:110px">
+
+							<i18n:outputText value="mc.Continuity.Use"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column colspan="3">
+							<h:outputText
+								value="#{attribute.mcContinuityUse}" />
+						</p:column>
+					</p:row>
+					<p:row
+						rendered="#{item.commoditygroup==SystemConfigBean.materialR2 or 
+						item.commoditygroup==SystemConfigBean.materialR94}">
+						<p:column style="width:110px">
+							<i18n:outputText value="mc.UseFrequency.type"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column colspan="3">
+							<h:outputText
+								value="#{attribute.mcUseFrequencyType}" />
+						</p:column>
+					</p:row>
+					<p:row
+						rendered="#{attribute.mcContinuityUse=='N'}">
+						<p:column>
+
+							<i18n:outputText value="mc.Ori.MinLevel"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText value="#{attribute.mcTotalMinLevel}" />
+						</p:column>
+						<p:column>
+
+							<i18n:outputText value="mc.UseFrequency.Level"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText
+								value="#{attribute.mcUseFrequencyLevel}" />
+						</p:column>
+					</p:row>
+					<p:row
+						rendered="#{attribute.mcContinuityUse=='Y'}">
+						<p:column>
+
+							<i18n:outputText value="mc.Total.MinLevel"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column colspan="3">
+							<h:outputText
+								value="#{attribute.mcOriMinLevel}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="mc.EveryUse.Level"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText
+								value="#{attribute.mcEveryUseLevel}" />
+						</p:column>
+						<p:column style="width:110px">
+							<i18n:outputText value="mc.SuggestingSafe.Level"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText
+								value="#{attribute.mcSuggestingSafeLevel}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column>
+							<i18n:outputText value="mc.Remark" style="font-weight: bold;" /> :
+							</p:column>
+						<p:column colspan="3">
+							<h:outputText value="#{attribute.mcRemark}" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<br />
+				<p:panelGrid style="width:100%;word-break:break-all;" id="strategyMgmt"
+					rendered="#{item.commoditygroup==SystemConfigBean.materialR2 or 
+						item.commoditygroup==SystemConfigBean.materialR94}">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">
+								<i18n:outputText value="strategy.mgmt.flag" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:110px">
+							<i18n:outputText value="strategy.mgmt.flag"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column colspan="3">
+							<h:outputText
+								value="#{attribute.strategyMgmtFlag}" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<p:panelGrid style="width:100%;word-break:break-all;"
+					id="facilitySupplier"
+					rendered="#{item.commoditygroup==SystemConfigBean.materialR2 or 
+						item.commoditygroup==SystemConfigBean.materialR94}">
+					<f:facet name="header">
+						<p:row>
+							<p:column colspan="4">
+								<i18n:outputText value="facility.supplier" />
+							</p:column>
+						</p:row>
+					</f:facet>
+					<p:row>
+						<p:column style="width:110px">
+							<i18n:outputText value="facility.supplier.name"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText value="#{attribute.facilitySupplierName}" />
+						</p:column>
+						<p:column style="width:110px">
+							<i18n:outputText value="facility.supplier.contact"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText
+								value="#{attribute.facilitySupplierContact}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:110px">
+							<i18n:outputText value="facility.supplier.phone"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText value="#{attribute.facilitySupplierPhone}" />
+						</p:column>
+						<p:column style="width:110px">
+							<i18n:outputText value="facility.supplier.itemnum"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column>
+							<h:outputText
+								value="#{attribute.facilitySupplierItemnum}" />
+						</p:column>
+					</p:row>
+					<p:row>
+						<p:column style="width:110px">
+							<i18n:outputText value="facility.supplier.address"
+								style="font-weight: bold;" /> :
+							</p:column>
+						<p:column colspan="3">
+							<h:outputText
+								value="#{attribute.facilitySupplierAddress}" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			</p:column>
+		</p:row>
+	</p:panelGrid>
+</ui:composition>

@@ -1,0 +1,237 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="ApplyClassstructureForm" prependId="false">
+		<p:panelGrid id="header" style="width:100%;word-break:break-all;">
+			<p:row>
+				<p:column style="vertical-align:top;width:50%">
+					<p:panelGrid style="width:100%;word-break:break-all;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="line.info" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:120px">
+								<i18n:outputText value="apply.num" style="font-weight: bold;" />  :
+									</p:column>
+							<p:column>
+										#{ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.applyHeaderNum}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="item_status" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{SystemConfigBean.parameterMap[ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.status]}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="class_structure_id"
+									style="font-weight: bold;" />  :
+									</p:column>
+							<p:column>
+								<h:outputText
+									value="#{ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.classstructureid}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<h:outputText value="ACTION" style="font-weight: bold;" /> :
+						</p:column>
+							<p:column>
+										#{SystemConfigBean.parameterMap[
+										ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.action]}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="apply.by" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+								#{ApplyClassstructureSignBean.classstructureForm.person.displayName}
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="dept_code" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+								#{ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.deptcode}
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="site" style="font-weight: bold;" />  :
+											</p:column>
+							<p:column>
+										#{SystemConfigBean.locationMapALL[
+										ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.organizationCode
+										]}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="use.msg" style="font-weight: bold;" />
+								<i18n:outputText value="command" style="font-weight: bold;" />  :
+							</p:column>
+							<p:column>
+								<h:outputText
+									value="#{ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.headerRemark}"
+									style="white-space: pre-wrap; word-wrap: break-word;" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="apply_date" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+								<h:outputText
+									value="#{ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.createDate}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="transdate" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+								<h:outputText
+									value="#{ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.lastUpdateDate}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:column>
+				<p:column style="vertical-align:top;width:50%">
+				<p:panelGrid id="file" style="width:100%;word-break:break-all;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="file" style="font-weight: bold;" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:100px;text-align:left;">
+								<i18n:outputText value="attachmentList" style="font-weight: bold;" />  :
+									</p:column>
+							<p:column>
+								<p:commandButton icon="ui-icon-disk"
+									value="(#{ApplyClassstructureSignBean.classstructureForm.dowloadFileMap[SystemConfigBean.fileMap['CLASSSTRUCTURE_HEADER_ATTACHMENT']]})"
+									rendered="#{ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.applyHeaderId !=null}"
+									action="#{FileUploadBean.view(
+									ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.applyHeaderNum,
+									SystemConfigBean.fileMap['CLASSSTRUCTURE_HEADER_ATTACHMENT'])}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+
+		<br />
+		<p:separator />
+		<br />
+	<p:dataTable var="listClassstructureLineApply"
+			id="listClassstructureLineApply"
+			rowStyleClass="#{listClassstructureLineApply.changeTypeFlag eq 'Y' ? 'old':null}"
+			value="#{ApplyClassstructureSignBean.classstructureForm.listClassstructureLineApply}"
+			paginatorPosition="bottom" paginator="true" rows="10"
+			rowKey="#{listClassstructureLineApply.applyLineId}">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="2">
+						<i18n:outputText value="Apply.Detail" />
+					</p:column>
+				</p:row>
+			</f:facet>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="line" />
+				</f:facet>
+				<h:outputText value="#{listClassstructureLineApply.lineNum}" />
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="assetattrid" />
+				</f:facet>
+				<h:outputText value="#{listClassstructureLineApply.assetattrid} - 
+					#{ApplyClassstructureSignBean.classstructureForm.assetAttributeMap[listClassstructureLineApply.assetattrid].description}" />
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="unit_description" />
+				</f:facet>
+				<h:outputText value="#{listClassstructureLineApply.description}" />
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="changDomainType" />
+				</f:facet>
+				<h:outputText value="#{listClassstructureLineApply.changeTypeFlag}" />
+			</p:column>
+			<p:column style="text-align:center;"
+				rendered="#{ApplyClassstructureSignBean.applyClassstructureView.inactiveDate}">
+				<f:facet name="header">
+					<i18n:outputText value="Inactive.Date" />
+				</f:facet>
+				<h:outputText value="#{listClassstructureLineApply.inactiveDate}">
+					<f:convertDateTime pattern="yyyy/MM/dd" timeZone="GMT+8" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>
+		<br />
+		<p:separator />
+		<br />
+		<iframe width="100%" frameborder="0" name="ifrm01" id="ifrm01"
+			src="#{ApplyClassstructureSignBean.classstructureForm.signHistoryUrl}"
+			onload="document.getElementById('ifrm01').height=ifrm01.document.body.scrollHeight+'px'" />
+		<p:panelGrid
+			style="width:100%;text-align:center;;word-break:break-all;" id="sign"
+			rendered="#{ApplyClassstructureSignBean.classstructureForm.classstructureHeaderApply.applyHeaderId!=null}">
+			<p:row>
+				<p:column style="background:#ff9900;border: none;">
+					<p:commandButton value="同意簽核" icon="ui-icon-circle-check"
+						update=":SubmitConfirmDialogForm"
+						oncomplete="PF('submitConfirmDialog').show();" />
+				</p:column>
+				<p:column style="background:#ff9900;border: none;">
+					<p:commandButton value="退回申請單" icon="ui-icon-arrowrefresh-1-w"
+						update=":RejectToNewConfirmDialogForm"
+						oncomplete="PF('RejectToNewConfirmDialog').show();" />
+				</p:column>
+				<p:column style="background:#ff9900;border: none;">
+					<p:inputText size="23" readonly="true"
+						value="#{ApplyClassstructureSignBean.classstructureForm.transferInfo}" />
+					<p:commandButton icon="ui-icon-search"
+						oncomplete="PF('listEmployeeDialog').show();">
+						<f:setPropertyActionListener
+								target="#{ListEmployeeBean.activeStatus}" value="true" />
+						<f:setPropertyActionListener target="#{ListEmployeeBean.object}"
+							value="#{ApplyClassstructureSignBean}" />
+						<f:setPropertyActionListener
+							target="#{ListEmployeeBean.updateView}"
+							value="tabView:sign" />
+					</p:commandButton>
+					<p:commandButton value="轉呈申請單" icon="ui-icon-arrowrefresh-1-w"
+						process="@form" update=":TransferConfirmDialog"
+						oncomplete="PF('TransferConfirmDialog').show();" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</h:form>
+</ui:composition>

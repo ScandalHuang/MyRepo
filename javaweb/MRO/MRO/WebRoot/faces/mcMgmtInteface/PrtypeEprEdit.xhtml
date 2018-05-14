@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="PrtypeEprEditForm" prependId="false">
+		<c:set var="bean" value="#{PrtypeEprEditBean}" />
+		<c:set var="form" value="#{bean.form}" />
+		<c:set var="prtypeEpr" value="#{form.prtypeEpr}" />
+		<p:panelGrid id="PrtypeEprHeader">
+			<p:row>
+				<p:column><i18n:outputText value="location.site" />:</p:column>
+				<p:column>
+					<p:selectOneMenu value="#{prtypeEpr.locationSite}"
+						id="locationSite" filter="true" filterMatchMode="contains"
+						required="true" requiredMessage="必須有值。">
+						<f:selectItem itemLabel="請選擇" itemValue="" />
+						<f:selectItems value="#{form.locationSites}" var="locationSites"
+							itemLabel="#{locationSites}" itemValue="#{locationSites}"/>
+						<p:ajax update="PrtypeEprHeader" process="@this"
+							listener="#{bean.onSelect}"/>
+					</p:selectOneMenu>
+					<p:message for="locationSite" />
+				</p:column>
+				<p:column>PRTYPE:</p:column>
+				<p:column>
+					<p:selectOneMenu value="#{prtypeEpr.prtype}" id="prtype"
+						filter="true" filterMatchMode="contains"
+						required="true" requiredMessage="必須有值。">
+						<f:selectItem itemLabel="請選擇" itemValue="" />
+						<f:selectItems value="#{form.prtypeOption}" />
+						<p:ajax update="PrtypeEprHeader" process="@this"
+							listener="#{bean.onSelect}" />
+					</p:selectOneMenu>
+					<p:message for="prtype" />
+				</p:column>
+				<p:column>拋轉請購人TYPE:</p:column>
+				<p:column>
+					<p:selectOneMenu value="#{prtypeEpr.eprRequestedby2Type}" id="eprRequestedby2Type"
+						required="true" requiredMessage="必須有值。">
+						<f:selectItem itemLabel="請選擇" itemValue="" />
+						<f:selectItems value="#{form.eprRequestedby2TypeO}" />
+						<p:ajax update="PrtypeEprHeader" process="@this"/>
+					</p:selectOneMenu>
+					<p:message for="eprRequestedby2Type" />
+				</p:column>
+				<p:column>
+					<p:commandButton value="SAVE" update="@form"
+						actionListener="#{bean.onSave}" />
+					<p:commandButton value="Delete" update="@form"
+						rendered="#{prtypeEpr.id!=null}"
+						actionListener="#{bean.onDelete(prtypeEpr)}" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<br />
+		<p:dataTable var="list" id="prtypeEprs"
+			style="width:98%;text-align:center;" value="#{form.list}">
+			<p:column>
+				<p:commandButton icon="ui-icon-search" update="@form"
+					action="#{bean.onSelect(list)}"  style="width:20px;height:20px;">
+					<p:ajax update="@form" listener="#{bean.onSelect(list)}" />
+				</p:commandButton>
+			</p:column>
+			<p:column headerText="區域">#{list.locationSite}</p:column>
+			<p:column headerText="PETYPE">#{SystemConfigBean.parameterMap[list.prtype]}</p:column>
+			<p:column headerText="拋轉請購人TYPE">#{SystemConfigBean.parameterMap[list.eprRequestedby2Type]}</p:column>
+			<p:column headerText="最後更新人">#{list.lastUpdateBy}</p:column>
+			<p:column headerText="LASTUPDATE">
+				<h:outputText value="#{list.lastUpdate}">
+					<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</ui:composition>

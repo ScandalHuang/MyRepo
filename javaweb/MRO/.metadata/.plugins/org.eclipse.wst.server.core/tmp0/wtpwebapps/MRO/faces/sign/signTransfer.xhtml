@@ -1,0 +1,174 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<h:form id="signTransferForm" prependId="false">
+			<p:panelGrid
+				style="width:100%;text-align:center;word-break:break-all;" id="sign">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="8"> 簽核轉呈  </p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column styleClass="ui-widget-header">申請單類型</p:column>
+					<p:column>
+						<p:selectOneMenu value="#{SignTransferBean.selectCategory}"
+							style="width:150px;text-align:left;" height="150">
+							<f:selectItem itemLabel="請選擇" itemValue="" />
+							<f:selectItems value="#{SignTransferBean.applyCategory}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column styleClass="ui-widget-header">申請單號</p:column>
+					<p:column>
+						<p:inputText value="#{SignTransferBean.applyNum}" size="15" />
+						<br />
+						<p:commandButton value="查詢待簽核文件"
+							actionListener="#{SignTransferBean.Search}"
+							update="listMroApplySignList" 
+							 />
+					</p:column>
+					<p:column styleClass="ui-widget-header">待簽核主管</p:column>
+					<p:column>
+						<p:inputText size="15" readonly="true"
+							value="#{SignTransferBean.signListEmployeeVO.displayName}" />
+						<p:commandButton icon="ui-icon-search"
+							oncomplete="PF('listEmployeeDialog').show();">
+							<f:setPropertyActionListener
+								target="#{SignTransferBean.employeeType}" value="1" />
+							<f:setPropertyActionListener
+								target="#{ListEmployeeBean.activeStatus}" value="false" />
+							<f:setPropertyActionListener target="#{ListEmployeeBean.object}"
+								value="#{SignTransferBean}" />
+							<f:setPropertyActionListener
+								target="#{ListEmployeeBean.updateView}"
+								value="sign" />
+						</p:commandButton>
+						<br />
+						<p:commandButton value="查詢待簽核文件"
+							actionListener="#{SignTransferBean.Search}"
+							update="listMroApplySignList" 
+							 />
+					</p:column>
+					<p:column styleClass="ui-widget-header">
+						<i18n:outputText style="color:red;" value="NonNullMark" />轉呈主管</p:column>
+					<p:column>
+						<p:inputText size="15" readonly="true"
+							value="#{SignTransferBean.fowardListEmployeeVO.displayName}" />
+						<p:commandButton icon="ui-icon-search"
+							oncomplete="PF('listEmployeeDialog').show();">
+							<f:setPropertyActionListener
+								target="#{SignTransferBean.employeeType}" value="2" />
+							<f:setPropertyActionListener
+								target="#{ListEmployeeBean.activeStatus}" value="true" />
+							<f:setPropertyActionListener target="#{ListEmployeeBean.object}"
+								value="#{SignTransferBean}" />
+							<f:setPropertyActionListener
+								target="#{ListEmployeeBean.updateView}"
+								value="sign" />
+						</p:commandButton>
+						<br />
+						<p:commandButton value="轉呈" update="listMroApplySignList"
+							actionListener="#{SignTransferBean.onTransfer}"
+							
+							 />
+					</p:column>
+				</p:row>
+				<p:row>
+					<p:column styleClass="ui-widget-header">
+						<i18n:outputText style="color:red;" value="NonNullMark" />轉呈原因 </p:column>
+					<p:column colspan="7" style="text-align:left">
+						<p:inputTextarea rows="3" value="#{SignTransferBean.signComment}"
+							maxlength="350" style="width:70%" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<br />
+			<p:separator />
+			<br />
+			<p:dataTable var="listMroApplySignList" id="listMroApplySignList"
+				value="#{SignTransferBean.listMroApplySignList}"
+				paginatorPosition="bottom" paginator="true" rows="10"
+				rowKey="#{listMroApplySignList.taskId}"
+				selection="#{SignTransferBean.mroApplySignList}">
+				<f:facet name="header">
+					<p:row>
+						<p:column>待簽核申請單</p:column>
+					</p:row>
+				</f:facet>
+				<p:column selectionMode="multiple"
+					style="text-align:center;width:20px" />
+				<p:column style="text-align:center;">
+					<f:facet name="header">
+								申請單單號
+							</f:facet>
+					<h:outputText value="#{listMroApplySignList.applyNum}" />
+				</p:column>
+				<p:column style="text-align:center;">
+					<f:facet name="header">
+								申請單類型
+							</f:facet>
+					<h:outputText
+						value="#{SignTransferBean.applyCategoryMap[listMroApplySignList.sourceCategory]}" />
+				</p:column>
+				<p:column style="text-align:center;">
+					<f:facet name="header">
+								申請人
+							</f:facet>
+					<h:outputText value="#{listMroApplySignList.actorName}" />
+				</p:column>
+				<p:column style="text-align:center;">
+					<f:facet name="header">
+								申請日期
+							</f:facet>
+					<h:outputText value="#{listMroApplySignList.createDate}">
+						<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+					</h:outputText>
+				</p:column>
+				<p:column style="text-align:center;">
+					<f:facet name="header">
+								簽核清單
+							</f:facet>
+					<p:commandButton update=":signListView"
+						action="#{SignTransferBean.signHistory(listMroApplySignList.taskId)}"
+						oncomplete="PF('signListViewDialog').show()" icon="ui-icon-search" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+		<p:dialog id="listEmployeeDialog" widgetVar="listEmployeeDialog"
+			modal="true" appendTo="@(body)" width="600">
+			<f:facet name="header">
+				<i18n:outputText value="List of Employee" />
+			</f:facet>
+			<ui:include src="../CommonView/listEmployee.xhtml" />
+		</p:dialog>
+		<p:dialog id="signListViewDialog" header="簽核清單"
+			widgetVar="signListViewDialog" modal="true" appendTo="@(body)"
+			width="100%">
+			<h:panelGrid id="signListView" columns="1" cellpadding="1">
+				<iframe width="100%" frameborder="0" name="ifrm02" id="ifrm02"
+					src="#{SignTransferBean.signHistoryUrl}"
+					onload="ResizeIframe(this)" />
+			</h:panelGrid>
+		</p:dialog>
+		
+		<script>
+		var myI, myW, myH
+		function ResizeIframe(i) {
+			var b = document.body;
+			myI = i;
+			myH = b.scrollHeight-150;
+			myW = b.scrollWidth-50;
+			setTimeout("ResizeIframe2(myI,myW,myH)", 20);
+		}
+		function ResizeIframe2(i, w, h) {
+			i.height = h;
+			i.width = w;
+		}
+	</script>
+	</ui:define>
+</ui:composition>

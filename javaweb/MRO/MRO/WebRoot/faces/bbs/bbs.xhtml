@@ -1,0 +1,204 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<ui:include src="../CommonView/fileUpload.xhtml" />
+			<h:form id="Form1" prependId="false">
+				<p:panel id="panelAdd" header="公佈欄維護" toggleable="true"
+					toggleSpeed="500" widgetVar="panelAdd">
+					<div align="center">
+						<p:panelGrid id="header" style="word-break:break-all;">
+							<p:row>
+								<p:column>
+									<i18n:outputText var="i18n" value="bss.type">
+										<h:outputLabel value="#{i18n}" />
+									</i18n:outputText>
+								</p:column>
+								<p:column><i18n:outputText value="location.site" /></p:column>
+								<p:column>
+									<i18n:outputText var="i18n" value="主題">
+										<h:outputLabel value="#{i18n}" />
+									</i18n:outputText>
+								</p:column>
+								<p:column>
+									<i18n:outputText var="i18n" value="訊息">
+										<h:outputLabel style="align:center" value="#{i18n}" />
+									</i18n:outputText>
+								</p:column>
+								<p:column>
+									<i18n:outputText var="i18n" value="file">
+										<h:outputLabel style="align:center" value="#{i18n}" />
+									</i18n:outputText>
+								</p:column>
+								<p:column>
+									<i18n:outputText var="i18n" value="到期日">
+										<h:outputLabel style="align:center" value="#{i18n}" />
+
+									</i18n:outputText>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<p:selectOneMenu value="#{BbsBean.bbsForm.bulletinboard.type}">
+										<f:selectItems value="#{BbsBean.bbsForm.typeOption}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+								<i18n:outputText style="color:red;" value="NonNullMark" />
+								<font color="red">不選取表示為全廠區</font><br/>
+									<p:selectManyMenu scrollHeight="140" converter="SerializesConverter"
+										value="#{BbsBean.bbsForm.sLocationSiteMap}"
+										style="text-align:left;" showCheckbox="true">
+										<f:selectItems value="#{LoginInfoBean.userLSMap}" />
+									</p:selectManyMenu>
+								</p:column>
+								<p:column>
+       	<p:inputTextarea rows="5" cols="20"
+											value="#{BbsBean.bbsForm.bulletinboard.subject}"
+											autoResize="false" />  
+								</p:column>
+								<p:column>
+       	<p:inputTextarea rows="10" cols="70"
+											value="#{BbsBean.bbsForm.bulletinboard.message}"
+											autoResize="false" />  
+								</p:column>
+								<p:column>
+									<i18n:outputText value="Notice.toUploadAttachement"
+									rendered="#{BbsBean.bbsForm.bulletinboard.bulletinboardid==null}"
+									style="color:red;text-align:center" />
+								<p:commandButton icon="ui-icon-disk"
+									value="(#{BbsBean.bbsForm.dowloadFileMap[SystemConfigBean.fileMap['BBS_ATTACHMENT']]})"
+									action="#{FileUploadBean.onFileType(7,7,
+									SystemConfigBean.fileMap['BBS_ATTACHMENT'],
+									BbsBean.bbsForm.bulletinboard.bulletinboardid,
+									BbsBean.bbsForm.dowloadFileMap,'header',true)}"
+									rendered="#{BbsBean.bbsForm.bulletinboard.bulletinboardid!=null}"/>
+								</p:column>
+								<p:column>
+									<p:calendar value="#{BbsBean.bbsForm.bulletinboard.expiredate}"
+										size="13" showOn="button" readonlyInput="true" />
+								</p:column>
+
+							</p:row>
+
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="6">
+										<div align="center">
+												<p:commandButton value="New" icon="ui-icon-plus"
+													update="@form"
+													actionListener="#{BbsBean.onNew}" />
+												<p:commandButton value="Add" icon="ui-icon-disk"
+													update="@form"
+													rendered="#{BbsBean.bbsForm.bulletinboard.bulletinboardid==null}"
+													actionListener="#{BbsBean.update}" />
+												<p:commandButton value="Update" icon="ui-icon-disk"
+													update="@form"
+													rendered="#{BbsBean.bbsForm.bulletinboard.bulletinboardid!=null}"
+													actionListener="#{BbsBean.update}" />
+												<p:commandButton value="Delete" icon="ui-icon-trash"
+													update="@form"
+													rendered="#{BbsBean.bbsForm.bulletinboard.bulletinboardid!=null}"
+													actionListener="#{BbsBean.delete}" />
+										</div>
+									</p:column>
+								</p:row>
+							</f:facet>
+
+						</p:panelGrid>
+
+					</div>
+				</p:panel>
+				<p:dataTable var="bbsList" value="#{BbsBean.bbsForm.bbsList}"
+					filteredValue="#{BbsBean.bbsForm.filterbbsList}" widgetVar="bbsList"
+					filterDelay="#{SystemConfigBean.filetDelay}"
+					style="width:100%;" rowKey="#{bbsList.bulletinboardid}" paginatorPosition="bottom"
+					paginator="true" rows="10" selectionMode="single" id="bbsList">
+					<p:ajax event="rowSelect" listener="#{BbsBean.onRowSelect}"
+						 
+						 update=":Form1:header" />
+					<f:facet name="header">  
+						公佈欄清單
+					</f:facet>
+					<p:column filterBy="#{SystemConfigBean.parameterMap[bbsList.type]}"  filterMatchMode="contains">
+						<f:facet name="header">
+							<i18n:outputText value="bss.type" />
+						</f:facet>
+						<f:facet name="filter">
+			                <p:selectOneMenu onchange="PF('bbsList').filter()" >
+			                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+			                    <f:selectItems value="#{BbsBean.bbsForm.typeList}" />
+			                </p:selectOneMenu>
+			            </f:facet>
+						<h:outputText value="#{SystemConfigBean.parameterMap[bbsList.type]}"/>
+					</p:column>
+					<p:column style="vertical-align:top;width:70%;" filterMatchMode="contains"
+					filterBy="#{bbsList.subject}">
+						<f:facet name="header">
+							<i18n:outputText value="主題">
+
+							</i18n:outputText>
+						</f:facet>
+						<h:outputText value="#{bbsList.subject}"/>
+					</p:column>
+
+<!-- 					<p:column style="vertical-align:top;width:50%;">
+						<f:facet name="header">
+							<i18n:outputText value="訊息">
+
+							</i18n:outputText>
+						</f:facet>
+						<h:outputText value="#{bbsList.message}" 
+							style="white-space: pre-wrap; word-wrap: break-word; " />
+					</p:column> -->
+
+
+					<p:column sortBy="#{bbsList.expiredate}" filterMatchMode="contains">
+						<f:facet name="header">
+							<i18n:outputText var="i18n" value="到期日">
+								<h:outputLabel value="#{i18n}" />
+							</i18n:outputText>
+
+						</f:facet>
+						<h:outputText value="#{bbsList.expiredate}">
+							<f:convertDateTime type="date" pattern="yyyy/M/d"
+								timeZone="GMT+8" />
+						</h:outputText>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<i18n:outputText var="i18n" value="張貼/更新日">
+								<h:outputLabel value="#{i18n}" />
+							</i18n:outputText>
+						</f:facet>
+
+						<h:outputText value="#{bbsList.postdate}">
+							<f:convertDateTime type="date" pattern="yyyy/M/d"
+								timeZone="GMT+8" />
+						</h:outputText>
+					</p:column>
+
+					<p:column sortBy="#{bbsList.postby}" filterBy="#{bbsList.postby}"
+						filterStyle="width:70px" filterMatchMode="contains">
+						<f:facet name="header">
+							<i18n:outputText var="i18n" value="張貼人">
+								<h:outputLabel value="#{i18n}" />
+							</i18n:outputText>
+						</f:facet>
+
+						<h:outputText value="#{bbsList.postby}" />
+
+
+					</p:column>
+
+				</p:dataTable>
+
+			</h:form>
+	</ui:define>
+
+</ui:composition>

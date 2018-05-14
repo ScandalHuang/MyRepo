@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form prependId="false">
+		<c:set var="bean" value="#{MroPmreqListBean}" />
+		<div align="center">
+			<p:panelGrid  style="width:100%;word-break:break-all;"
+				columns="6">
+				<f:facet name="header">MRO R1非週期與R2保養需求單與重訂購歷史資料報表</f:facet>
+				<p:column><font color="red">※</font>區域：</p:column>
+				<p:column>
+					<p:selectOneMenu filter="true" filterMatchMode="contains"
+						scrollHeight="100" style="width:180px;text-align: left;"
+						value="#{bean.locationSite}" required="true" id="mplocationSite"
+						label="區域">
+						<f:selectItem itemLabel="請選擇" itemValue="" />
+						<f:selectItem itemLabel="失效區域" itemValue="失效區域" />
+						<f:selectItems value="#{SystemConfigBean.lSiteOption}" />
+						<p:ajax update="mporganizationCode" process="@this" />
+					</p:selectOneMenu>
+					<p:message for="mplocationSite" />
+				</p:column>
+				<p:column>廠區：</p:column>
+				<p:column>
+					<p:selectManyMenu
+						value="#{bean.organizationCode}"
+						showCheckbox="true" scrollHeight="80" id="mporganizationCode"
+						style="width:180px;text-align: left;" filter="true"
+						filterMatchMode="contains">
+						<f:selectItems value="#{bean.getOrgs()}" />
+					</p:selectManyMenu>
+				</p:column>
+				<p:column>料號：</p:column>
+				<p:column><p:inputText value="#{bean.itemnum}" /></p:column>
+				<p:column>申請單分類：</p:column>
+				<p:column>
+					<p:selectOneMenu filter="true" filterMatchMode="contains"
+						scrollHeight="100" style="width:180px;text-align: left;"
+						value="#{bean.prtype}">
+						<f:selectItem itemLabel="請選擇" itemValue="" />
+						<f:selectItem itemLabel="R1耗材非週期需求申請" itemValue="R1PMREQ" />
+						<f:selectItem itemLabel="R1重訂購申請" itemValue="R1REORDER" />
+						<f:selectItem itemLabel="SpareParts保養需求申請" itemValue="R2PMREQ" />
+						<f:selectItem itemLabel="SpareParts重訂購申請" itemValue="R2REORDER" />
+					</p:selectOneMenu>
+				</p:column>
+				<p:column>申請單號：</p:column>
+				<p:column><p:inputText value="#{bean.prnum}" /></p:column>
+				<p:column>申請單狀態：</p:column>
+				<p:column><p:selectOneMenu filter="true" filterMatchMode="contains"
+						scrollHeight="100" style="width:180px;text-align: left;"
+						value="#{bean.status}">
+						<f:selectItem itemLabel="請選擇" itemValue="" />
+						<f:selectItems value="#{bean.sOption}" />
+					</p:selectOneMenu></p:column>
+				<p:column>申請人工號：</p:column>
+				<p:column><p:inputText value="#{bean.requestby2}" /></p:column>
+				<p:column>	開單日期起始區間：
+						</p:column>
+				<p:column><p:calendar navigator="true"  id="cStrDate" label="開單日期起始區間"
+								value="#{bean.cStrDate}" size="13" showOn="button" />
+					<p:message for="cStrDate" />
+				</p:column>
+				<p:column>開單日期截止區間：</p:column>
+				<p:column>
+							<p:calendar navigator="true"  id="cEndDate" label="開單日期截止區間"
+								value="#{bean.cEndDate}" size="13" showOn="button" />
+					<p:message for="cEndDate" />
+				</p:column>
+				<p:column>申請部門：</p:column>
+				<p:column><p:inputText value="#{bean.deptNo}" /></p:column>
+				<p:column>送審日期起始區間：
+						</p:column>
+				<p:column><p:calendar navigator="true"  id="sStrDate" label="送審日期起始區間"
+								value="#{bean.sStrDate}" size="13" showOn="button" />
+					<p:message for="sStrDate" />
+				</p:column>
+				<p:column>送審日期截止區間：</p:column>
+				<p:column>
+							<p:calendar navigator="true"  id="sEndDate" label="送審日期截止區間"
+								value="#{bean.sEndDate}" size="13" showOn="button" />
+					<p:message for="sEndDate" />
+				</p:column>
+				<p:column>待簽核人員：</p:column>
+				<p:column><p:inputText value="#{bean.sName}" /></p:column>
+				<f:facet name="footer">
+					<div align="center">
+						<p:commandButton icon="ui-icon-search" value="Search"
+							actionListener="#{bean.search}" update="@form"
+							style="margin-top:5px" />
+					</div>
+				</f:facet>
+			</p:panelGrid>
+			<BR />
+			<p:dataTable paginatorPosition="bottom" id="mPmreqQuery"
+				paginator="true" var="listQuery" rows="10" value="#{bean.list}">
+				<f:facet name="header">
+						搜尋筆數：#{bean.list.size()}
+				</f:facet>
+				<p:columns value="#{bean.columns}" var="column"
+					sortBy="#{listQuery[column.property]}" columnIndexVar="colIndex"
+					style="text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="#{column.header}" />
+					</f:facet>
+					<h:outputText value="#{listQuery[column.property]}" />
+				</p:columns>
+			</p:dataTable>
+		</div>
+		<p:panelGrid columns="2">
+			<p:panel header="Export All Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="mPmreqQuery"
+						fileName="#{currentDate.getTime()}E" />
+				</h:commandLink>
+			</p:panel>
+		</p:panelGrid>
+	</h:form>
+</ui:composition>

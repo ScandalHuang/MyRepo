@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+
+      <navigation-rule>
+      <from-view-id>/faces/*</from-view-id>
+    <navigation-case>
+      <from-outcome>error</from-outcome>
+      <to-view-id>/error.xhtml</to-view-id>
+    </navigation-case>
+    </navigation-rule>
+    
+<factory>
+        <exception-handler-factory>
+           mro.base.error.handler.CustomExceptionHandlerFactory
+        </exception-handler-factory>
+
+</factory> 
+	<managed-bean>
+	    <managed-bean-name>currentDate</managed-bean-name>
+	    <managed-bean-class>java.util.Date</managed-bean-class>
+	    <managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+</faces-config>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="javax.persistence.SequenceGenerator"/>
+    <fullyQualifiedTypeName name="javax.persistence.GenerationType"/>
+    <fullyQualifiedTypeName name="javax.persistence.GeneratedValue"/>
+    <fullyQualifiedTypeName name="org.primefaces.context.RequestContext"/>
+    <fullyQualifiedTypeName name="mro.base.System.config.jsf.SystemConfigBean"/>
+    <fullyQualifiedTypeName name="java.math.BigDecimal"/>
+    <fullyQualifiedTypeName name="mro.base.entity.ItemAttribute"/>
+    <fullyQualifiedTypeName name="mro.app.item.bo.ListItemBO"/>
+    <fullyQualifiedTypeName name="mro.app.reportView.dao.R2LTListDao"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="org.apache.commons.lang3.ObjectUtils"/>
+    <fullyQualifiedTypeName name="org.apache.commons.lang3.time.DateUtils"/>
+    <fullyQualifiedTypeName name="mro.app.item.vo.ListItemBeanItemVO"/>
+    <fullyQualifiedTypeName name="mro.form.PrForm"/>
+</qualifiedTypeNameHistroy>

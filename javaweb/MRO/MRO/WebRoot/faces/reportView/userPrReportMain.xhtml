@@ -1,0 +1,92 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<ui:include src="../CommonView/PersonDetail.xhtml" />
+		<p:tabView id="tabView"  dynamic="true" cache="true" >
+			<p:tab id="tab1">
+				<f:facet name="title">
+					<i18n:outputText value="mro.pmreq.report" />
+				</f:facet>
+				<ui:include src="mroPmreqList.xhtml" />
+			</p:tab>
+			<p:tab id="tab2">
+				<f:facet name="title">
+					<i18n:outputText value="eam.pmreq.report" />
+				</f:facet>
+				<ui:include src="eamPmreqList.xhtml" />
+			</p:tab>
+			<p:tab id="tab3">
+				<f:facet name="title">
+					R1庫存資訊
+				</f:facet>
+				<ui:include src="r1InventoryList.xhtml" />
+			</p:tab>
+			<p:tab id="tab4">
+				<f:facet name="title">
+					Spare Parts庫存資訊
+				</f:facet>
+				<ui:include src="r2InventoryList.xhtml" />
+			</p:tab>
+			<p:tab id="tab5">
+				<f:facet name="title">
+					領退料紀錄
+				</f:facet>
+				<ui:include src="itemTransList.xhtml" />
+			</p:tab>
+			<p:tab id="tab6">
+				<f:facet name="title">
+					Spare parts 各部門近半年耗用資訊 
+				</f:facet>
+				<ui:include src="r2HalfBssList.xhtml" />
+			</p:tab>
+			<p:tab id="tab7">
+				<f:facet name="title">
+					R1 各部門近半年領用資訊 
+				</f:facet>
+				<FONT color="red">*N月僅供參考，不列入「近半年平均月耗用數量」&amp;「近半年領用月次數」計算</FONT><BR/><BR/>
+				<ui:include src="r1HalfUseList.xhtml" />
+			</p:tab>
+			<p:tab id="tab8">
+				<f:facet name="title">
+					MRO 庫存歸屬與庫齡資訊
+				</f:facet>
+				<ui:include src="mroWmsInfoList.xhtml" />
+			</p:tab>
+			<p:tab id="tab9">
+				<f:facet name="title">
+					預算費用資訊
+				</f:facet>
+				<ui:include src="prtypeBudgetList.xhtml" />
+			</p:tab>
+			<p:tab id="tab10">
+				<f:facet name="title">
+					<i18n:outputText value="Exclusive.Return.Report" />
+				</f:facet>
+				<ui:include src="exclusiveReturnReport.xhtml" />
+			</p:tab>
+			<p:tab id="tab11">
+				<f:facet name="title">
+					<i18n:outputText value="Exclusive.rate" />
+				</f:facet>
+				<ui:include src="exclusiveReturnMDReport.xhtml" />
+			</p:tab>
+			<p:tab id="tab14">
+				<f:facet name="title">
+					<i18n:outputText value="List.invetory.idle" />
+				</f:facet>
+				<ui:include src="mroInventoryIdleList.xhtml" />
+			</p:tab>
+			<p:tab id="tab15">
+				<f:facet name="title">
+					Spare parts 前置交貨期 查詢
+				</f:facet>
+				<ui:include src="r2LTList.xhtml" />
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>

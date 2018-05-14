@@ -1,0 +1,158 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="listStoreCategoryChangeForm" prependId="false">
+		<center>
+			<p:panelGrid id="listStoreCategoryChangeHeader">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="7">
+							<i18n:outputText value="Store.category.change" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column>
+						<i18n:outputText value="location.site" />
+					</p:column>
+					<p:column>
+						<i18n:outputText value="site" />
+					</p:column>
+					<p:column>
+						<i18n:outputText value="apply.prtype.category" />
+					</p:column>
+					<p:column>
+						<i18n:outputText value="itemnum" />
+					</p:column>
+					<p:column><i18n:outputText value="contorl.category" /></p:column>
+					<p:column>同料號不同TYPE</p:column>
+					<p:column></p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectOneMenu
+							value="#{ListStoreCategoryChangeBean.sLocationSite}"
+							filter="true" filterMatchMode="startsWith">
+							<f:selectItem itemLabel="請選擇" itemValue="" />
+							<f:selectItems value="#{LoginInfoBean.userLSMap.values()}" var="userLSMap"
+								itemLabel="#{userLSMap.locationSite}" 
+								itemValue="#{userLSMap.locationSite}" />
+							<p:ajax update="listStoreCategoryChangeHeader"
+								listener="#{ListStoreCategoryChangeBean.changeSite}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu
+							value="#{ListStoreCategoryChangeBean.selectOrganization}"
+							filter="true" filterMatchMode="startsWith">
+							<f:selectItem itemLabel="請選擇" itemValue="" />
+							<f:selectItems
+								value="#{ListStoreCategoryChangeBean.organizationMap}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu value="#{ListStoreCategoryChangeBean.prtype}">
+							<f:selectItems
+								value="#{ListStoreCategoryChangeBean.prtypeOption}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:inputText value="#{ListStoreCategoryChangeBean.selectitemnum}"
+							size="20" />
+					</p:column>					
+					<p:column>
+						<p:selectManyMenu value="#{ListStoreCategoryChangeBean.selectControlType}" filter="true"
+							filterMatchMode="startsWith" align ="left" style="width:300px" showCheckbox="true" scrollHeight="80">
+							<f:selectItems value="#{ListStoreCategoryChangeBean.controlOption}" />
+						</p:selectManyMenu>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu
+							value="#{ListStoreCategoryChangeBean.diffControlType}">
+							<f:selectItem itemLabel="請選擇" itemValue="" />
+							<f:selectItem itemLabel="Y" itemValue="Y" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:commandButton icon="ui-icon-search" value="Search"
+							actionListener="#{ListStoreCategoryChangeBean.search}"
+							update="listInventory" style="margin-top:5px" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</center>
+		<br />
+		<font color="red">
+			*代碼：<br/>
+			<ui:repeat value="#{ListStoreCategoryChangeBean.controlShow.entrySet().toArray()}" var="entry">
+			&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+			#{entry.key}：#{entry.value} <br/>
+			</ui:repeat>
+		</font>
+		<br/>
+		<p:dataTable var="listInventory" paginatorPosition="bottom"
+			id="listInventory" paginator="true" rows="10"
+			value="#{ListStoreCategoryChangeBean.list}">
+			<f:facet name="header" style="text-align:left;">  
+		           搜索結果：  #{ListStoreCategoryChangeBean.list.size()} 筆
+		        </f:facet>
+			<p:column sortBy="#{listInventory.itemnum}">
+				<f:facet name="header">ITEMNUM</f:facet>
+				<h:outputText value="#{listInventory.itemnum}" />
+			</p:column>
+			<p:column sortBy="#{listInventory.location}">
+				<f:facet name="header">LOCATION</f:facet>
+				<h:outputText value="#{listInventory.location}" />
+			</p:column>
+			<p:column sortBy="#{listInventory.siteid}">
+				<f:facet name="header">SITEID</f:facet>
+				<h:outputText value="#{listInventory.siteid}" />
+			</p:column>
+			<p:column sortBy="#{listInventory.cmommcontrol}">
+				<f:facet name="header">CMOMMCONTROL</f:facet>
+				<h:outputText value="#{listInventory.cmommcontrol}" />
+			</p:column>
+			<p:column
+				sortBy="#{SystemConfigBean.parameterMap[listInventory.cmommcontrol]}"
+				exportable="false">
+				<f:facet name="header">CMOMMCONTROL說明</f:facet>
+				<h:outputText
+					value="#{SystemConfigBean.parameterMap[listInventory.cmommcontrol]}" />
+			</p:column>
+			<p:column sortBy="#{listInventory.mccommand}">
+				<f:facet name="header">MCCOMMAND</f:facet>
+				<h:outputText value="#{listInventory.mccommand}" />
+			</p:column>
+			<p:column sortBy="#{listInventory.stockdays}">
+				<f:facet name="header">STOCK_DAYS(備貨天數)</f:facet>
+				<h:outputText value="#{listInventory.stockdays}" />
+			</p:column>
+		</p:dataTable>
+		<p:panelGrid columns="2">
+			<p:panel header="Export All Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="listInventory"
+						fileName="STORE_CATEGORY" />
+				</h:commandLink>
+			</p:panel>
+			<p:panel header="Upload Data">
+				<font color="red" size="1">＊只更新現有資料不執行新增動作</font>
+				<br />
+				<i18n:outputText value="upload.excel" />：
+					<p:commandButton icon="ui-icon-disk" update=":fileUploadExcelForm"
+					action="#{FileUploadExcelBean.excel(3,1)}"
+					oncomplete="PF('ExcelFileUploadDialog').show();">
+					<f:setPropertyActionListener target="#{FileUploadExcelBean.object}"
+						value="#{ListStoreCategoryChangeBean}" />
+					<f:setPropertyActionListener
+						target="#{FileUploadExcelBean.updateView}"
+						value="tabView:listStoreCategoryChangeForm" />
+				</p:commandButton>
+			</p:panel>
+		</p:panelGrid>
+	</h:form>
+</ui:composition>

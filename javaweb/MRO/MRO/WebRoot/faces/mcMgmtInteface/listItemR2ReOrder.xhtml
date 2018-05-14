@@ -1,0 +1,369 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="listItemR2ReOrderForm" prependId="false">
+		<c:set var="bean" value="#{ListItemR2ReOrderBean}" />
+		<c:set var="form" value="#{bean.form}" />
+		<center>
+			<p:panelGrid id="header">
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="6">
+							<i18n:outputText value="item.reorder.mgmt" />
+							<p:commandButton value="停用Reorder料號" icon="ui-icon-trash"
+								update=":listReOrderItemDisableForm"
+								action="#{ListReOrderItemDisableBean.search}"
+								oncomplete="PF('listReOrderItemDisableDialog').show();">
+							</p:commandButton>
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column>
+						<i18n:outputText value="location.site" />
+					</p:column>
+					<p:column>
+						<i18n:outputText value="site" />
+					</p:column>
+					<p:column>
+						<i18n:outputText value="apply.prtype.category" />
+					</p:column>
+					<p:column>
+						<i18n:outputText value="itemnum" />
+					</p:column>
+					<p:column>
+						<i18n:outputText value="contorl.category" />
+					</p:column>
+					<p:column></p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<p:selectOneMenu value="#{form.sLocationSite}" filter="true"
+							filterMatchMode="startsWith">
+							<f:selectItem itemLabel="請選擇" itemValue="" />
+							<f:selectItems value="#{LoginInfoBean.userLSMap.values()}" var="userLSMap"
+								itemLabel="#{userLSMap.locationSite}" 
+								itemValue="#{userLSMap.locationSite}" />
+							<p:ajax update="header" listener="#{bean.changeSite}" process="header" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:selectManyMenu value="#{form.selectOrganization}" filter="true"
+							filterMatchMode="startsWith" style="width:150px" 
+							showCheckbox="true" scrollHeight="80">
+							<f:selectItems value="#{form.organizationMap}" />
+						</p:selectManyMenu>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu value="#{form.sPrtype}">
+							<f:selectItems value="#{form.prtypeMap}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:inputText value="#{form.selectitemnum}" size="15"
+							id="selectitemnum" />
+						<br/><i18n:outputText style="color:red;" value="NonNullMark" />
+							<font color="red">非R11請輸入!=R11</font>
+					</p:column>
+					<p:column>
+						<p:selectOneMenu value="#{form.selectcmommcontrol}" filter="true"
+							filterMatchMode="startsWith" style="width:200px" 
+							showCheckbox="true" scrollHeight="80">
+							<f:selectItem itemLabel="請選擇" itemValue="" />
+							<f:selectItems value="#{form.controlMap}" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<p:commandButton icon="ui-icon-search" value="Search"
+							id="reOrderSearch" actionListener="#{bean.search}"
+							update="listReOrderItem :tabView:R2ReOrderDialogForm"
+							style="margin-top:5px" />
+						<p:defaultCommand target="reOrderSearch" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</center><br />
+		<a href="../../resources/images/itemControlDetail.jpeg" target="_blank"
+			style="TEXT-DECORATION: UNDERLINE; color: BLUE;"> 
+			各 Site reorder 開單邏輯邏輯
+		</a>
+		<br/>
+		<font color="red">
+			*驗收人=控管人員，若控管人離職則為該控管部門對應的課級主管；若控管人換部門則為該控管部門對應的部級主管，皆不存在則為開立人員
+		</font>
+		<br />
+		<font color="BLUE"> *TOTAL_SUPPLY=原物料倉+IQC+BSS+該Site費用倉總數 + 該Site待轉售倉總數 
+			+PR+PO +PR未送審 (已開立Reorder但EMPALL未送審) -原物料倉(保養需求) -IQC(保養需求) -PR(保養需求)
+			-PO(保養需求) </font>
+		<br />
+		<p:dataTable var="listReOrderItem" paginatorPosition="bottom"
+			value="#{form.listReOrderItem}" paginator="true"
+			rowKey="#{listReOrderItem['INVBALANCESID']}"
+			selection="#{form.selectlistReOrderItem}" rows="10"
+			id="listReOrderItem">
+			<f:facet name="header">
+				搜索結果：  #{form.listReOrderItem.size()} 筆
+				<p:commandButton value="選取全部 " update="listReOrderItem"
+					icon="ui-icon-circle-check" actionListener="#{bean.onSelectAll}" />
+			</f:facet>
+			<p:column selectionMode="multiple"
+				style="text-align:center;width:20px" exportable="false" />
+			<p:column sortBy="#{listReOrderItem['ITEMNUM']}">
+				<f:facet name="header">
+					料號
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['ITEMNUM']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['CMOMMCONTROL']}">
+				<f:facet name="header">
+					控管模式
+				</f:facet>
+				<h:outputText value="#{SystemConfigBean.parameterMap[listReOrderItem['CMOMMCONTROL']]}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['SITEID']}">
+				<f:facet name="header">
+					廠區
+				</f:facet>
+				<h:outputText
+					value="#{SystemConfigBean.locationMapALL[listReOrderItem['SITEID']]}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['LOCATION']}">
+				<f:facet name="header">
+					倉庫
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['LOCATION']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['DEPTCODE']}">
+				<f:facet name="header">
+					控管部門
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['DEPTCODE']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['NEW_RATE_QTY']}">
+				<f:facet name="header">
+					開單數量
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['NEW_RATE_QTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['DEMAND_QTY']}">
+				<f:facet name="header">
+					Demand
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['DEMAND_QTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['TOTAL_STOCKQTY']}">
+				<f:facet name="header">
+					TOTAL_SUPPLY
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['TOTAL_STOCKQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['MC_ORDER_QUANTITY']}">
+				<f:facet name="header">
+					MOQ
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['MC_ORDER_QUANTITY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['MC_MIN_PACKAGE_QUANTITY']}">
+				<f:facet name="header">
+					MPQ
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['MC_MIN_PACKAGE_QUANTITY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['ORIAVGUSEQTY']}">
+				<f:facet name="header">
+					總平均月耗量
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['ORIAVGUSEQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['CMOMINLEVEL']}">
+				<f:facet name="header">
+					總重訂購量
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['CMOMINLEVEL']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['INVBALANCES_ORIAVGUSEQTY']}">
+				<f:facet name="header">
+					平均月耗量
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['INVBALANCES_ORIAVGUSEQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['INVBALANCES_MINLEVEL']}">
+				<f:facet name="header">
+					重訂購量
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['INVBALANCES_MINLEVEL']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['STOCK']}">
+				<f:facet name="header">
+					MT
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['STOCK']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['IQC']}">
+				<f:facet name="header">
+					IQC
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['IQC']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['BSSQTY']}">
+				<f:facet name="header">
+					BSS
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['BSSQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['SEQTY']}">
+				<f:facet name="header">
+					該Site費用倉總數
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['SEQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['SDQTY']}">
+				<f:facet name="header">
+					該Site待轉售倉總數
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['SDQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['PRQTY']}">
+				<f:facet name="header">
+					PR
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['PRQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['POQTY']}">
+				<f:facet name="header">
+					PO
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['POQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['INVBALANCES_PRQTY']}">
+				<f:facet name="header">
+					該部門控管PR
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['INVBALANCES_PRQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['INVBALANCES_POQTY']}">
+				<f:facet name="header">
+					該部門控管PO
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['INVBALANCES_POQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['PMREQQTY']}">
+				<f:facet name="header">
+					PR未送審
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['PMREQQTY']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['STOCK_PMREQ']}">
+				<f:facet name="header">
+					MT(保養需求)
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['STOCK_PMREQ']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['IQC_PMREQ']}">
+				<f:facet name="header">
+					IQC(保養需求)
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['IQC_PMREQ']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['PRQTY_PMREQ']}">
+				<f:facet name="header">
+					PR(保養需求)
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['PRQTY_PMREQ']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['POQTY_PMREQ']}">
+				<f:facet name="header">
+					PO(保養需求)
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['POQTY_PMREQ']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['DESCRIPTION']}">
+				<f:facet name="header">
+					品名
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['DESCRIPTION']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['INSPECTOR']}">
+				<f:facet name="header">
+					驗收人
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['INSPECTOR']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['INSPECTOR_DEPTCODE']}">
+				<f:facet name="header">
+					驗收人部門
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['INSPECTOR_DEPTCODE']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['NEW_MINLEVEL']}">
+				<f:facet name="header">
+					新控管量
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['NEW_MINLEVEL']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['ORI_RATE']}">
+				<f:facet name="header">
+					開單比例
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['ORI_RATE']}" />
+			</p:column>
+			<p:column sortBy="#{listReOrderItem['NEW_RATE']}">
+				<f:facet name="header">
+					調整後開單比例
+				</f:facet>
+				<h:outputText value="#{listReOrderItem['NEW_RATE']}" />
+			</p:column>
+			<f:facet name="footer">
+				<p:commandButton value="開立Reorder申請單" process="@form"
+					rendered="#{form.listReOrderItem.size()>0}" icon="ui-icon-plus"
+					onclick="PF('R2ReOrderDialog').show();" />
+			</f:facet>
+		</p:dataTable>
+		<p:panelGrid columns="2">
+			<p:panel header="Export All Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="listReOrderItem"
+						fileName="ReordeList_ALL" />
+				</h:commandLink>
+			</p:panel>
+
+			<p:panel header="Export Page Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="listReOrderItem"
+						fileName="ReordeList_Page" pageOnly="true" />
+				</h:commandLink>
+			</p:panel>
+		</p:panelGrid>
+	</h:form>
+	<p:confirmDialog id="R2ReOrderDialog" message="確定開立Reorder申請單?"
+		width="300" height="30" header="開立Reorder申請單"
+		widgetVar="R2ReOrderDialog" appendTo="@(body)">
+		<h:form id="R2ReOrderDialogForm" prependId="false">
+			<p:panelGrid
+				style="width:100%;text-align:center;word-break:break-all;">
+				<p:row>
+					<p:column>
+						<i18n:outputText value="require.date" style="font-weight: bold;" />：</p:column>
+					<p:column>
+						<p:calendar value="#{form.needDate}" showOn="button" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<p:commandButton value="Yes Sure"
+				oncomplete="PF('R2ReOrderDialog').hide();"
+				actionListener="#{bean.onReOrder}"
+				update=":tabView:listItemR2ReOrderForm:listReOrderItem
+			                :tabView:R2ReOrderDialogForm"
+				icon="ui-icon-circle-check" />
+			<p:commandButton value="Not Yet"
+				onclick="PF('R2ReOrderDialog').hide();" type="button"
+				icon="ui-icon-close" />
+		</h:form>
+	</p:confirmDialog>
+</ui:composition>

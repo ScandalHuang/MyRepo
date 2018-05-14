@@ -1,0 +1,139 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:i18n="http://innolux.com/i18n">
+		<h:form id="listClassstructureItemSiteSignForm" prependId="false">
+
+			<i18n:outputText value="class_structure_id" />：
+			<p:selectOneMenu
+				value="#{ListClassstructureItemSiteSignBean.classstructureItemSiteSignForm.selectClassstructureid}"
+				 filter="true" filterMatchMode="startsWith"
+				style="width:150px;" height="150">
+				<f:selectItem itemLabel="請選擇" itemValue="" />
+				<f:selectItems
+					value="#{ListClassstructureItemSiteSignBean.classstructureItemSiteSignForm.classstructureMap}" />
+				<p:ajax update="listClassstructureItemSiteSign"
+					listener="#{ListClassstructureItemSiteSignBean.changeSelect}"
+					process="@form" 
+					 />
+			</p:selectOneMenu>
+			&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+			LOCATION SITE：
+			<p:selectOneMenu
+				value="#{ListClassstructureItemSiteSignBean.classstructureItemSiteSignForm.selectLocationSite}"
+				 filter="true" filterMatchMode="startsWith"
+				style="width:150px;" height="150">
+				<f:selectItem itemLabel="請選擇" itemValue="" />
+				<f:selectItems value="#{SystemConfigBean.siteMap}" />
+				<p:ajax update="listClassstructureItemSiteSign"
+					listener="#{ListClassstructureItemSiteSignBean.changeSelect}"
+					process="@form" 
+					 />
+			</p:selectOneMenu>
+			<br />
+		<br /><font color="red">*重複的類別與LOCATION SITE名稱會在上傳後自動覆蓋</font>
+
+			<p:dataTable var="listClassstructureItemSiteSign"
+				value="#{ListClassstructureItemSiteSignBean.classstructureItemSiteSignForm.listClassstructureItemSiteSign}"
+				paginator="true" rows="10" id="listClassstructureItemSiteSign"
+			rowKey="#{listClassstructureItemSiteSign.itemSiteSignId}"
+			selection="#{ListClassstructureItemSiteSignBean.classstructureItemSiteSignForm.deleteClassstructureItemSiteSign}"
+				paginatorPosition="bottom"  style="text-align:center">
+
+				<f:facet name="header">
+					<i18n:outputText value="Measureunit.list" />
+						<p:commandButton value="刪除簽核人員清單" icon="ui-icon-trash"
+						update="listClassstructureItemSiteSign"
+						actionListener="#{ListClassstructureItemSiteSignBean.onDelete}" />
+				</f:facet>
+				<p:column selectionMode="multiple" exportable="false"
+					style="text-align:center;width:20px" />
+				<p:column>
+					<f:facet name="header">
+						CLASSSTRUCTUREID(類別)
+					</f:facet>
+					<h:outputText value="#{listClassstructureItemSiteSign.classstructureid}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+					LOCATION_SITE(區域)
+				</f:facet>
+				<h:outputText value="#{listClassstructureItemSiteSign.locationSite}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						DISCIPLINARY_BOARD(紀委會簽核人員)
+					</f:facet>
+					<h:outputText value="#{listClassstructureItemSiteSign.disciplinaryBoard}" /> 
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						BUYER_EMPNO(採購簽核人員)
+					</f:facet>
+					<h:outputText value="#{listClassstructureItemSiteSign.buyerEmpno}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						ADD_BUYER_EMPNO(新增廠區採購簽核人員)
+					</f:facet>
+					<h:outputText value="#{listClassstructureItemSiteSign.addBuyerEmpno}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						EHS_EMPNO(環安簽核人員)
+					</f:facet>
+					<h:outputText value="#{listClassstructureItemSiteSign.ehsEmpno}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						MC_EMPNO(物管簽核人員)
+					</f:facet>
+					<h:outputText value="#{listClassstructureItemSiteSign.mcEmpno}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						MC2_EMPNO(物管2簽核人員)
+					</f:facet>
+					<h:outputText value="#{listClassstructureItemSiteSign.mc2Empno}"/>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						ITEM_GROUP_EMPNO(料號審核小組)
+					</f:facet>
+					<h:outputText value="#{listClassstructureItemSiteSign.itemGroupEmpno}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						FINAL_APPOVE_NOTIFY_EMPNO(通知人員)
+					</f:facet>
+					<h:outputText value="#{listClassstructureItemSiteSign.finalAppoveNotifyEmpno}"
+						style="white-space:normal;" />
+				</p:column>
+			</p:dataTable>
+			<p:panelGrid columns="2">
+				<p:panel header="Export All Data">
+					<h:commandLink>
+						<p:graphicImage value="../../resources/images/excel.png" />
+						<p:dataExporter type="xls" target="listClassstructureItemSiteSign"
+							fileName="SIGN_LIST"  />
+					</h:commandLink>
+				</p:panel>
+				<p:panel header="Upload Data">
+					<i18n:outputText value="upload.excel" />：
+					<p:commandButton icon="ui-icon-disk"
+						update=":fileUploadExcelForm"
+						action="#{FileUploadExcelBean.excel(3,1)}"
+						oncomplete="PF('ExcelFileUploadDialog').show();" >
+						<f:setPropertyActionListener target="#{FileUploadExcelBean.object}" 
+								value="#{ListClassstructureItemSiteSignBean}" />
+							<f:setPropertyActionListener target="#{FileUploadExcelBean.updateView}" 
+								value="tabView:listClassstructureItemSiteSignForm" />
+					</p:commandButton>
+						</p:panel>
+					</p:panelGrid>
+		</h:form>
+		
+</ui:composition>

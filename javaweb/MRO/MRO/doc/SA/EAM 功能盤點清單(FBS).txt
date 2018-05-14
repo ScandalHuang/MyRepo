@@ -1,0 +1,287 @@
+EAM 功能盤點清單(FBS)
+----------------------------------------------------------------------------------------------------------
+I.  >[EAM App.]
+II. >[與外部系統的資料拋轉 & 系統資料更新作業]
+III.>[查詢報表]
+===========================================================================================================
+I.>[EAM App.] (x):刪除; (?):待確認; >>: for IT only
+	系統管理
+	>>	公司(CMO,CMOCHINA,CMECHINA) [依ERP 公司帳本來分類; D:\IT\EAM\教材\00.Password&TNS\ERP_OU_NO_mappingtable.xls]
+	>>	類別
+		公佈欄
+	>>財務
+	>>	貨幣
+	>>	匯率
+	>>設定
+	>>	簽核流程
+	>>		工作流程管理
+	>>		工作流程設計(BIZ Flow)***
+	>>		動作
+	>>		角色
+	>>		聯絡範本
+	>>	資料庫設定(class & domain & relationship)***
+	>>	應用程式畫面設計
+	>>	時效管理機制(alert mail & trigger even)
+	>>	定時啟動服務設定   <未實作>
+	>>	電子郵件監聽器設定 <未實作>
+	>>	值清單(domain)
+	零件
+		零件主檔
+	>>	倉庫
+		零件主檔for MC
+		奇美離職員工VS料號 (?)
+	報表
+		KPI管理
+		報表管理 [移到:http://eamrpt.cminl.oa/EAMFAQ/MC.htm]
+	>>授權
+	>>	安全群組(group)
+	>>	使用者(maxuser)
+	奇美庫存
+		非BOM生產性耗材料號主檔查詢 					[by itemnum]
+		非BOM生產性耗材料號主檔查詢(for MC) 			[by itemnum]
+		新增/異動/查詢/重訂購-非BOM生產性耗材控管量 	[已失能: 新增/異動; 未啟用:重訂購]
+		非BOM生產性耗材總覽查詢(維護) 					[by deptcode, 已失能: 維護]
+		非BOM生產性耗材料號庫存異動歷史查詢 			[by deptcode]
+		
+		無塵耗材料號主檔查詢							[by itemnum]
+		新增/異動/查詢/重訂購-無塵耗材控管量			[已失能: 新增/異動; 未啟用:重訂購]
+		無塵耗材總覽查詢(維護)							[by deptcode, 已失能: 維護]
+	
+		Spare Parts料號主檔查詢							[by itemnum]
+		Spare Parts料號主檔查詢(for MC)					[by itemnum]
+		新增/異動/查詢/重訂購-Spare Parts控管量		[已失能: 新增/異動; 已啟用:重訂購]
+		新增/異動/查詢/重訂購-Spare Parts控管量FOR_PUR [已失能: 新增/異動/重訂購] (?:確認PUR是否可以執行reorder)
+		Spare Parts料號總覽查詢(維護)					[by deptcode, 已失能: 維護]
+		Spare Parts料號總覽查詢(維護)For MC				[by deptcode, 已失能: 維護](?:確認是否可以整併)
+		
+		奇美部門內控管料號查詢
+		奇美物控管理查詢(for 廠商叫貨)					(X)
+		奇美流程內申請單狀態變更作業
+	奇美 物料控管申請
+		非BOM生產性耗材料號新增/庫存異動 申請
+		
+		92非週期需求單 申請作業
+		92非週期需求單 審核作業
+		92非週期需求申請單 歷史查詢
+		
+		無塵耗材料號新增/庫存異動 申請
+		無塵耗材料號控管申請單 審核作業
+		無塵耗耗材申請單 歷史查詢
+		
+		無塵耗材訂製品需求單 申請作業
+		無塵耗材訂製品需求單 審核作業
+		無塵耗材訂製品需求單 歷史查詢
+		
+		Spare Parts料號新增/庫存異動 申請
+		Spare Parts廠商備料控管量申請/異動 申請		(x)
+		
+		奇美料號控管申請單 審核
+		奇美料號控管申請單 歷史查詢
+		
+		奇美保養需求單 申請作業
+		奇美保養需求單 審核作業
+		奇美保養需求申請單 歷史查詢
+		物管審核完畢之保養需求單清單(待開立PR)
+		
+		料號規格異動申請
+		料號規格異動查詢
+		奇美料號請購歷史查詢
+		
+		線邊倉庫存量新增與修改						(x)
+		線邊倉庫存查詢								(x)
+		
+		奇美料號與替代料號對應總覽
+	奇美 PM
+		奇美設備位置資料維護
+		奇美設備主檔
+		奇美料號與設備機台之對應表查詢
+		奇美料號vs設備機台之資料維護
+		奇美設備機台vs料號之資料維護
+	奇美基本資料
+		奇美員工資料查詢
+		奇美供應商資料查詢
+		大陸寧波人資主檔遺漏查詢					(x)
+		奇美每日資料拋轉機制Monitor
+		奇美EAM系統開立帳號與權限清單
+		奇美部門已開立帳號與權限清單
+		奇美部門廠區對應維護與查詢
+		奇美開立帳號現況總覽
+		消滅部門與其主管查詢(維護)表
+	奇美PU
+		奇美PU設備管理FOR_LCD
+		奇美PU設定管理FOR_TFT
+		奇美PU設備管理FOR_PDI
+		奇美PU設備查詢
+		奇美PU_PANEL_SIZE維護
+		奇美PU設備報表FOR_GPC
+	奇美批次資料
+		LEAD TIME批次下載
+		控管人員批次查詢下載
+		廠商備料批次下載							(x)
+		部門批次下載
+		PR未轉PO List								[download]
+		PO交期已過 List								[download]
+		奇美呆滯天數參數設定
+		無塵耗材每日追蹤紀錄表						(x)
+		92/93/94料號-每日追蹤紀錄表					(x)
+		Monitor PRLINE Raw Data						(x)
+----------------------------------------------------------------------------------------------------------------
+II.>[與外部系統的資料拋轉 & 系統資料更新作業]
+	a. 每日6點排程更新[trigger]
+		ITEM ON HAND
+		ERP領退料收發料整合介面
+		員工資料介面
+		ERP PR
+		ERP 供應商資料
+		ERP PO
+		匯率 Interface
+		Consign
+		BSS on-hand 資料整合介面
+		BSS trkhist 資料整合介面
+
+	b. maximo.jobs(Data Fixed)
+	   	job#76(mothly, 08:02)-> delete_pmwo                                      <<**MRO no need! 此屬 PM 工單模組，可停止!>>
+	   	job#77(daily, 21:05)->	CMOINVTRANS_INSERT;                              <<** mroinvtrans_insert **>>
+	   	         				UPDATE_IDLEDAYS;								 <<** update_idledays **>>
+	    job#79(Mon. weekly, 07:21) -> MAXIMO.INSERTINVSTOCKIDLEDAYS;             <<*** only for 94%, 待 MRO R2上線後, 可stop!****>>              
+	    job#80(daily, 07:59) -> MAXIMO.consumable93test_P;    					<<stop!>>
+	    job#81(daily, 08:12) -> CMO93CONSUMABLE_P;            					<<stop!>>
+	    job#82(1 hr per day, 1st quarter) -> maximo.foraltitem_P;                 <<*** only for 94%, 待 MRO R2上線後, 再實作!****>> 
+	    job#96(daily, 07:00) -> MAXIMO.Update_ERP_ReadFlag;
+
+	c. eam1.windows排程[procedure]
+	    runERP2EAM_Part 	(8 min)
+	    	C:\Middle\classes\runERP2EAM_Part.bat;MiddleCall_ERP2EAM_Part.properties		
+	    		maximo_erp.EAM_ERP2EAM_PART_P                                    <<** erp2mro_part_p **>> 由 KY's quartz 執行
+	    runEAM2ERP_Part_PR 	(2 min)
+	    	C:\Middle\classes\runEAM2ERP_Part_PR.bat; MiddleCall_EAM2ERP_Part_PR.properties	
+	    		maximo_erp.EAM_EAM2ERP_PART_P                                    <<** mro2erp_part_p **>> 由 KY's quartz 執行
+	    			
+	    BackUp_EAMRpt_Attachments 				(22:00 daily)
+	    	"C:\Program Files\SyncToy\SyncToy.exe" -R "EAMRpt_to_EAM1_Backup"
+	    MiddleCall_EAM2ERP_NOCQ (21:30 daily)
+	    	C:\Middle\classes\MiddleCall_EAM2ERP_NOCQ.bat; MiddleCall_EAM2ERP_NOCQ.properties
+	    		maximo_erp.EAM_EAM2ERP_NOCQ_P	    	
+	    ERPReadFlag_Check (08:00 daily)
+	        C:\Middle\classes\ERPReadFlag_Check.bat
+	    runUpdate_Inventory_P (07:45 daily)
+	    	C:\Middle\classes\runUpdate_Inventory_P.bat; MiddleCall_Update_Inventory_P.properties                                  
+	    																				 <<** read_bss2mro_onhand_trkhist_p **>>	
+	    	    maximo.Update_Inventory_P                                                <<** update_inventory_p **>>
+	    runINV94STOCK 							(05:00 daily)
+	    	C:\Middle\classes\runINV94STOCK.bat; MiddleCall_INV94STOCK.properties
+				maximo.INV94STOCK_P
+				maximo.EAM_PR2PODELAY_P
+				maximo.EAM_PODELAY_P
+				maximo.READ_BSS2EAM_ONHAND_TRKHIST_P                                       
+				
+	    runHourly_4_oclock 						(04:00 daily)
+	    	C:\Middle\classes\runHourly_4_oclock.bat; MiddleCall_Hourly_4_oclock.properties
+				maximo_erp.EAM_Get_Data_From_ERP_P                                         <<*** mro_get_data_from_erp_p ****>>
+				maximo_erp.EAM_Get_Org_Vendor_From_ERP_P
+				maximo_erp.EAM_Get_Notes_Deputy_P                                          <<** mro_get_deputy_from_pdm_p **>> 由 java sync
+				maximo_erp.EAM_ERP2EAM_NOCQ_P
+				maximo_erp.eam_daily_rates_from_erp_p									   <<** mro_daily_rates_from_erp_p **>>	
+				maximo_erp.EAM_PRPO_FR_ERP_P                                               <<**MRO no need! 此屬 PM 工單模組，可停止!>>
+				maximo_erp.eam_item_vendor_p												<<***MRO需修改 R1/R2****>>
+				maximo_erp.eam_get_consign_from_wms_p                                       <<*** mro_get_consign_from_wms_p ****>>
+				maximo_erp.EAM_ERP2EAM_ASSETPU_P                      
+	    runEMPupdate 							(03:50 daily)
+	    	C:\Middle\classes\runEMPupdate.bat; MiddleCall_EMPupdate.properties
+				maximo_erp.EAM_GET_EMPDATA_UPDATE_P											<<**MRO no need!>>
+				maximo_erp.eam_get_empdata_update1_p                                        <<**MRO no need!>>
+				maximo_erp.eam_get_empdata_update2_p                                        <<**MRO no need!>>
+				maximo_erp.eam_empdata_updateMAXUSER_p                                      <<**MRO no need!>>
+	    runHourly_3_oclock 						(03:10 daily)
+	    	C:\Middle\classes\runHourly_3_oclock.bat; MiddleCall_EMPHR_3_oclock.properties
+				maximo_erp.EAM_Get_EMP_From_HR_P                                            <<** mro_get_person_from_hr_p **>> 由 java sync
+				maximo_erp.EAM_BSS2EAM_ONHAND_P                                             <<** bss2mro_onhand_p **>>
+				maximo_erp.EAM_BSS2EAM_TRKHISTORY_P											<<** bss2mro_trkhistory_p **>>
+	    MiddleCall_EAM2ERP_SNAP_PART_NOTIFIER 	(01:30 daily)
+	    	C:\Middle\classes\MiddleCall_EAM2ERP_SNAP_PART_NOTIFIER.bat; MiddleCall_EAM2ERP_SNAP_PART_NOTIFIER.properties
+				maximo_erp.EAM2ERP_SNAP_PART_NOTIFIER_P
+				maximo_erp.EAM2ERP_PUR_REPORT_P
+				maximo_erp.EAM2ERP_ASSET_P
+
+	    runMCIdle (14:03 Mon. weekly)
+	    	C:\CMOGENRPT\runMCIdle.bat
+	    		  
+	    {for 更新物料規格變更& EAM建議驗收人名單}
+	    PjItemInsp			[C:\Maximo\Interface\PjItemInsp.exe]       	(20:30 daily) [for 建議驗收人/ 免驗料號] <<***MRO需修改 R1/R2****>>
+	    PjItemAttrSTOPUSE	[C:\Maximo\Interface\PjItemAttrSTOPUSE.exe]	(12:00 daily)                             <<***MRO需修改 R1/R2****>>
+	    PjItemAttr1			[C:\Maximo\Interface\PjItemAttr1.exe]      	(1 min)  [for 料號新增]                   <<***MRO需修改 R1/R2****>>
+	    PjItemAttr2			[C:\Maximo\Interface\PjItemAttr2.exe]		(26 min) [for 規格異動]                   <<***MRO需修改 R1/R2****>>
+	
+	d.eamprt.webservice    
+    	[C:\Tomcat\webapps\WebRoot] > for EAM2EPMALL WebService for Reorder and PMRequest
+--------------------------------------------------------------------------------------------------------------------------------------------------
+III.[查詢報表](x):刪除; (?):待確認
+	 	[@eam1, C:\bea\user_projects\domains\EAM1_Prod]
+		http://eam1.cminl.oa:7001/CmoEam/main.jsp 							>Idle 180天資訊(?)
+		
+		[@eamrpt, C:\Tomcat\webapps\{mcreports}]
+		http://eamrpt.cminl.oa:7003/EAM_Util_VENDORITEMFLAG/uploadExcel.htm 	>批次修改廠商備料Flag資訊(x)
+		http://eamrpt.cminl.oa:7003/EAM_Util_Leadtime/uploadExcel.htm 		>批次修改Leadtime資訊
+		http://eamrpt.cminl.oa:7003/EAM_Util_DEPTNO/uploadExcel.htm 			>批次修改部門代碼資訊
+		http://eamrpt.cminl.oa:7003/EAM_Util_DEPTINV/uploadExcel.htm >			批次線邊倉上傳修改資訊(x)
+		http://eamrpt.cminl.oa:7003/EAM_Util_LASTREQUESTEDBY2/uploadExcel.htm >	批次修改控管人員資訊
+		http://eamrpt.cminl.oa:7003/EAM_Util_PR2PODELAY/uploadExcel.htm >		PR未轉PO List資訊		[upload]              
+		http://eamrpt.cminl.oa:7003/EAM_Util_PODELAY/uploadExcel.htm >			PO交期已過List		 	[upload]
+		http://eamrpt.cminl.oa:7003/prposataus.jsp >							PR/PO Status確認 			    (BIRT)
+		http://eamrpt.cminl.oa:7003/mcwarn.jsp >								跨廠(跨Region)呆滯料確認 	(BIRT)
+		http://eamrpt.cminl.oa:7003/EAM_Util_MCCOMMAND/uploadExcel.htm >		呆滯料Remark資訊批次上傳
+		http://eamrpt.cminl.oa:7003/EAM_Util_ITEMSTATUS/uploadExcel.htm >		整批上傳:修正已生效料號的狀態('S':Stopuse; 'A':Active,'Z':Zombie)
+		http://eamrpt.cminl.oa:7003/CmoEam_93/main.jsp 							>訂製品需求報表
+		http://eamrpt.cminl.oa:7003/CmoEam_94/main.jsp 							>設備保養需求報表
+		http://eamrpt.cminl.oa:7003/CmoEam_control/main.jsp 					>無塵室耗材控管需求報表
+		http://eamrpt.cminl.oa:7003/CmoEam_His/main.jsp 						>93階料號領用歷史紀錄報表
+		http://eamrpt.cminl.oa:7003/cmo_inv_stockyearlist_92/main.jsp 			>92階－部門呆滯物料明細報表查詢資料
+		http://eamrpt.cminl.oa:7003/cmo_inv_issuebyitem_act/main.jsp 			>Non-BOM料品領用歷史報表查詢資料 
+		http://eamrpt.cminl.oa:7003/cmo_reorder92_act/main.jsp 					>Non-BOM料品訂貨報表查詢資料
+		http://eamrpt.cminl.oa:7003/cmo_reorder92_review_act/main.jsp 			>Non-BOM料品訂貨檢核清單查詢資料
+		http://eamrpt.cminl.oa:7003/CmoEam_92/main.jsp 							>92階-非週期需求報表
+==================================================================================================================================================
+       
+Q&A
+a. 94% 物控模式料號 百分比
+b. 哪種 物控模式 對於降低庫存最有效?
+c. 保/物 & 安全 的 PR, 若同一料號會併單嗎?
+d. weekly chk point why use monthly data? how about weekly data?
+e. 9/16 go-live, how about 績效? 呆滯料,SE倉...下降了嗎?
+f. 規格異動變更，借屍還魂?
+
+to-do:
+EAM's ER-Diagram created by ComputerAssociate ERWin
+
+===
+上週對部門同仁報告 EAM 物料控管模式，
+
+有下列問題尚未解惑，請教 物管同仁後，回覆如下:
+
+a. 94% 控管模式料號 百分比為何? 保養需求模式(??%), 安全控管模式(??%),  物控模式(??%)
+    => 依數量: 保養需求模式(96.7%), 安全控管模式(2.9%),  物控模式(0.4%) 
+    => 依金額: 保養需求模式(38%), 安全控管模式(12%),  物控模式(43%)
+
+b. 請問哪種上述 控管模式 對於降低庫存最有效? Users偏好哪一類? and Why?
+    => based on ABC物控法則，依物料使用的頻度(近半年耗用月次)分成三種模式控管，以期提高耗用率&降低庫存量，才能達成需求合理性的綜效。
+    => Users偏好: 安全控管模式。  由系統根據 再訂購點[重訂購量] 下單，廠商依據訂單交期入庫。 無須自行開單申請 與 人為控管。
+
+c. 控管模式(保養, 安全 & 物控) 的 EAM申請單中, 如果有相同料號，會併單處理嗎?   若是，How to?
+   => 以EAM做為部門單位物料需求蒐集平台，在開立請購單時，也是依部門單位的物料需求逐筆建立請購需求。
+   => 基本上，經採購端批次彙整請購單需求，再與廠商議價後，將依請購需求逐筆開立採購單。
+   => 在系統面上，並不會有併單處理的作業。
+
+d. 控管模式參照月耗用資料；卻使用每週查核頻率?  為何不使用"每月"查核頻率? or 參照 "周"耗用資料呢?
+  =>理論上，必須要每日查檢庫存量是否低於需求量，以判斷是否啟動相對應的物料管理模式。 目前使用每週查核頻率，乃是根據經驗法則。
+ 
+e. 2011/9/16 go-live, 的新Spare Pare控管模式，請問迄今其 績效?  呆滯料,SE倉...下降了嗎?
+ =>變更前採用建議庫存量控管模式，變更後採用ROP(重訂購量)控管模式;    [耗用量x LT + 安全庫存量 = 重訂購量]
+ =>參照上線後，需求合理性(i.e. 耗用金額/需求金額)的數據，有逐漸接近於1的趨勢。 可以有效地控制庫存水位。
+
+f.  料號規格異動變更，有借屍還魂之弊!  [新增料號之簽核流程依金額大小，逐級往上；But 料號規格異動時，僅需上一級長官簽核]
+=> 針對這點，
+=> Users能在初次申建新料號提出需求申請時，可以規避了更上層長官審核；
+=> 但是在請購單(PR)審核階段，此物料將會依實際金額，進行層級簽核流程作業。
+=> 因此，可以規避第 一階段的需求申請審核作業；卻無法by pass第二階段的請/採審核作業
+
+

@@ -1,0 +1,1280 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:i18n="http://innolux.com/i18n">
+
+	<h:form id="listPrLineForm" prependId="false">
+		<c:set var="prLineForm" value="#{ListPrlineBean.prLineForm}" />
+		<c:set var="prLineView" value="#{ListPrlineBean.prLineView}" />
+		<c:set var="prForm" 	value="#{prLineForm.prForm}" />
+		<c:set var="itemForm" 	value="#{prLineForm.itemForm}" />
+		<c:set var="prline" 	value="#{prLineForm.prline}" />
+		<c:set var="editButton" value="#{prLineForm.editButton}" />
+		<h:outputText escape="false" style="font-weight: bold;color:red;"
+			value="#{prForm.lineErrorMap[prline.itemnum]}"
+			rendered="#{prForm.lineErrorMap[prline.itemnum]!=null}" />
+
+		<p:panelGrid id="header" style="width:100%;">
+			<p:row>
+				<p:column style="vertical-align:top;width:50%">
+					<p:panelGrid style="width:100%;word-break:break-all;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="line.info" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:120px">
+								<i18n:outputText value="line" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column>
+							#{prline.prlinenum}
+					</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="itemnum" style="font-weight: bold;" />
+								<i18n:outputText style="color:red;" value="NonNullMark" />  :
+					</p:column>
+							<p:column rendered="#{!editButton}">
+							#{prline.itemnum}
+							 &#160;&#160;&#160;
+							<p:commandLink
+									actionListener="#{ListItemOverviewBean.onSearchPrline(
+													prline.itemnum,
+													prline.commoditygroup)}"
+									update=":iframePanel"
+									onclick="PF('listItemOverviewStockDialog').show()">
+									<i18n:outputText value="item.info.link" />
+								</p:commandLink>
+							</p:column>
+							<p:column rendered="#{editButton}">
+								<p:inputText value="#{prline.itemnum}" size="20" readonly="true" />
+								<p:commandButton icon="ui-icon-search"
+									update=":listItemCommonForm"
+									oncomplete="PF('listItemCommonFormDialog').show();">
+									<f:setPropertyActionListener
+										target="#{ListItemCommonBean.object}"
+										value="#{ListPrlineBean}" />
+									<f:setPropertyActionListener
+										target="#{ListItemCommonBean.updateView}"
+										value="listPrLineForm" />
+								</p:commandButton>
+							</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.photo}">
+							<p:column>
+								<i18n:outputText value="photo" style="font-weight: bold;" />:
+							</p:column>
+							<p:column>
+								<p:lightBox iframe="true">
+									<h:outputLink
+										value="../CommonView/imageView.xhtml?keyId=#{prline.itemnum}">
+										<p:graphicImage id="img" style="cursor:pointer"
+											value="../../resources/images/images.png" width="30" />
+									</h:outputLink>
+								</p:lightBox>
+							</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.altItemnum}">
+							<p:column>
+								<i18n:outputText value="alt_itemnum" style="font-weight: bold;" />:
+							</p:column>
+							<p:column>
+								<p:commandLink update=":listSecondItemform"
+									rendered="#{prline.itemnum!=null}"
+									action="#{ItemListALItemBean.onSearch}"
+									oncomplete="PF('listSecondItemDialog').show();"
+									style="color:blue;">
+									<f:setPropertyActionListener
+										target="#{ItemListALItemBean.itemnum}"
+										value="#{prline.itemnum}" />
+									<i18n:outputText value="ItemList.AlItem" />
+								</p:commandLink>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="stockroom" style="font-weight: bold;" />
+							</p:column>
+							<p:column>
+								#{prline.storeroom}
+							</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.requireDate}">
+							<p:column>
+								<i18n:outputText value="require.date" style="font-weight: bold;" />
+								<c:if test="#{prLineView.requireDatNullMark}">
+									<i18n:outputText style="color:red;" value="NonNullMark" />
+								</c:if> :
+							</p:column>
+							<p:column rendered="#{!editButton}">
+								<h:outputText value="#{prline.reqdeliverydate}">
+									<f:convertDateTime pattern="yyyy/MM/dd" timeZone="GMT+8" />
+								</h:outputText>
+							</p:column>
+							<p:column rendered="#{editButton}">
+								<p:calendar value="#{prline.reqdeliverydate}" showOn="button"
+									id="reqdeliverydate" readonlyInput="true" />
+								<p:commandButton icon="ui-icon-close"
+									update=":listPrLineForm:reqdeliverydate">
+									<f:setPropertyActionListener target="#{prline.reqdeliverydate}"
+										value="" />
+								</p:commandButton>
+							</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.eqId}">
+							<p:column>
+								<i18n:outputText value="facility.num" style="font-weight: bold;" />
+								<i18n:outputText style="color:red;" value="NonNullMark" /> :
+					</p:column>
+							<p:column rendered="#{!editButton}">
+							#{prline.eqId}
+					</p:column>
+							<p:column rendered="#{editButton}">
+								<p:inputText value="#{prline.eqId}" size="20" readonly="true"
+									id="eqId" />
+								<p:commandButton icon="ui-icon-search"
+									update=":listOrgFacilityEqCommonForm"
+									oncomplete="PF('listOrgFacilityEqCommonDialog').show();">
+									<f:setPropertyActionListener
+										target="#{ListOrgFacilityEqCommonBean.object}"
+										value="#{ListPrlineBean}" />
+									<f:setPropertyActionListener
+										target="#{ListOrgFacilityEqCommonBean.updateView}"
+										value="eqId" />
+								</p:commandButton>
+								<br />
+								<font color="red">資料來源：IE提供Loading95%以上機台清單</font>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="item.description"
+									style="font-weight: bold;" />
+								<i18n:outputText value="description" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column>
+						#{prline.description}
+					</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="class.structure1"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{itemForm.sStructs1}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="class.structure2"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{itemForm.sStructs2}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="class.structure3"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{itemForm.sStructs3}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="class_structure_id"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{itemForm.sStructs4}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:130px">
+								<i18n:outputText value="min.Basic.Unit"
+									style="font-weight: bold;" /> :
+							</p:column>
+							<p:column>
+								<h:outputText value="#{prline.minBasicUnit}" />
+							</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.packageUnit}">
+							<p:column style="width:130px">
+								<i18n:outputText value="package.Unit" style="font-weight: bold;" /> :
+							</p:column>
+							<p:column>
+								<h:outputText value="#{prline.packageUnit}" />
+							</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.transferQuantity}">
+							<p:column style="width:130px">
+								<i18n:outputText value="transfer.quantity"
+									style="font-weight: bold;" /> :
+							</p:column>
+							<p:column>
+								#{prline.transferQuantity}
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<font style="font-weight: bold;">Org :</font>
+							</p:column>
+							<p:column>
+							#{SystemConfigBean.locationMapALL[prline.siteid]}
+					</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="dept_code" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column>
+						#{prline.MDept}
+					</p:column>
+						</p:row>
+						<p:row rendered="#{prline.inspectionEmpno!=null}">
+							<p:column>
+								<i18n:outputText value="inspector" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column>
+						#{prline.inspectionEmpno}
+					</p:column>
+						</p:row>
+						<p:row rendered="#{prline.inspectionDeptCode!=null}">
+							<p:column>
+								<i18n:outputText value="inspector.deptcode" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column>
+						#{prline.inspectionDeptCode}
+					</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="use.msg" style="font-weight: bold;" />
+								<i18n:outputText style="color:red;" value="NonNullMark" /> :
+							</p:column>
+							<p:column rendered="#{!editButton}">
+								<p:inputTextarea rows="5" cols="40" value="#{prline.cmoremark}"
+									autoResize="false" readonly="true" />
+							</p:column>
+							<p:column rendered="#{editButton}">
+								<p:inputTextarea rows="5" cols="40" value="#{prline.cmoremark}"
+									autoResize="false" maxlength="500" />
+							</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.mccommand}">
+							<p:column style="width:120px">
+								<i18n:outputText value="mc_command" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column>
+							#{prline.mccommand}
+					</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.maxidledays}">
+							<p:column style="width:120px">
+								<i18n:outputText value="maxidledays" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column>
+							#{prline.maxidledays}
+					</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="create.date" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column>
+								<h:outputText value="#{prline.enterdate}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.otherFile}">
+							<p:column>
+								<i18n:outputText value="other.file" style="font-weight: bold;" /> :
+							</p:column>
+							<p:column>
+								<a href="../../resources/doc/20140218workerList.xls"
+									style="color: blue;"> 依分類所對應之製成工務負責人一欄表 </a>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:column>
+				<p:column style="vertical-align:top;width:50%">
+					<p:panelGrid style="width:100%;word-break:break-all;"
+						rendered="#{prLineView.costInfo}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="4">
+									<i18n:outputText value="cost.info" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:100px">
+								<i18n:outputText value="currency_code"
+									style="font-weight: bold;" /> :
+					</p:column>
+							<p:column colspan="3">
+								<h:outputText value="#{prline.currencycode}"
+									rendered="#{prline.itemnum!=null}" style="color:red" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:100px">
+								<i18n:outputText value="unit_cost" style="font-weight: bold;" /> :
+					</p:column>
+							<p:column style="width:50px">
+
+								<h:outputText value="#{prline.oriunitcost}">
+									<f:convertNumber groupingUsed="true" />
+								</h:outputText>
+							</p:column>
+							<p:column style="width:120px">
+								<i18n:outputText style="color:red;" value="NonNullMark" />
+								<i18n:outputText value="change" style="font-weight: bold;" />
+								<i18n:outputText value="unit_cost" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column rendered="#{!editButton}">
+
+								<h:outputText value="#{prline.unitcost}">
+									<f:convertNumber groupingUsed="true" />
+								</h:outputText>
+							</p:column>
+							<p:column rendered="#{editButton}">
+								<pe:inputNumber value="#{prline.unitcost}" style="width:70px"
+									decimalPlaces="3">
+									<f:converter converterId="javax.faces.BigDecimal" />
+								</pe:inputNumber>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="lead.time" style="font-weight: bold;" />  :
+							</p:column>
+							<p:column>
+							#{prline.orideliverytime}
+							</p:column>
+
+							<p:column>
+								<i18n:outputText style="color:red;" value="NonNullMark" />
+								<i18n:outputText value="change" style="font-weight: bold;" />
+								<i18n:outputText value="lead.time" style="font-weight: bold;" />  :
+							</p:column>
+							<p:column rendered="#{!editButton}">
+								#{prline.deliverytime}
+							</p:column>
+							<p:column rendered="#{editButton}">
+								<pe:inputNumber value="#{prline.deliverytime}"
+									style="width:70px" decimalPlaces="0" minValue="0" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<i18n:outputText value="change.unitcost.remark"
+									style="font-weight: bold;" />  :
+					</p:column>
+							<p:column colspan="2" rendered="#{!editButton}">
+						#{prline.changeUnitcostRemark}
+					</p:column>
+							<p:column colspan="2" rendered="#{editButton}">
+								<p:inputText value="#{prline.changeUnitcostRemark}" size="40"
+									maxlength="50" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<i18n:outputText value="change.deliverytime.remark"
+									style="font-weight: bold;" />  :
+					</p:column>
+							<p:column colspan="2" rendered="#{!editButton}">
+						#{prline.changeDeliverytimeRemark}
+					</p:column>
+							<p:column colspan="2" rendered="#{editButton}">
+								<p:inputText value="#{prline.changeDeliverytimeRemark}"
+									size="40" maxlength="50" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid style="width:100%;word-break:break-all;"
+						rendered="#{!prLineView.costInfo}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="cost.info" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:100px">
+								<i18n:outputText value="currency_code"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+								<h:outputText value="#{prline.currencycode}"
+									rendered="#{prline.itemnum!=null}" style="color:red" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:100px">
+								<i18n:outputText value="unit_cost" style="font-weight: bold;" /> :
+							</p:column>
+							<p:column>
+
+								<h:outputText value="#{prline.oriunitcost}">
+									<f:convertNumber groupingUsed="true" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="lead.time" style="font-weight: bold;" />  :
+							</p:column>
+							<p:column>
+							#{prline.orideliverytime}
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid
+						style="width:100%;margin-top:20px;word-break:break-all;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="mc.control.Info" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:120px">
+								<i18n:outputText value="mc.OrderQuantity"
+									style="font-weight: bold;" />  :
+							</p:column>
+							<p:column>
+								<h:outputText value="#{prline.mcOrderQuantity}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:120px">
+								<i18n:outputText value="mc.MinPackage.Quantity"
+									style="font-weight: bold;" />  :
+							</p:column>
+							<p:column>
+								<h:outputText value="#{prline.mcMinPackageQuantity}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<!-- ============R1非週期 & R2保養需求 & R1ReORder & R2ReORder======================================= -->
+					<p:panelGrid
+						style="width:100%;margin-top:20px;word-break:break-all;"
+						rendered="#{prLineView.pmreqqtyT1 or 
+									prLineView.pmreqqtyT2}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="3">
+									<i18n:outputText value="request.quantity" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:120px">
+								<i18n:outputText value="request.quantity"
+									style="font-weight: bold;" />
+								<i18n:outputText style="color:red;" value="NonNullMark" />  :
+					</p:column>
+							<p:column rendered="#{!editButton}">
+							#{prline.pmreqqty}
+					</p:column>
+							<p:column rendered="#{editButton}">
+								<pe:inputNumber decimalPlaces="3"
+									rendered="#{prLineView.pmreqqtyT2}"
+									value="#{prline.pmreqqty}" />
+								<pe:inputNumber decimalPlaces="0"
+									rendered="#{prLineView.pmreqqtyT1}"
+									value="#{prline.pmreqqty}" />
+								&#160;<h:outputText rendered="#{prline.minBasicUnit!=''}"
+									value="(#{prline.minBasicUnit})" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid
+						style="width:100%;margin-top:20px;word-break:break-all;"
+						rendered="#{prLineView.erpInfo}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="4">
+									PR PO INFO
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:100px;font-weight: bold;">請購系統單號</p:column>
+							<p:column colspan="3">#{prline.epNum}</p:column>
+						</p:row>
+						<p:row rendered="#{prline.transferMsg!=null}">
+							<p:column style="width:100px;font-weight: bold;">拋轉錯誤訊息</p:column>
+							<p:column colspan="3">#{prline.transferMsg}</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:70px;font-weight: bold;">PONUM</p:column>
+							<p:column>#{prline.erpPo}</p:column>
+							<p:column style="width:70px;font-weight: bold;">PRNUM</p:column>
+							<p:column>#{prline.erpPrnum}</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:100px;font-weight: bold;">PO項次</p:column>
+							<p:column>#{prline.erpPoLineNum}</p:column>
+							<p:column style="width:100px;font-weight: bold;">PR項次</p:column>
+							<p:column>#{prline.erpPrLineNum}</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:100px;font-weight: bold;">PO<i18n:outputText
+									value="status" />
+							</p:column>
+							<p:column>#{prline.erpPoStatus}</p:column>
+							<p:column style="width:100px;font-weight: bold;">PR<i18n:outputText
+									value="status" />
+							</p:column>
+							<p:column>#{prline.erpPrStatus}</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:100px;font-weight: bold;">PO<i18n:outputText
+									value="buyer" />
+							</p:column>
+							<p:column>
+								<h:outputText rendered="#{prline.erpPoBuyerEmpNo!=null}"
+									value="#{prline.erpPoBuyerEmpNo}
+								(#{prForm.prNameMap[prline.erpPoBuyerEmpNo]})" />
+							</p:column>
+							<p:column style="width:100px;font-weight: bold;">
+								<i18n:outputText value="defult_buyer" />
+							</p:column>
+							<p:column>
+								<h:outputText rendered="#{prline.erpPrBuyerEmpNo!=null}"
+									value="#{prline.erpPrBuyerEmpNo}
+								(#{prForm.prNameMap[prline.erpPrBuyerEmpNo]})" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:100px;font-weight: bold;">
+								<i18n:outputText value="promised.date" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{prline.poPromisedDate}">
+									<f:convertDateTime pattern="yyyy/MM/dd" timeZone="GMT+8" />
+								</h:outputText>
+							</p:column>
+							<p:column style="width:100px;font-weight: bold;">
+								<i18n:outputText value="buyer.reutrn.note" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{prline.erpBuyerReturnNote}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:100px;font-weight: bold;">
+									PO<i18n:outputText value="vendor" />
+							</p:column>
+							<p:column>
+								<h:outputText rendered="#{prline.poVendorId!=null}"
+									value="#{ListCompaniesBean.getSupplierHeader(
+									prline.poVendorId).newvendorname}" />
+							</p:column>
+							<p:column style="width:100px;font-weight: bold;">
+									PRLINE<i18n:outputText value="inactive.status" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{prline.epmallPrLineCancelFlag}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:100px;font-weight: bold;">
+							</p:column>
+							<p:column>
+							</p:column>
+							<p:column style="width:100px;font-weight: bold;">
+									PRLINE<i18n:outputText value="inactive.date" />
+							</p:column>
+							<p:column>
+								<h:outputText value="#{prline.erpPrCancelDate}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<!-- ====================================R1週期性控管==================================== -->
+					<p:panelGrid
+						style="width:100%;margin-top:20px;word-break:break-all;"
+						rendered="#{prLineView.controlInfoT1}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="oriminlevel" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:120px">
+								<i18n:outputText value="mon.minlevel" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column>
+						#{prline.oriminlevel}
+								&#160;<h:outputText rendered="#{prline.minBasicUnit!=''}"
+									value="(#{prline.minBasicUnit})" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid
+						style="width:100%;margin-top:20px;word-break:break-all;"
+						rendered="#{prLineView.controlInfoT1}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="add.control.minlevel" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:120px">
+								<i18n:outputText value="add.mon.minlevel"
+									style="font-weight: bold;" />
+								<i18n:outputText style="color:red;" value="NonNullMark" />  :
+					</p:column>
+							<p:column rendered="#{!editButton}">
+							#{prline.minlevel}
+								&#160;<h:outputText rendered="#{prline.minBasicUnit!=''}"
+									value="(#{prline.minBasicUnit})" />
+							</p:column>
+							<p:column rendered="#{editButton}">
+								<pe:inputNumber decimalPlaces="3" minValue="-9999999"
+									value="#{prline.minlevel}">
+									<p:ajax event="blur" listener="#{ListPrlineBean.newminlevel}"
+										update="newminlevel multipleAvghdqtyThree" />
+									<f:converter converterId="javax.faces.BigDecimal" />
+								</pe:inputNumber>
+								&#160;<h:outputText rendered="#{prline.minBasicUnit!=''}"
+									value="(#{prline.minBasicUnit})" />
+        						&#160;<i18n:outputText style="color:red;"
+									value="prline.description1" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid
+						style="width:100%;margin-top:20px;word-break:break-all;"
+						rendered="#{prLineView.controlInfoT1}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="new.minlevel" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:120px">
+								<i18n:outputText value="NEWMINLEVEL" style="font-weight: bold;" />  :
+					</p:column>
+							<p:column>
+								<h:outputText id="newminlevel" value="#{prline.newminlevel}" />
+								&#160;<h:outputText rendered="#{editButton}"
+									value="(#{prline.minBasicUnit})" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid
+						style="width:100%;margin-top:20px;word-break:break-all;"
+						rendered="#{prLineView.controlInfoT1}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="caculate.description" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:160px">
+								<i18n:outputText value="mc.Buyer.WorkTime"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prForm.prMcParameter.mcBuyerWorkTime}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="month.halfyear.Frequence.Limit"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prForm.prMcParameter.mFrequenceLimit}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="2">
+								<i18n:outputText style="color:red;" value="NonNullMark" />
+								<i18n:outputText value="r1.caculate.remark" style="color:red;" />
+								<br />
+								<i18n:outputText style="color:red;" value="NonNullMark" />
+								<i18n:outputText value="r1.caculate.remark2" style="color:red;" />
+								<br />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid style="width:100%;word-break:break-all;" 
+						rendered="#{prLineView.controlInfoT1 ||
+									prLineView.halfyearIssueCounter}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="4">
+									<i18n:outputText value="MatusetransHalf.info" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row rendered="#{prLineView.controlInfoT1}">
+							<p:column style="width:160px">
+								<i18n:outputText value="three.dept.max.Matusetranqty"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column colspan="3">
+										#{prline.maxhdqtyThree}
+									</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.controlInfoT1}">
+							<p:column style="width:160px">
+								<i18n:outputText value="three.dept.avg.Matusetranqty"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column colspan="3">
+										#{prline.avghdqtyThree}
+									</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="font-weight: bold;">
+								<i18n:outputText value="helfyear.issue.counter"/>[主]
+								<c:if test="#{prLineView.controlInfoT1}">/[主+替]:</c:if>
+							</p:column>
+							<p:column colspan="3">
+										#{prline.halfyearIssueCounter}
+										<c:if test="#{prLineView.controlInfoT1}">
+											/#{prline.sumofissuecounter}
+										</c:if>
+									&#160;&#160;&#160;
+									<p:commandLink
+									actionListener="#{ListItemOverviewBean.onHalfyearIssueCounter(
+															prline.itemnum,
+															prline.MDept)}"
+									rendered="#{!editButton}" update=":halfyearIssueCounterPanel"
+									onclick="PF('halfyearIssueCounterDialog').show()">
+									<i18n:outputText value="helfyear.issue.counter.link" />
+								  </p:commandLink>
+							</p:column>
+						</p:row>
+						<p:row rendered="#{prLineView.controlInfoT1}">
+							<p:column style="font-weight: bold;">
+									<i18n:outputText value="multipleAvghdqtyThree" />:
+							</p:column>
+							<p:column colspan="3">
+								<h:outputText value="#{prline.multipleAvghdqtyThree}"
+									id="multipleAvghdqtyThree"/>
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid style="width:100%;word-break:break-all;"
+						rendered="#{prLineView.controlInfoT1}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2" style="text-align:center;">
+										說明&#160;新月用量 &gt;
+										#{prForm.prMcParameter.maxRemarkRange}
+										倍<i18n:outputText value="three.dept.avg.Matusetranqty" />
+										<Br />或   &lt; 
+										#{prForm.prMcParameter.minRemarkRange}
+										倍<i18n:outputText value="three.dept.avg.Matusetranqty" />
+									</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="command" style="font-weight: bold;" /> :
+								</p:column>
+							<p:column rendered="#{!editButton}">
+								<p:inputTextarea rows="5" cols="40" value="#{prline.reqmark2}"
+									autoResize="false" readonly="true" />
+							</p:column>
+							<p:column rendered="#{editButton}">
+								<p:inputTextarea rows="5" cols="40" value="#{prline.reqmark2}"
+									autoResize="false" maxlength="500" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<!-- ======================================R2需求控管==================================== -->
+					<p:panelGrid
+						style="width:100%;margin-top:20px;word-break:break-all;"
+						rendered="#{prLineView.controlInfoT2}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<a href="../../resources/images/itemControlDescription.jpg"
+										target="_blank"
+										style="TEXT-DECORATION: UNDERLINE; color: red;"> <i18n:outputText
+											value="caculate.formula" />
+									</a>
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:160px">
+								<i18n:outputText value="mc.Buyer.WorkTime"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prForm.prMcParameter.mcBuyerWorkTime}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="month.Frequence.Limit"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prForm.prMcParameter.mFrequenceLimit}
+									</p:column>
+						</p:row>
+					</p:panelGrid>
+					<br/>
+					<p:panelGrid style="width:100%;word-break:break-all;"
+						id="headerR2Control"
+						rendered="#{prLineView.controlInfoT2}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="6">
+									<i18n:outputText value="oriminlevel" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="ori.oriavguseqty"
+									style="font-weight: bold;" /> :
+							</p:column>
+							<p:column style="width:30px">
+									#{prline.oriavguseqty}
+							</p:column>
+							<p:column>
+								<i18n:outputText value="ori" style="font-weight: bold;" />  &#160;
+								<i18n:outputText value="invsstock.sstock"
+									style="font-weight: bold;" /> /
+								<i18n:outputText value="site.invstock"
+									style="font-weight: bold;" /> :
+							</p:column>
+							<p:column style="width:30px">
+									#{prline.orisstock} 
+									&#160;&#160;&#160;/&#160;&#160;&#160;
+									<br />
+									#{prline.invsstock}			
+								</p:column>
+
+							<p:column>
+								<i18n:outputText value="ori" style="font-weight: bold;" />
+								<i18n:outputText value="minlevel" style="font-weight: bold;" />:
+							</p:column>
+							<p:column style="width:30px">
+								#{prline.oriminlevel}
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="6" style="text-align:center;"
+								styleClass="ui-widget-header">
+
+								<i18n:outputText value="update.level" />&#160;
+								<i18n:outputText value="contol.minlevel" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText style="color:red;" value="NonNullMark" />
+								<i18n:outputText value="pr_davguseqty"
+									style="font-weight: bold;" /> :
+							</p:column>
+							<p:column>
+								<pe:inputNumber value="#{prline.davguseqty}"
+									rendered="#{editButton and 
+									prline.itemnum!=null}"
+									style="width:40px" minValue="-9999999" decimalPlaces="0">
+									<p:ajax event="blur"
+										listener="#{ListPrlineBean.newminlevel}"
+										update="headerR2Control multipleAvghdqtyThree2" />
+								</pe:inputNumber>
+								<h:outputText value="#{prline.davguseqty}"
+									rendered="#{!editButton}" />
+							</p:column>
+							<p:column>
+								<i18n:outputText style="color:red;" value="NonNullMark" />
+								<i18n:outputText value="pr_sstock" style="font-weight: bold;" />:
+							</p:column>
+							<p:column>
+								<pe:inputNumber value="#{prline.sstock}"
+									rendered="#{prLineView.sstock and editButton}"
+									style="width:40px" minValue="-9999999" decimalPlaces="0">
+									<p:ajax event="blur"
+										listener="#{ListPrlineBean.newminlevel}"
+										update="headerR2Control multipleAvghdqtyThree2" />
+								</pe:inputNumber>
+
+								<h:outputText value="#{prline.sstock}"
+									rendered="#{!prLineView.sstock or !editButton}" />
+							</p:column>
+
+							<p:column>
+								<i18n:outputText value="pr_minlevel" style="font-weight: bold;" />:
+							</p:column>
+							<p:column>
+								#{prline.minlevel}
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column colspan="6" style="text-align:center;"
+								styleClass="ui-widget-header">
+
+								<i18n:outputText value="new.minlevel" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="new" style="font-weight: bold;" />
+								<i18n:outputText value="oriavguseqty" style="font-weight: bold;" /> :
+							</p:column>
+							<p:column>
+								#{prline.newavguseqty}
+							</p:column>
+							<p:column>
+								<i18n:outputText value="new" style="font-weight: bold;" />
+								<i18n:outputText value="sstock" style="font-weight: bold;" /> :
+							</p:column>
+							<p:column>
+								#{prline.newsstock}
+							</p:column>
+
+							<p:column>
+								<i18n:outputText value="new" style="font-weight: bold;" />
+								<i18n:outputText value="minlevel" style="font-weight: bold;" />:
+							</p:column>
+							<p:column>
+								#{prline.newminlevel}
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<br/>
+					<p:panelGrid style="width:100%;word-break:break-all;"
+						rendered="#{prLineView.controlInfoT2}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="4">
+									<i18n:outputText value="use.info" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:150px">
+								<i18n:outputText value="three.dept.useqty"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prline.hdqtyThree}
+							</p:column>
+							<p:column style="width:150px">
+								<i18n:outputText value="three.hdcost" style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+
+								<h:outputText value="#{prline.hdcostThree}">
+									<f:convertNumber groupingUsed="true" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="three.dept.max.useqty"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prline.maxhdqtyThree}
+									</p:column>
+							<p:column>
+								<i18n:outputText value="three.max.hdcost" style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+
+								<h:outputText value="#{prline.maxhdcostThree}">
+									<f:convertNumber groupingUsed="true" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="three.dept.avg.useqty"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prline.avghdqtyThree}
+									</p:column>
+							<p:column>
+								<i18n:outputText value="three.avg.hdcost" style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+
+								<h:outputText value="#{prline.avghdcostThree}">
+									<f:convertNumber groupingUsed="true" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="bsstrkhistdept.usecounter"
+									style="font-weight: bold;" />[主] / [主+替]   :
+								</p:column>
+							<p:column colspan="3">
+										#{prline.usecounter} &#160;&#160;&#160;/&#160;&#160;&#160;
+										#{prline.sumofusecounter}
+									</p:column>
+						</p:row>
+						<p:row >
+							<p:column style="font-weight: bold;">
+									<i18n:outputText value="multipleAvghdqtyThree" />:
+							</p:column>
+							<p:column colspan="3">
+								<h:outputText value="#{prline.multipleAvghdqtyThree}"
+									id="multipleAvghdqtyThree2"/>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="contorl.category"
+									style="font-weight: bold;" />:
+								</p:column>
+							<p:column colspan="3">
+										#{SystemConfigBean.parameterMap[prline.cmommcontrol]}
+									</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid style="width:100%;word-break:break-all;"
+						rendered="#{prLineView.controlInfoT2}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2" style="text-align:center;">
+										說明&#160;新平均月耗用量 &gt;
+										#{prForm.prMcParameter.maxRemarkRange}
+										倍<i18n:outputText value="three.dept.avg.useqty" />
+										<Br />或   &lt; 
+										#{prForm.prMcParameter.minRemarkRange}
+										倍<i18n:outputText value="three.dept.avg.useqty" />
+									</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="command" style="font-weight: bold;" /> :
+								</p:column>
+							<p:column rendered="#{!editButton}">
+								<p:inputTextarea rows="5" cols="40" value="#{prline.reqmark2}"
+									autoResize="false" readonly="true" />
+							</p:column>
+							<p:column rendered="#{editButton}">
+								<p:inputTextarea rows="5" cols="40" value="#{prline.reqmark2}"
+									autoResize="false" maxlength="500" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<!-- ======================================R2保養需求==================================== -->
+					<p:panelGrid
+						style="width:100%;margin-top:20px;word-break:break-all;"
+						id="vendor" rendered="#{prLineView.vendor}">
+						<f:facet name="header">
+							<p:row rendered="#{editButton and prline.itemnum!=null}">
+								<p:column colspan="3">
+									<p:commandButton value="指定供應商" icon="ui-icon-plus"
+										actionListener="#{ListCompaniesBean.onItemSearch(prline.itemnum)}"
+										update=":listSupplierHeaderForm"
+										oncomplete="PF('listCompaniesDialog2').show()">
+										<f:setPropertyActionListener
+											target="#{ListCompaniesBean.object}"
+											value="#{ListPrlineBean}" />
+										<f:setPropertyActionListener
+											target="#{ListCompaniesBean.updateView}" value="vendor" />
+									</p:commandButton>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column style="width:20px;">
+								</p:column>
+								<p:column>
+									<i18n:outputText value="basic.vendor.company" />
+								</p:column>
+								<p:column>
+									<i18n:outputText value="basic.vendor.name" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column>
+								<p:commandButton update="vendor"
+									rendered="#{editButton and prline.vendor!=null}"
+									style="width:20px;height:20px;"
+									actionListener="#{ListPrlineBean.setCompany(null)}"
+									icon="ui-icon-trash" title="Delete" />
+							</p:column>
+							<p:column style="width:80px">
+								<h:outputText rendered="#{prline.vendor!=null}"
+									value="#{ListCompaniesBean.getSupplierHeader(prline.vendor).registrationnum}" />
+							</p:column>
+							<p:column>
+								<h:outputText rendered="#{prline.vendor!=null}"
+									value="#{ListCompaniesBean.getSupplierHeader(prline.vendor).newvendorname}" />
+							</p:column>
+						</p:row>
+						<p:row rendered="#{prline.vendor!=null}">
+							<p:column colspan="2">
+								<i18n:outputText value="vendor.remark"
+									style="font-weight: bold;" />
+								<i18n:outputText style="color:red;" value="NonNullMark" />：
+							</p:column>
+							<p:column>
+								<p:inputText value="#{prline.vendorRemark}" maxlength="100"
+									size="30" rendered="#{editButton and prline.itemnum!=null}" />
+								<h:outputText value="#{prline.vendorRemark}"
+									style="white-space: pre-wrap; word-wrap: break-word; "
+									rendered="#{!editButton}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid
+						style="width:100%;margin-top:20px;word-break:break-all;"
+						rendered="#{prLineView.useInfo}">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="use.info" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:200px">
+								<i18n:outputText value="half.dept.useqty"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prline.hdqty}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:200px">
+								<i18n:outputText value="bsstrkhistdept.usecounter"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prline.usecounter}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:200px">
+								<i18n:outputText value="half.dept.max.useqty"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prline.maxhdqty}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:200px">
+								<i18n:outputText value="half.dept.avg.useqty"
+									style="font-weight: bold;" /> :
+								</p:column>
+							<p:column>
+										#{prline.avghdqty}
+									</p:column>
+						</p:row>
+					</p:panelGrid>
+					<!-- =====================================SAVE==================================== -->
+				</p:column>
+			</p:row>
+
+			<f:facet name="footer">
+				<p:row rendered="#{editButton}">
+					<p:column colspan="2" style="text-align: center">
+						<p:commandButton value="OK"
+							actionListener="#{ListPrlineBean.save}" icon="ui-icon-contact"
+							oncomplete="PF('listPrlineDialog').hide();PF('statusDialog').hide();"
+							title="OK" />
+					</p:column>
+				</p:row>
+			</f:facet>
+		</p:panelGrid>
+	</h:form>
+	<p:dialog id="listOrgFacilityEqCommonDialog"
+		widgetVar="listOrgFacilityEqCommonDialog" modal="true"
+		appendTo="@(body)" width="800" height="350">
+		<f:facet name="header">
+			<i18n:outputText value="facility.num" />
+			<i18n:outputText value="list" />
+		</f:facet>
+		<ui:include src="../CommonView/listOrgFacilityEqCommon.xhtml" />
+	</p:dialog>
+	<p:dialog id="listItemCommonFormDialog"
+		widgetVar="listItemCommonFormDialog" modal="true" appendTo="@(body)"
+		width="800" height="500">
+		<f:facet name="header">
+			<i18n:outputText value="itemnum" />
+		</f:facet>
+		<ui:include src="../CommonView/listItemCommon.xhtml" />
+	</p:dialog>
+	<p:dialog id="listCompaniesDialog2" header="Vendor"
+		widgetVar="listCompaniesDialog2" modal="true" appendTo="@(body)"
+		width="800" height="500">
+		<ui:include src="../CommonView/listCompanies.xhtml" />
+	</p:dialog>
+	<p:dialog id="listSecondItemDialog" widgetVar="listSecondItemDialog"
+		modal="true" appendTo="@(body)" width="600">
+		<f:facet name="header">
+			<i18n:outputText value="alt_itemnum" />
+		</f:facet>
+		<ui:include src="../CommonView/listSecondItem.xhtml" />
+	</p:dialog>
+	<p:dialog id="listItemOverviewStockDialog"
+		widgetVar="listItemOverviewStockDialog" modal="true"
+		appendTo="@(body)" width="1000" height="500">
+		<f:facet name="header">
+			<i18n:outputText value="ItemList.OverView" />
+		</f:facet>
+			<h:panelGrid columns="1" id="iframePanel" width="100%">
+				<div align="center">
+				<c:if test="#{ListItemOverviewBean.itemOverviewForm.itemtype=='R1'}">
+					<ui:include src="../overview/r1InvbalancesList.xhtml"  />
+				</c:if>
+				<c:if test="#{ListItemOverviewBean.itemOverviewForm.itemtype=='R2'}">
+					<ui:include src="../overview/r2InvbalancesList.xhtml" />
+				</c:if>
+				<ui:include src="../overview/zErpUnProcessList.xhtml" />
+				<ui:include src="../overview/zMroOpenPoList.xhtml" />
+				</div>
+			</h:panelGrid>
+	</p:dialog>
+	<p:dialog id="halfyearIssueCounterDialog"
+		widgetVar="halfyearIssueCounterDialog" modal="true" appendTo="@(body)"
+		width="1000" height="500">
+		<f:facet name="header">
+			<i18n:outputText value="helfyear.issue.counter" />
+		</f:facet>
+		<h:panelGrid columns="1" id="halfyearIssueCounterPanel" width="100%">
+				<div align="center">
+					<ui:include src="../reportView/r1HalfUseList.xhtml" />
+				</div>
+		</h:panelGrid>
+	</p:dialog>
+</ui:composition>

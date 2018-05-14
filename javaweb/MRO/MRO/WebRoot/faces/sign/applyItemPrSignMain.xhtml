@@ -1,0 +1,467 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<ui:include src="../CommonView/fileUpload.xhtml" />
+		<p:tabView id="tabView" cache="true"
+			activeIndex="#{ApplyItemPrSignBean.prForm.activeIndex}">
+
+
+			<p:tab id="tab1">
+				<f:facet name="title">
+					<i18n:outputText value="pr.apply.sign" />
+					<i18n:outputText value="list" />
+				</f:facet>
+				<h:form id="form" prependId="false">
+					<div align="center">
+						<p:panelGrid id="search" style="width:100%;word-break:break-all;" 
+						rendered="#{LoginInfoBean.mcRole or LoginInfoBean.adminRole or LoginInfoBean.fsmcRole}">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<i18n:outputText style="color:red;" value="NonNullMark" />
+										<i18n:outputText value="apply.classification" />
+									</p:column>
+									<p:column>
+										<i18n:outputText value="apply.num" />
+										<font color="red">(多個申請單號請用逗號隔開)</font>
+									</p:column>
+									<p:column>
+										<i18n:outputText value="apply.by" />
+									</p:column>
+									<p:column>
+										<i18n:outputText value="dept_code" />
+									</p:column>
+									<p:column>
+										<i18n:outputText value="" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<p:row>
+								<p:column style="text-align:center">									
+									<p:selectOneMenu value="#{ApplyItemPrSignBean.prForm.selectPrtype}">
+										<f:selectItem itemValue="" itemLabel="請選擇" />
+										<f:selectItems value="#{ApplyItemPrSignBean.prForm.prtypeOption}" />
+										<p:ajax update=":tabView"
+										listener="#{ApplyItemPrSignBean.search}" process="@form"
+										  />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column style="text-align:center">
+									<p:inputText value="#{ApplyItemPrSignBean.prForm.prnum}"
+										size="50"  />
+								</p:column>
+								<p:column style="text-align:center">
+									<p:inputText value="#{ApplyItemPrSignBean.prForm.requestby2}"
+										size="13" />
+								</p:column>
+								<p:column style="text-align:center">
+									<p:inputText value="#{ApplyItemPrSignBean.prForm.MDept}"
+										size="13" />
+								</p:column>
+								<p:column style="text-align:center">
+									<p:commandButton icon="ui-icon-search" value="Search"
+										
+										
+										actionListener="#{ApplyItemPrSignBean.search}"
+										update=":tabView" style="margin-top:5px" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+					</div>
+					<c:if test="#{LoginInfoBean.mcRole or LoginInfoBean.adminRole or LoginInfoBean.fsmcRole}">
+						<p:dataTable var="listPr" paginatorPosition="bottom"
+							value="#{ApplyItemPrSignBean.prForm.listPr}" 
+							rendered="#{LoginInfoBean.mcRole or LoginInfoBean.adminRole or LoginInfoBean.fsmcRole}"
+							selection="#{ApplyItemPrSignBean.prForm.prs}" rowKey="#{listPr.prid}"
+							paginator="true" rows="10" id="listPr" >
+					 
+					
+						<p:ajax event="rowSelect"
+							listener="#{ApplyItemPrSignBean.selectApply}"
+							update=":tabView" 
+							 />
+						<f:facet name="header"> 
+							搜索結果：  #{ApplyItemPrSignBean.prForm.listPr.size()} 筆
+							<p:commandButton  value="選取全部 " update="listPr" 
+								icon="ui-icon-circle-check"
+								actionListener="#{ApplyItemPrSignBean.onSelectAllPr}" />
+						</f:facet>
+						<p:column selectionMode="multiple" 
+								style="text-align:center;width:20px" />
+								
+						<p:column style="text-align:center" sortBy="#{listPr.prnum}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.num" />
+							</f:facet>
+							<h:outputText value="#{listPr.prnum}" />
+
+						</p:column>
+						<p:column style="text-align:center" sortBy="#{listPr.prtype}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.classification" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[listPr.prtype]}" />
+						</p:column>
+						<p:column style="text-align:center"
+							sortBy="#{SystemConfigBean.parameterMap[listPr.status]}">
+							<f:facet name="header">
+								<i18n:outputText value="status" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[listPr.status]}" />
+						</p:column>
+						<p:column style="text-align:center">
+							<f:facet name="header">
+								<i18n:outputText value="siteid" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.locationMapALL[listPr.siteid]}" />
+						</p:column>
+						<p:column style="text-align:center"
+							sortBy="#{listPr.requestedby2}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.by" />
+							</f:facet>
+							<h:outputText value="#{listPr.requestedby2}" />
+						</p:column>
+						<!-- added by r.c -->
+						<p:column style="text-align:center"
+							sortBy="#{ApplyItemPrSignBean.prForm.requestedby2NameMap[listPr.requestedby2]}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.by.name" />
+							</f:facet>
+							<h:outputText
+								value="#{ApplyItemPrSignBean.prForm.requestedby2NameMap[listPr.requestedby2]}" />
+
+						</p:column>
+						<p:column style="text-align:center" sortBy="#{listPr.MDept}">
+							<f:facet name="header">
+								<i18n:outputText value="dept_code" />
+							</f:facet>
+							<h:outputText value="#{listPr.MDept}" />
+
+						</p:column>
+						<p:column sortBy="#{listPr.totalbasecost2}"
+							style="text-align:center">
+							<f:facet name="header">
+								<i18n:outputText value="total_cost" />
+								<br />
+								(<i18n:outputText value="current.code" />)
+							</f:facet>
+							<h:outputText value="#{listPr.totalbasecost2}" >
+								<f:convertNumber groupingUsed="true" />
+							</h:outputText>
+
+						</p:column>
+						<p:column sortBy="#{listPr.changedate}">
+							<f:facet name="header">
+								<i18n:outputText value="change_date" />
+							</f:facet>
+							<h:outputText value="#{listPr.changedate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+							</h:outputText>
+						</p:column>
+						<p:column sortBy="#{listPr.issuedate}">
+							<f:facet name="header">
+								<i18n:outputText value="pr_issue_date" />
+							</f:facet>
+							<h:outputText value="#{listPr.issuedate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+							</h:outputText>
+
+						</p:column>
+						<p:column sortBy="#{listPr.description}">
+							<f:facet name="header">
+								<i18n:outputText value="command" />
+							</f:facet>
+							<h:outputText value="#{listPr.description}" />
+						</p:column>
+							<f:facet name="footer">
+							<p:commandButton value="Approve" icon="ui-icon-circle-check"
+							update=":SubmitMutiConfirmDialogForm"
+							oncomplete="PF('SubmitMutiConfirmDialog').show();" />   
+							</f:facet>
+					</p:dataTable>
+					</c:if>
+					<c:if test="#{!LoginInfoBean.mcRole and !LoginInfoBean.adminRole and !LoginInfoBean.fsmcRole}">
+					<p:dataTable var="listPr" paginatorPosition="bottom"
+							value="#{ApplyItemPrSignBean.prForm.listPr}" selectionMode="single"
+							selection="#{ApplyItemPrSignBean.prForm.pr}" rowKey="#{listPr.prid}"
+							paginator="true" rows="10" id="listPr" >
+							
+						<p:ajax event="rowSelect"
+							listener="#{ApplyItemPrSignBean.selectApply}"
+							update=":tabView" 
+							 />
+						<f:facet name="header">
+							<i18n:outputText style="color:red;" value="NonNullMark" />
+							<i18n:outputText value="apply.classification"
+									style="font-weight: bold;" /> :
+							<p:selectOneMenu value="#{ApplyItemPrSignBean.prForm.selectPrtype}"
+								style="width:250px;">
+								<f:selectItem itemValue="" itemLabel="請選擇" />
+								<f:selectItems value="#{ApplyItemPrSignBean.prForm.prtypeOption}" />
+								<p:ajax update=":tabView"
+								listener="#{ApplyItemPrSignBean.search}" process="@form"
+								  />
+							</p:selectOneMenu>
+						</f:facet>
+						<p:column style="text-align:center" sortBy="#{listPr.prnum}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.num" />
+							</f:facet>
+							<h:outputText value="#{listPr.prnum}" />
+
+						</p:column>
+						<p:column style="text-align:center" sortBy="#{listPr.prtype}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.classification" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[listPr.prtype]}" />
+						</p:column>
+						<p:column style="text-align:center"
+							sortBy="#{SystemConfigBean.parameterMap[listPr.status]}">
+							<f:facet name="header">
+								<i18n:outputText value="status" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[listPr.status]}" />
+						</p:column>
+						<p:column style="text-align:center">
+							<f:facet name="header">
+								<i18n:outputText value="siteid" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.locationMapALL[listPr.siteid]}" />
+						</p:column>
+						<p:column style="text-align:center"
+							sortBy="#{listPr.requestedby2}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.by" />
+							</f:facet>
+							<h:outputText value="#{listPr.requestedby2}" />
+						</p:column>
+						<!-- added by r.c -->
+						<p:column style="text-align:center"
+							sortBy="#{ApplyItemPrSignBean.prForm.requestedby2NameMap[listPr.requestedby2]}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.by.name" />
+							</f:facet>
+							<h:outputText
+								value="#{ApplyItemPrSignBean.prForm.requestedby2NameMap[listPr.requestedby2]}" />
+
+						</p:column>
+						<p:column style="text-align:center" sortBy="#{listPr.MDept}">
+							<f:facet name="header">
+								<i18n:outputText value="dept_code" />
+							</f:facet>
+							<h:outputText value="#{listPr.MDept}" />
+
+						</p:column>
+						<p:column sortBy="#{listPr.totalbasecost2}"
+							style="text-align:center">
+							<f:facet name="header">
+								<i18n:outputText value="total_cost" />
+								<br />
+								(<i18n:outputText value="current.code" />)
+							</f:facet>
+							<h:outputText value="#{listPr.totalbasecost2}" >
+								<f:convertNumber groupingUsed="true" />
+							</h:outputText>
+
+						</p:column>
+						<p:column sortBy="#{listPr.changedate}">
+							<f:facet name="header">
+								<i18n:outputText value="change_date" />
+							</f:facet>
+							<h:outputText value="#{listPr.changedate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+							</h:outputText>
+						</p:column>
+						<p:column sortBy="#{listPr.issuedate}">
+							<f:facet name="header">
+								<i18n:outputText value="pr_issue_date" />
+							</f:facet>
+							<h:outputText value="#{listPr.issuedate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+							</h:outputText>
+
+						</p:column>
+						<p:column sortBy="#{listPr.description}">
+							<f:facet name="header">
+								<i18n:outputText value="command" />
+							</f:facet>
+							<h:outputText value="#{listPr.description}" />
+						</p:column>
+					</p:dataTable>
+					</c:if>
+				</h:form>
+			</p:tab>
+			<p:tab id="tab2">
+				<f:facet name="title">
+					<i18n:outputText value="Apply.Info" />
+				</f:facet>
+				<ui:include src="applyItemPrSign.xhtml" />
+			</p:tab>
+		</p:tabView>
+		<p:dialog id="listEmployeeDialog" widgetVar="listEmployeeDialog"
+			modal="true" appendTo="@(body)" width="600">
+			<f:facet name="header">
+				<i18n:outputText value="List of Employee" />
+			</f:facet>
+			<ui:include src="../CommonView/listEmployee.xhtml" />
+		</p:dialog>
+		<p:confirmDialog id="RejectToNewConfirmDialog" message="確定退回申請單重新修改?"
+			header="退回申請單" widgetVar="RejectToNewConfirmDialog"
+			appendTo="@(body)">
+			<h:form id="RejectToNewConfirmDialogForm" prependId="false">
+				<!-- added by r.c. -->
+				<p:panelGrid style="width:100%;text-align:center;word-break:break-all;">
+					<p:row>
+						<p:column colspan="3"> 簽核說明<i18n:outputText
+								style="color:red;" value="NonNullMark.Notice" /> : </p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+							<p:inputTextarea rows="6" cols="60"
+								value="#{ApplyItemPrSignBean.prForm.signComment}" maxlength="350"
+								style="width:100%" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<!-- end of added-->
+				<p:commandButton value="Yes Sure"
+					onclick="PF('RejectToNewConfirmDialog').hide();"
+					actionListener="#{ApplyItemPrSignBean.onRejectToNew}"
+					update=":tabView" 
+					 icon="ui-icon-circle-check" />
+				<p:commandButton value="Not Yet"
+					onclick="PF('RejectToNewConfirmDialog').hide();" type="button"
+					icon="ui-icon-close" />
+			</h:form>
+		</p:confirmDialog>
+		<p:confirmDialog id="SubmitMutiConfirmDialog" message="確定同意簽核選取的申請單?"
+			header="同意簽核申請單" widgetVar="SubmitMutiConfirmDialog" appendTo="@(body)">
+			<h:form id="SubmitMutiConfirmDialogForm" prependId="false">
+				<!-- added by r.c. -->
+				<p:panelGrid style="width:100%;text-align:center;word-break:break-all;">
+					<p:row>
+						<p:column colspan="3"> 簽核說明 : </p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+							<p:inputTextarea rows="6" cols="60"
+								value="#{ApplyItemPrSignBean.prForm.signComment}" maxlength="350"
+								style="width:100%" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<!-- end of added-->
+				<p:commandButton value="Yes Sure"
+					onclick="PF('SubmitMutiConfirmDialog').hide();"
+					actionListener="#{ApplyItemPrSignBean.onMultiAppr}"
+					update=":tabView" 
+					 icon="ui-icon-circle-check" />
+				<p:commandButton value="Not Yet"
+					onclick="PF('SubmitMutiConfirmDialog').hide();" type="button"
+					icon="ui-icon-close" />
+			</h:form>
+		</p:confirmDialog>
+		<p:confirmDialog id="submitConfirmDialog" message="確定同意簽核此申請單?"
+			header="同意簽核申請單" widgetVar="submitConfirmDialog" appendTo="@(body)">
+			<h:form id="SubmitConfirmDialogForm" prependId="false">
+				<!-- added by r.c. -->
+				<p:panelGrid style="width:100%;text-align:center;word-break:break-all;">
+					<p:row>
+						<p:column colspan="3"> 簽核說明 : </p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+							<p:inputTextarea rows="6" cols="60"
+								value="#{ApplyItemPrSignBean.prForm.signComment}" maxlength="350"
+								style="width:100%" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<!-- end of added-->
+				<p:commandButton value="Yes Sure"
+					onclick="PF('submitConfirmDialog').hide();"
+					actionListener="#{ApplyItemPrSignBean.onAccept}"
+					update=":tabView" 
+					 icon="ui-icon-circle-check" />
+				<p:commandButton value="Not Yet"
+					onclick="PF('submitConfirmDialog').hide();" type="button"
+					icon="ui-icon-close" />
+			</h:form>
+		</p:confirmDialog>
+		<p:confirmDialog id="TransferConfirmDialog" message="確定轉呈申請單?"
+			header="轉呈申請單" widgetVar="TransferConfirmDialog" appendTo="@(body)">
+			<h:form id="TransferConfirmDialogForm" prependId="false">
+				<!-- added by r.c. -->
+				<p:panelGrid style="width:100%;text-align:center;word-break:break-all;">
+					<p:row>
+						<p:column colspan="3"> 簽核說明 : </p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+							<p:inputTextarea rows="6" cols="60"
+								value="#{ApplyItemPrSignBean.prForm.signComment}" maxlength="350"
+								style="width:100%" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<!-- end of added-->
+				<p:commandButton value="Yes Sure"
+					onclick="PF('TransferConfirmDialog').hide();"
+					actionListener="#{ApplyItemPrSignBean.onTransfer}"
+					update=":tabView" 
+					 icon="ui-icon-circle-check" />
+				<p:commandButton value="Not Yet"
+					onclick="PF('TransferConfirmDialog').hide();" type="button"
+					icon="ui-icon-close" />
+			</h:form>
+		</p:confirmDialog>
+		<p:confirmDialog id="CanConfirmDialog" message="確定取消申請單?"
+			header="取消申請單" widgetVar="CanConfirmDialog" appendTo="@(body)">
+			<h:form id="CanConfirmDialogForm" prependId="false">
+				<!-- added by r.c. -->
+				<p:panelGrid style="width:100%;text-align:center;word-break:break-all;">
+					<p:row>
+						<p:column colspan="3"> 簽核說明<i18n:outputText
+								style="color:red;" value="NonNullMark.Notice" /> : </p:column>
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+							<p:inputTextarea rows="6" cols="60"
+								value="#{ApplyItemPrSignBean.prForm.signComment}" maxlength="350"
+								style="width:100%" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+				<!-- end of added-->
+				<p:commandButton value="Yes Sure" onclick="PF('CanConfirmDialog').hide();"
+					actionListener="#{ApplyItemPrSignBean.onCan}"
+					update=":tabView" 
+					 icon="ui-icon-circle-check" />
+				<p:commandButton value="Not Yet" onclick="PF('CanConfirmDialog').hide();"
+					type="button" icon="ui-icon-close" />
+			</h:form>
+		</p:confirmDialog>
+		<p:dialog id="listPrlineDialog" widgetVar="listPrlineDialog"
+			modal="true" appendTo="@(body)" height="500">
+			<f:facet name="header">PrLine <i18n:outputText
+					style="color:red;" value="NonNull" />
+			</f:facet>
+			<ui:include src="../CommonView/listPrline.xhtml" />
+		</p:dialog>
+	</ui:define>
+</ui:composition>

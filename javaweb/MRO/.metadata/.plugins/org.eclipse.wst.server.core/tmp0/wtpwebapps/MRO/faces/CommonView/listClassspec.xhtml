@@ -1,0 +1,131 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:i18n="http://innolux.com/i18n"> 
+	<h:form id="listClassspecForm" prependId="false">
+	
+					<h:outputText
+						value="規格填寫注意事項: 廠牌、規格型號、零件編號不可使用簡體/日文/全形/空格/&quot;X&quot;符號, 並請勿填&quot;單位&quot;值" />
+					<br />
+					<p:dataTable var="listClassspecVO"
+						value="#{ListClassspecBean.listClassspecVO}" paginator="true" rows="10"
+						id="listClassspecVO" paginatorPosition="bottom">
+
+						<f:facet name="header">
+						#{ListClassspecBean.classstructure.classstructureid} -  
+							<i18n:outputText  value="attribute" />
+							<p:commandButton value="新增屬性" icon="ui-icon-plus" 
+							update=":listAssetattributeForm" 
+							actionListener="#{ListAssetattributeBean.onSelect}"
+							oncomplete="PF('listClassspecFormDialog2').show();" 
+							rendered="#{ListClassspecBean.editButton}" />
+							<!-- 將selectButton=true  改為選取模式 -->
+						</f:facet>
+						
+						<p:column style="text-align:center" >
+							<f:facet name="header">
+								<i18n:outputText var="i18n" value="itemrequirevalue" />
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{ListClassspecBean.dooleanCheckbox[listClassspecVO.assetattrid]}"  />
+							<p:selectBooleanCheckbox disabled="true" value="#{ListClassspecBean.dooleanCheckbox[listClassspecVO.assetattrid]}" rendered="#{!ListClassspecBean.editButton}" />
+						</p:column>
+						<p:column >
+							<f:facet name="header">
+								<i18n:outputText var="i18n" value="attribute" />
+							</f:facet>
+							<h:outputText value="#{listClassspecVO.assetattrid}" />
+						</p:column>
+						<p:column >
+							<f:facet name="header">
+								<i18n:outputText var="i18n" value="description" />
+							</f:facet>
+							<h:outputText value="#{listClassspecVO.description}" />
+						</p:column>
+						<p:column >
+							<f:facet name="header">
+								<i18n:outputText var="i18n" value="datatype" />
+							</f:facet>
+							<h:outputText value="#{listClassspecVO.datatype}" />
+						</p:column>
+<!-- 						<p:column >
+							<f:facet name="header">
+								<i18n:outputText var="i18n" value="measureunitid" />
+							</f:facet>
+							<h:outputText value="#{listClassspecVO.measureunitid}" />
+						</p:column> -->
+						<p:column >
+							<f:facet name="header">
+								<i18n:outputText var="i18n" value="sequence" />
+							</f:facet>
+							<pe:inputNumber decimalPlaces="0" minValue="0" size="2" value="#{listClassspecVO.itemsequence}" rendered="#{ListClassspecBean.editButton}" />
+							<h:outputText value="#{listClassspecVO.itemsequence}" rendered="#{!ListClassspecBean.editButton}" />
+						</p:column>
+						<p:column style="text-align:center" rendered="#{ListClassspecBean.editButton}">
+							<f:facet name="header">
+								<i18n:outputText value="inactive.date" />
+							</f:facet>
+							<p:calendar value="#{listClassspecVO.inactiveDate}" size="12" pattern="yyyy/MM/dd" showOn="button" rendered="#{ListClassspecBean.editButton}"/>
+									<h:outputText name="output" value="#{listClassspecVO.inactiveDate}" rendered="#{!ListClassspecBean.editButton}"  >
+										<f:convertDateTime pattern="yyyy/MM/dd" timeZone="GMT+8" />
+									</h:outputText>
+						</p:column>
+						<p:column style="text-align:center" rendered="#{ListClassspecBean.editButton}">
+							<f:facet name="header">
+								Domain
+							</f:facet>
+							<p:commandButton icon="ui-icon-search" style="width:20px;height:20px;" 
+							update=":listAlndomainForm" 
+							action="#{ListAlndomainBean.onSearch}" oncomplete="PF('listAlndomainFormDialog2').show()"
+							rendered="#{listClassspecVO.classspecid!=null}" title="View" >
+							<f:setPropertyActionListener value="#{listClassspecVO.domainid}" target="#{ListAlndomainBean.domainid}" />
+							</p:commandButton>
+						</p:column>
+						<p:column style="text-align:center" rendered="#{ListClassspecBean.editButton}">
+							<f:facet name="header">
+								<i18n:outputText var="i18n" value="delete" />
+							</f:facet>
+							<p:commandButton icon="ui-icon-close" style="width:20px;height:20px;" 
+							update=":listClassspecForm" 
+							action="#{ListClassspecBean.onDelete}"
+							rendered="#{listClassspecVO.classspecid==null}" title="Delete" >
+							<f:setPropertyActionListener value="#{listClassspecVO}" target="#{ListClassspecBean.deleteListClassspecVO}" />
+							</p:commandButton>
+						</p:column>
+						<p:column style="text-align:center" rendered="#{ListClassspecBean.editButton}">
+							<f:facet name="header">
+								MeasureUnit
+							</f:facet>
+							<p:commandButton icon="ui-icon-search" style="width:20px;height:20px;" 
+							update=":listMeasureunitDomainForm" 
+							action="#{ListMeasureunitDomainBean.onSearch}" oncomplete="PF('listMeasureunitomainFormDialog3').show()"
+							rendered="#{listClassspecVO.classspecid!=null}" title="View" >
+							<f:setPropertyActionListener value="#{listClassspecVO.domainid}" target="#{ListMeasureunitDomainBean.domainid}" />
+							</p:commandButton>
+						</p:column>
+						<f:facet name="footer" rendered="#{ListClassspecBean.editButton}">
+							<p:commandButton icon="ui-icon-disk" value="Save"
+							update=":listClassspecForm" 
+							actionListener="#{ListClassspecBean.onUpdate}" />
+						</f:facet>
+					</p:dataTable>
+			</h:form>
+		<p:dialog id="listClassspecFormDialog2" header="屬性" widgetVar="listClassspecFormDialog2"  modal="true"  
+		appendTo="@(body)" width="700" height="500">
+			<ui:include src="../CommonView/listAssetattribute.xhtml" />
+			<p:ajax event="close" listener="#{ListAssetattributeBean.onEdit}" 
+			update=":tabView:listAssetattributeForm" /> 
+					<!-- 將selectButton=false  改為編輯模式 -->
+		</p:dialog>
+		<p:dialog id="listAlndomainFormDialog2" header="Domain" widgetVar="listAlndomainFormDialog2"  modal="true"  
+		appendTo="@(body)" width="700" height="400">
+			<ui:include src="../CommonView/listAlndomain.xhtml" />
+		</p:dialog>
+		<p:dialog id="listMeasureunitomainFormDialog3" header="MeasureunitDomain" widgetVar="listMeasureunitomainFormDialog3"  modal="true"  
+		appendTo="@(body)" width="700" height="400">
+			<ui:include src="../CommonView/listMeasureunitDomain.xhtml" />
+		</p:dialog>
+</ui:composition>

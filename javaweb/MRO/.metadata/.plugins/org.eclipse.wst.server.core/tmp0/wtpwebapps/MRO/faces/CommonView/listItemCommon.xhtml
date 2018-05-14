@@ -1,0 +1,102 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:i18n="http://innolux.com/i18n"> 
+	<h:form id="listItemCommonForm" prependId="false">
+	<div align="center">
+			<p:panelGrid style="width:100%;word-break:break-all;">
+				<p:row > 
+					<p:column>類別：</p:column>
+					<p:column style="text-align:left;" >
+					<p:selectOneMenu
+						value="#{ListItemCommonBean.classstructureId}"
+						 filter="true" filterMatchMode="startsWith" 
+						style="width:250px;" height="150">
+						<f:selectItem itemLabel="請選擇" itemValue="" />
+						<f:selectItems
+							value="#{ListItemCommonBean.classstructureOption}" />
+					</p:selectOneMenu>
+					</p:column>
+				</p:row>
+				<p:row > 
+					<p:column>料號：</p:column>
+					<p:column style="text-align:left;" >
+						<p:inputText value="#{ListItemCommonBean.itemnumSearch}" />
+					</p:column>
+				</p:row>
+				<p:row > 
+					<p:column>品名：</p:column>
+					<p:column style="text-align:left;" >
+						<p:inputText value="#{ListItemCommonBean.description}" />
+					<p:commandButton value="Search" 
+							 update="listItem"
+							actionListener="#{ListItemCommonBean.onSearch}" 
+							style="margin-top:5px" />
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+		</div>
+		<font color="red">可使用的料號狀態：#{ListItemCommonBean.statusMap.values()}</font><br />
+		<c:if test="#{ListItemCommonBean.actionType!=null and ListItemCommonBean.locationSite!=''}">
+			<font color="red">
+				區域(#{ListItemCommonBean.locationSite})&#160;可使用的料號：
+				#{ListItemCommonBean.actionType.getMsg()}=Y &#160;</font><br />
+		</c:if>
+		<p:dataTable var="listItem" 
+						value="#{ListItemCommonBean.listItem}" 
+						rowKey="#{listItem.itemid}" paginator="true" rows="10"
+						paginatorPosition="bottom" id="listItem"> 
+
+					    <p:column headerText="Add" style="width:80px;text-align:center;" >
+				                <p:commandButton  
+				                  rendered="#{!(ListItemCommonBean.actionType!=null and ListItemCommonBean.locationSite!='' 
+				                  and ListItemCommonBean.itemSiteMap[listItem.itemnum]==null)
+				                 	 and ListItemCommonBean.statusMap[listItem.status]!=null}"
+				                  oncomplete="PF('listItemCommonFormDialog').hide();"   style="width:20px;height:20px;"
+				                actionListener="#{ListItemCommonBean.save(listItem)}"
+				                icon="ui-icon-contact" />    
+				         </p:column>
+						<p:column >
+							<f:facet name="header">
+								<i18n:outputText value="itemnum" />
+							</f:facet>
+							<h:outputText value="#{listItem.itemnum}" />
+
+						</p:column>
+						<p:column style="text-align:center" 
+							sortBy="#{ListItemCommonBean.itemSiteMap[listItem.itemnum]}"
+							rendered="#{ListItemCommonBean.actionType!=null and ListItemCommonBean.locationSite!=''}">
+							<f:facet name="header">
+								#{ListItemCommonBean.actionType.msg}
+							</f:facet>
+							#{ListItemCommonBean.itemSiteMap[listItem.itemnum]}
+						</p:column>
+						<p:column >
+							<f:facet name="header">
+								<i18n:outputText value="description" />
+
+							</f:facet>
+							<h:outputText value="#{listItem.description}" />
+
+						</p:column>
+						<p:column >
+							<f:facet name="header">
+								<i18n:outputText value="class_structure_id" />
+
+							</f:facet>
+							<h:outputText value="#{ListItemCommonBean.classstructureMap[listItem.classstructureid]}" />
+						</p:column>
+						<p:column sortBy="#{listItem.status}">
+							<f:facet name="header">
+								<i18n:outputText value="status" />
+							</f:facet>
+							<h:outputText value="#{SystemConfigBean.parameterMap[listItem.status]}" />
+							(<h:outputText value="#{listItem.status}" />)
+						</p:column>
+					</p:dataTable>
+		</h:form>
+</ui:composition>

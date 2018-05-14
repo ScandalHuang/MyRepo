@@ -1,0 +1,147 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="listMroOrgFacilityEqForm" prependId="false">
+		<i18n:outputText value="location.site" />：
+		<p:selectOneMenu style="width:250px;" converter="SerializesConverter"
+			value="#{ListMroOrgFacilityEqBean.mroOrgFacilityEqForm.sLocationSiteMap}"
+			filter="true" filterMatchMode="startsWith" >
+			<f:selectItem itemLabel="請選擇" itemValue="" />
+			<f:selectItems value="#{LoginInfoBean.userLSMap.values()}" var="userLSMap"
+								itemLabel="#{userLSMap.locationSite}"  itemValue="#{userLSMap}" />
+			<p:ajax update="@form" listener="#{ListMroOrgFacilityEqBean.onSearch}" />
+		</p:selectOneMenu>&#160;&#160;&#160;&#160;
+		<i18n:outputText value="apply.purpose" />：
+			<p:selectOneMenu style="width:250px;"
+			value="#{ListMroOrgFacilityEqBean.mroOrgFacilityEqForm.selectReason}"
+			filter="true" filterMatchMode="startsWith" >
+			<f:selectItem itemLabel="請選擇" itemValue="" />
+			<f:selectItems
+				value="#{ListMroOrgFacilityEqBean.mroOrgFacilityEqForm.reasonOption}" />
+			<p:ajax update=":tabView:listMroOrgFacilityEqForm"
+				listener="#{ListMroOrgFacilityEqBean.onSearch}"
+				process="@form" 
+				 />
+		</p:selectOneMenu>
+		<br/><font color="red">*系統會依照選取的<i18n:outputText value="location.site" />與申請目的進行新增</font>
+		<br /><font color="red">*重複的FAB與EQ_ID會在上傳後自動覆蓋</font>
+		<p:dataTable var="listMroOrgFacilityEq"
+			value="#{ListMroOrgFacilityEqBean.mroOrgFacilityEqForm.listMroOrgFacilityEq}"
+			filterDelay="#{SystemConfigBean.filetDelay}"
+			filteredValue="#{ListMroOrgFacilityEqBean.mroOrgFacilityEqForm.filterListMroOrgFacilityEq}"
+			paginator="true" rows="10" id="listMroOrgFacilityEq"
+			rowKey="#{listMroOrgFacilityEq.mroOrgFacilityEqId}"
+			selection="#{ListMroOrgFacilityEqBean.mroOrgFacilityEqForm.deleteMroOrgFacilityEq}"
+			paginatorPosition="bottom" style="text-align:center">
+			<f:facet name="header">
+				EQID管理清單
+				<br/>
+				<p:commandButton value="選取全部" icon="ui-icon-circle-check"
+					rendered="#{ListMroOrgFacilityEqBean.mroOrgFacilityEqForm.listMroOrgFacilityEq.size()>0}"
+					actionListener="#{ListMroOrgFacilityEqBean.onSelectAll}" 
+					update="listMroOrgFacilityEq" />
+				<p:commandButton value="刪除清單" icon="ui-icon-trash"
+					rendered="#{ListMroOrgFacilityEqBean.mroOrgFacilityEqForm.listMroOrgFacilityEq.size()>0}"
+					oncomplete="PF('deleteConfirmEqDialog').show();" />
+			</f:facet>
+			<p:column selectionMode="multiple" exportable="false"
+				style="text-align:center;width:20px" />
+			<p:column exportable="false">
+				<f:facet name="header">
+						REASONCODE(申請目的)
+				</f:facet>
+				<h:outputText value="#{SystemConfigBean.parameterMap[listMroOrgFacilityEq.reasoncode]}" />
+			</p:column>
+			<p:column filterMatchMode="contains" filterBy="#{listMroOrgFacilityEq.fab}">
+				<f:facet name="header">
+						FAB
+				</f:facet>
+				<h:outputText value="#{listMroOrgFacilityEq.fab}" />
+			</p:column>		
+			<p:column filterMatchMode="contains" filterBy="#{listMroOrgFacilityEq.processType}">
+				<f:facet name="header">
+						PROCESS_TYPE
+				</f:facet>
+				<h:outputText value="#{listMroOrgFacilityEq.processType}" />
+			</p:column>
+			<p:column >
+				<f:facet name="header">
+						EQ_TYPE
+				</f:facet>
+				<h:outputText value="#{listMroOrgFacilityEq.eqType}" />
+			</p:column>				
+			<p:column filterMatchMode="contains" filterBy="#{listMroOrgFacilityEq.eqId}">
+				<f:facet name="header">
+						EQ_ID
+				</f:facet>
+				<h:outputText value="#{listMroOrgFacilityEq.eqId}" />
+			</p:column>	
+			<p:column>
+				<f:facet name="header">
+						REMARK(備註)
+				</f:facet>
+				<h:outputText value="#{listMroOrgFacilityEq.remark}" />
+			</p:column>
+			<p:column exportable="false">
+				<f:facet name="header">
+					最後更新人
+				</f:facet>
+					<h:outputText value="#{listMroOrgFacilityEq.createBy}" />
+			</p:column>
+			<p:column exportable="false">
+				<f:facet name="header">
+					<i18n:outputText value="create.date" />
+				</f:facet>
+				<h:outputText
+					value="#{listMroOrgFacilityEq.createDate}">
+					<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>
+		<p:panelGrid columns="2" rendered="#{
+			ListMroOrgFacilityEqBean.mroOrgFacilityEqForm.sLocationSiteMap!=null
+			and ListMroOrgFacilityEqBean.mroOrgFacilityEqForm.selectReason!=null}">
+			<p:panel header="Export All Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="listMroOrgFacilityEq"
+						fileName="FAB_EQID" />
+				</h:commandLink>
+			</p:panel>
+			<p:panel header="Upload Data">
+				<i18n:outputText value="upload.excel" />：
+					<p:commandButton icon="ui-icon-disk"
+					update=":fileUploadExcelForm"
+					action="#{FileUploadExcelBean.excel(6,1)}"
+					 
+					oncomplete="PF('ExcelFileUploadDialog').show();">
+					<f:setPropertyActionListener target="#{FileUploadExcelBean.object}"
+						value="#{ListMroOrgFacilityEqBean}" />
+					<f:setPropertyActionListener
+						target="#{FileUploadExcelBean.updateView}"
+						value="tabView:listMroOrgFacilityEqForm" />
+				</p:commandButton>
+			</p:panel>
+		</p:panelGrid>
+	</h:form>
+	
+	
+		
+		<p:confirmDialog id="deleteConfirmEqDialog" message="確定刪除EQID清單?" width="300"
+			header="確定刪除EQID清單" widgetVar="deleteConfirmEqDialog" appendTo="@(body)">
+			<h:form id="deleteConfirmEqDialogEqForm" prependId="false">
+				<p:commandButton value="Yes Sure"
+					oncomplete="PF('deleteConfirmEqDialog').hide();"
+					actionListener="#{ListMroOrgFacilityEqBean.onDelete}"
+					update=":tabView:listMroOrgFacilityEqForm"
+					 
+					icon="ui-icon-circle-check" />
+				<p:commandButton value="Not Yet"
+					onclick="PF('deleteConfirmEqDialog').hide();" type="button"
+					icon="ui-icon-close" />
+			</h:form>
+		</p:confirmDialog>
+</ui:composition>

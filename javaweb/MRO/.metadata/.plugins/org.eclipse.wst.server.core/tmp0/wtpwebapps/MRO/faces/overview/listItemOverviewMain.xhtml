@@ -1,0 +1,52 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+			<p:tabView  dynamic="true" cache="true">
+			<p:tab id="tab1" title="R1料號控管清單">
+				<ui:include src="r1InvbalancesList.xhtml" />
+				</p:tab>
+				<p:tab id="tab2" title="Spare Parts料號控管清單">
+					<ui:include src="r2InvbalancesList.xhtml" />
+				</p:tab>
+				<p:tab id="tab3" title="部門料號清單">
+					<p:commandButton value="部門料號清單"
+						update=":listItemDeptForm"
+						oncomplete="PF('statusDialog').hide();PF('ItemDeptDialog').show();"
+						actionListener="#{ListItemDeptBean.onSearch}"
+						style="margin-top:5px" />
+					<ui:include src="itemDeptList.xhtml" />
+				</p:tab>
+				<p:tab id="tab4" title="控管異動(一年內)">
+					<ui:include src="InvbalanceChangeList.xhtml" />
+				</p:tab>
+				<p:tab id="tab5" title="ERP尚待處理的請購單(一年內)">
+					<ui:include src="zErpUnProcessList.xhtml" />
+				</p:tab>
+				<p:tab id="tab6" title="ERP Open 訂單">
+					<ui:include src="zMroOpenPoList.xhtml" />
+				</p:tab>
+				<p:tab id="tab7" title="ERP已轉po請購單(三年內)">
+					<ui:include src="zErpProcessList.xhtml" />
+				</p:tab>
+				<p:tab id="tab8" title="ERP Close 訂單(三年內)">
+					<ui:include src="zMroNonOpenPoList.xhtml" />
+				</p:tab>
+			</p:tabView>
+
+		<p:dialog id="ExcelFileUploadDialog" header="ExcelFileUpload"
+			widgetVar="ExcelFileUploadDialog" modal="true" appendTo="@(body)"
+			width="600">
+			<ui:include src="../CommonView/fileUploadExcel.xhtml" />
+		</p:dialog>
+		<p:dialog id="ItemDeptDialog" header="部門料號清單"
+			widgetVar="ItemDeptDialog" modal="true" appendTo="@(body)"
+			width="600">
+			<ui:include src="listItemDept.xhtml" />
+		</p:dialog>
+	</ui:define>
+</ui:composition>

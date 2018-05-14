@@ -1,0 +1,9 @@
+# MRO PRD oracle setting
+p.ora.url = jdbc:oracle:thin:csp_ap///pvMAXIMO.cminl.oa:1521/PMAXIMDB
+
+# HR PRD oracle setting
+#hcmif.url = jdbc:oracle:thin:javaoauser/javaoa123@//pvHCMIFDB.cminl.oa:1521/HCMIF
+
+# MRO TEST oracle setting
+#ora.url = jdbc:oracle:thin:csp/csp@//10.55.3.147:1521/eam120516
+s.ora.url = jdbc:oracle:thin:CSP_AP///tvCOMB10gDB.cminl.oa:1521/tcomb10g

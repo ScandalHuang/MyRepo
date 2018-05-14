@@ -1,0 +1,80 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:i18n="http://innolux.com/i18n">
+		<h:form id="aItemCorrectForm" prependId="false">
+			<br /><font color="red">*離職人員更新請於EXCEL內填入新異動人員</font>
+			<br /><font color="red">*類別結構更新請於EXCEL內填入新類別結構</font>
+			<br /><font color="red">*刪除申請單請於EXCEL內填入刪除=Y</font>
+
+			<p:dataTable var="failList"
+				value="#{AItemCorrectBean.failList}" 
+				paginator="true" rows="10" id="failList"
+				paginatorPosition="bottom"  style="text-align:center">
+
+				<f:facet name="header">
+					<font color="red">更新失敗筆數：#{AItemCorrectBean.failList.size()}</font>
+				</f:facet>
+				<p:column>
+					<f:facet name="header">
+						ITEMNUM(申請單號)
+					</f:facet>
+					<h:outputText value="#{failList.itemnum}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						CHANGEBY(新異動人員)
+					</f:facet>
+					<h:outputText value="#{failList.changeby}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						ORGANIZATION_CODE(新申請廠區)
+					</f:facet>
+					<h:outputText value="#{failList.organizationCode}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						CLASSSTRUCTUREID(新類別結構)
+					</f:facet>
+					<h:outputText value="#{failList.classstructureid}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						DELETE(刪除Y/N)
+					</f:facet>
+					<h:outputText value="#{failList.delete}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						錯誤訊息
+					</f:facet>
+					<font color="red"><h:outputText value="#{failList.errorMsg}" escape="false" /></font>
+				</p:column>
+			</p:dataTable>
+			<p:panelGrid columns="2">
+				<p:panel header="Export All Data">
+					<h:commandLink>
+						<p:graphicImage value="../../resources/images/excel.png" />
+						<p:dataExporter type="xls" target="failList"
+							fileName="failList"  />
+					</h:commandLink>
+				</p:panel>
+				<p:panel header="Upload Data">
+					<i18n:outputText value="upload.excel" />：
+					<p:commandButton icon="ui-icon-disk"
+						update=":fileUploadExcelForm"
+						action="#{FileUploadExcelBean.excel(3,1)}"
+						oncomplete="PF('ExcelFileUploadDialog').show();" >
+						<f:setPropertyActionListener target="#{FileUploadExcelBean.object}" 
+								value="#{AItemCorrectBean}" />
+							<f:setPropertyActionListener target="#{FileUploadExcelBean.updateView}" 
+								value="tabView:aItemCorrectForm" />
+					</p:commandButton>
+						</p:panel>
+					</p:panelGrid>
+		</h:form>
+</ui:composition>

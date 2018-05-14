@@ -1,0 +1,21 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="applyItemForm" prependId="false">
+		<h:panelGrid columns="6" cellpadding="5">
+			<p:commandButton value="異動前明細" icon="ui-icon-search"
+				actionListener="#{ApplyItemQueryBean.selectApply(ApplyItemChangeQueryBean.itemForm.aItem.preEaudittransid)}"
+				update=":preItemForm"
+				rendered="#{ApplyItemChangeQueryBean.itemForm.aItem.itemnum!=null and
+							ApplyItemChangeQueryBean.itemForm.aItem.preEaudittransid!=null}"
+				oncomplete="PF('preApplyItemDialog').show();" />
+		</h:panelGrid>
+		<p:separator />
+			<ui:include src="../item/aItemChange.xhtml" />
+	</h:form>
+</ui:composition>

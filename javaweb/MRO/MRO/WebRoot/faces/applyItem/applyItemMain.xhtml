@@ -1,0 +1,171 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<ui:include src="../CommonView/fileUpload.xhtml" />
+			<p:tabView id="tabView" cache="true"
+				activeIndex="#{ApplyItemBean.itemForm.activeIndex}" >
+				<p:tab id="tab1">
+					<f:facet name="title">
+					<i18n:outputText value="Application.Encode" />
+					<i18n:outputText value="list" />
+					</f:facet>
+				<h:form id="form" prependId="false">
+
+					<p:dataTable var="listAItem" filterDelay="#{SystemConfigBean.filetDelay}"
+						widgetVar="listAItem"
+						filteredValue="#{ApplyItemBean.itemForm.filterListAItem}"
+						value="#{ApplyItemBean.itemForm.listAItem}"
+						rowKey="#{listAItem.eaudittransid}" paginator="true" rows="10"
+						paginatorPosition="bottom"
+						selection="#{ApplyItemBean.itemForm.aItem}"
+						selectionMode="single" id="listAItem">
+						<p:ajax event="rowSelect" listener="#{ApplyItemBean.selectApply}"
+							update=":tabView" 
+							  />
+							
+						<p:column sortBy="#{listAItem.itemnum}" 
+							filterBy="#{listAItem.itemnum}" filterMatchMode="contains" >
+							<f:facet name="header">
+								<!-- i18n:outputText value="ir_itemnum" /-->
+								<i18n:outputText value="apply.num"/>
+							</f:facet>
+							<h:outputText value="#{listAItem.itemnum}" />
+
+						</p:column>
+						<p:column sortBy="#{SystemConfigBean.parameterMap[listAItem.status]}">
+							<f:facet name="header">
+								<i18n:outputText value="status" />
+							</f:facet>
+							<h:outputText value="#{SystemConfigBean.parameterMap[listAItem.status]}" />
+
+						</p:column>
+						<p:column sortBy="#{ApplyItemBean.itemForm.signMap[listAItem.taskId].actorName}">
+							<f:facet name="header">
+								<i18n:outputText value="wait.sign" />
+							</f:facet>
+							<h:outputText value="#{ApplyItemBean.itemForm.signMap[listAItem.taskId].actorName}" />
+
+						</p:column>
+						<p:column style="text-align:center">
+							<f:facet name="header">
+								<i18n:outputText value="siteid" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.locationMapALL[listAItem.organizationCode]}" />
+						</p:column>
+						<p:column sortBy="#{listAItem.description}">
+							<f:facet name="header">
+								<i18n:outputText value="description" />
+
+							</f:facet>
+							<h:outputText value="#{listAItem.description}" />
+
+						</p:column>
+
+						<p:column sortBy="#{listAItem.classstructureid}">
+							<f:facet name="header">
+								<i18n:outputText value="class_structure_id" />
+
+							</f:facet>
+							<h:outputText value="#{listAItem.classstructureid}" />
+
+						</p:column>
+						<p:column sortBy="#{listAItem.createDate}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.date" />
+
+							</f:facet>
+							<h:outputText value="#{listAItem.createDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+							</h:outputText>
+
+						</p:column>
+						<p:column sortBy="#{listAItem.remark}">
+							<f:facet name="header">
+								<i18n:outputText value="use.msg" />
+
+							</f:facet>
+							<h:outputText value="#{listAItem.remark}" />
+
+						</p:column>
+					</p:dataTable>
+					</h:form>
+				</p:tab>
+
+
+				<p:tab id="tab2" >
+					<f:facet name="title">
+					<i18n:outputText value="Application.Encode" />
+					</f:facet>
+					<ui:include src="applyItem.xhtml" />
+				</p:tab>
+			</p:tabView>
+		<p:dialog id="listCompaniesDialog2" header="Vendor" widgetVar="listCompaniesDialog2"  modal="true"  
+		appendTo="@(body)" width="800" height="500">
+			<ui:include src="../CommonView/listCompanies.xhtml" />
+		</p:dialog>
+		<p:dialog id="listClassstructureFormDialog" header="分類" widgetVar="listClassstructureFormDialog"  modal="true"  
+		appendTo="@(body)" width="750" height="400">
+			<ui:include src="../CommonView/listClassstructure.xhtml" />
+		</p:dialog>
+		<p:confirmDialog id="deleteConfirmDialog" message="確定刪除申請單?"  
+			     header="刪除申請單" widgetVar="deleteConfirmDialog" appendTo="@(body)">  
+			 <h:form id="deleteConfirmDialogForm" prependId="false">  
+			      <p:commandButton  value="Yes Sure" oncomplete="PF('deleteConfirmDialog').hide();" 
+			                actionListener="#{ApplyItemBean.onApplyDelete}" 
+			                update=":tabView"
+			                   icon="ui-icon-circle-check"/>  
+			      <p:commandButton  value="Not Yet" onclick="PF('deleteConfirmDialog').hide();" type="button" icon="ui-icon-close"/>   
+			 </h:form>       
+		</p:confirmDialog>  
+		<p:confirmDialog id="submitConfirmDialog" message="確定送出申請單?"  
+			     header="送出申請單" widgetVar="submitConfirmDialog" appendTo="@(body)">  
+			 <h:form id="submitConfirmDialogForm" prependId="false">  
+			 	<p:panelGrid style="width:100%;text-align:center;word-break:break-all;">
+					<p:row>
+						<p:column colspan="3"> 簽核說明 : </p:column> 
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+						 <p:inputTextarea rows="6" cols="60"
+								value="#{ApplyItemBean.itemForm.signComment}" maxlength="350" 
+								style="width:100%" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+			      <p:commandButton  value="Yes Sure" oncomplete="PF('submitConfirmDialog').hide();" 
+			                actionListener="#{ApplyItemBean.onApplySubmit}" 
+			                update=":tabView" icon="ui-icon-circle-check"/>  
+			      <p:commandButton  value="Not Yet" onclick="PF('submitConfirmDialog').hide();" type="button" icon="ui-icon-close"/>   
+			 </h:form>       
+		</p:confirmDialog>
+		<p:confirmDialog id="strategyConfirmDialog" header="Confirm Strategy"
+			widgetVar="strategyConfirmDialog" message="請確認  &quot;戰略管制品 &quot;欄位是否正確" modal="true"
+			appendTo="@(body)">
+			<p:commandButton value="Yes" onclick="PF('strategyConfirmDialog').hide();PF('submitConfirmDialog').show();" 
+				type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="No" type="button" onclick="PF('strategyConfirmDialog').hide();"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+		<p:dialog id="signPreViewDialog" header="簽核預覽" widgetVar="signPreViewDialog"  modal="true"  
+		appendTo="@(body)" width="850" height="500">
+			<h:panelGrid id="signPreView" columns="1" cellpadding="1">
+			<iframe width="780" frameborder="0" name="ifrm02" id="ifrm02"
+			 src="#{ApplyItemBean.itemForm.signPreViewUrl}" 
+			onload="document.getElementById('ifrm02').height=ifrm02.document.body.scrollHeight+'px'"/>
+			</h:panelGrid>
+		</p:dialog>
+		<p:dialog id="listItemCommonFormDialog"  
+			widgetVar="listItemCommonFormDialog"  modal="true"  
+			appendTo="@(body)" width="800" height="500">
+			<f:facet name="header"><i18n:outputText value="itemnum"/></f:facet>
+			<ui:include src="../CommonView/listItemCommon.xhtml" />
+		</p:dialog>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,120 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="listGpTypeForm" prependId="false">
+		<font color="red">*<i18n:outputText value="gp.Delivery.Type" />：
+			#{ListGpTypeBean.gpTypeForm.gpDelivery}
+		</font>
+		<br />
+		<font color="red">*<i18n:outputText value="gp.Remain.Type" />：
+			#{ListGpTypeBean.gpTypeForm.gpRemain}
+		</font>
+		<br /><br />
+		<p:dataTable var="listGpType"
+			value="#{ListGpTypeBean.gpTypeForm.list}"
+			filterDelay="#{SystemConfigBean.filetDelay}"
+			filteredValue="#{ListGpTypeBean.gpTypeForm.filterList}"
+			paginator="true" rows="10" id="listGpType" rowKey="#{listGpType.id}"
+			selection="#{ListGpTypeBean.gpTypeForm.deleteList}"
+			paginatorPosition="bottom" style="text-align:center">
+			<f:facet name="header">
+				<i18n:outputText value="gp.type.list" />
+				<p:commandButton value="選取全部" icon="ui-icon-circle-check"
+					rendered="#{ListGpTypeBean.gpTypeForm.list.size()>0}"
+					actionListener="#{ListGpTypeBean.onSelectAll}" update="listGpType" />
+				<p:commandButton value="刪除清單" icon="ui-icon-trash"
+					rendered="#{ListGpTypeBean.gpTypeForm.list.size()>0}"
+					oncomplete="PF('deleteConfirmErDialog').show();" />
+			</f:facet>
+			<p:column selectionMode="multiple" exportable="false"
+				style="text-align:center;width:20px" />
+			<p:column filterMatchMode="contains"
+				filterBy="#{listGpType.classstructureid}">
+				<f:facet name="header">
+						CLASSSTRUCTUREID(類別結構)
+				</f:facet>
+				<h:outputText value="#{listGpType.classstructureid}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+						DELIVERY_TYPE(是否隨產品出貨代碼)
+				</f:facet>
+				<h:outputText value="#{listGpType.deliveryType}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+						是否隨產品出貨
+				</f:facet>
+				<h:outputText
+					value="#{SystemConfigBean.parameterMap[listGpType.deliveryType]}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+						REMAIN_TYPE(是否殘留在產品內部代碼)
+				</f:facet>
+				<h:outputText value="#{listGpType.remainType}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+						是否殘留在產品內部
+				</f:facet>
+				<h:outputText
+					value="#{SystemConfigBean.parameterMap[listGpType.remainType]}" />
+			</p:column>
+			<p:column exportable="false">
+				<f:facet name="header">
+					最後更新人
+				</f:facet>
+				<h:outputText value="#{listGpType.lastUpdateBy}" />
+			</p:column>
+			<p:column filterMatchMode="contains"
+				filterBy="#{listGpType.lastUpdate}">
+				<f:facet name="header">
+					建立日期
+				</f:facet>
+				<h:outputText value="#{listGpType.lastUpdate}">
+					<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>
+		<p:panelGrid columns="2">
+			<p:panel header="Export All Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="listGpType"
+						fileName="#{currentDate.getTime()}E" />
+				</h:commandLink>
+			</p:panel>
+			<p:panel header="Upload Data">
+				<i18n:outputText value="upload.excel" />：
+					<p:commandButton icon="ui-icon-disk" update=":fileUploadExcelForm"
+					action="#{FileUploadExcelBean.excel(6,1)}"
+					oncomplete="PF('ExcelFileUploadDialog').show();">
+					<f:setPropertyActionListener target="#{FileUploadExcelBean.object}"
+						value="#{ListGpTypeBean}" />
+					<f:setPropertyActionListener
+						target="#{FileUploadExcelBean.updateView}"
+						value="tabView:listGpTypeForm" />
+				</p:commandButton>
+			</p:panel>
+		</p:panelGrid>
+	</h:form>
+
+	<p:confirmDialog id="deleteConfirmErDialog" message="確定刪除清單?"
+		width="300" header="確定刪除清單" widgetVar="deleteConfirmErDialog"
+		appendTo="@(body)">
+		<h:form id="deleteConfirmErForm" prependId="false">
+			<p:commandButton value="Yes Sure"
+				oncomplete="PF('deleteConfirmErDialog').hide();"
+				actionListener="#{ListGpTypeBean.onDelete}"
+				update=":tabView:listGpTypeForm" icon="ui-icon-circle-check" />
+			<p:commandButton value="Not Yet"
+				onclick="PF('deleteConfirmErDialog').hide();" type="button"
+				icon="ui-icon-close" />
+		</h:form>
+	</p:confirmDialog>
+</ui:composition>

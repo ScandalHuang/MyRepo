@@ -1,0 +1,120 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="listAlndomainCommonForm" prependId="false">
+
+		<i18n:outputText value="ItemCategory" />：
+			<p:selectOneMenu
+			value="#{ListAlnvalueCommonBean.alnvalueCommonForm.itemType}"
+			filter="true" filterMatchMode="startsWith" style="width:150px;"
+			height="150">
+			<f:selectItem itemLabel="請選擇" itemValue="" />
+			<f:selectItems
+				value="#{ListAlnvalueCommonBean.alnvalueCommonForm.itemCategoryOption}" />
+			<p:ajax update="@form"
+				listener="#{ListAlnvalueCommonBean.onSearch}"
+				process="@form" 
+				 />
+		</p:selectOneMenu>
+			&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+			<i18n:outputText value="Attribute.list" />：
+			<p:selectOneMenu value="#{ListAlnvalueCommonBean.alnvalueCommonForm.assetattribute}"
+			 converter="SerializesConverter" filter="true" filterMatchMode="startsWith" 
+			 height="150">
+			<f:selectItem itemLabel="請選擇" itemValue="" />
+			<f:selectItems var="a" 
+				value="#{ListAlnvalueCommonBean.alnvalueCommonForm.assetattributeList}" 
+				itemValue="#{a}" itemLabel="#{a.assetattrid}(#{a.description})"/>
+			<p:ajax update="listAlndomainCommon"
+				listener="#{ListAlnvalueCommonBean.onSearch}"
+				process="@form" 
+				 />
+		</p:selectOneMenu>
+		<br />
+		<br /><font color="red">*重複的料號類型、屬性與清單編號會在上傳後自動覆蓋</font>
+		<br /><font color="red">*A300為MATERIAL NAME 不得使用共用屬性清單</font>
+		<p:dataTable var="listAlndomainCommon"
+			value="#{ListAlnvalueCommonBean.alnvalueCommonForm.listAlndomainCommon}"
+			paginator="true" rows="10" id="listAlndomainCommon"
+			rowKey="#{listAlndomainCommon.alndomainidCommonId}"
+			selection="#{ListAlnvalueCommonBean.alnvalueCommonForm.deleteAlndomainCommon}"
+			paginatorPosition="bottom" style="text-align:center">
+			<f:facet name="header">
+				<i18n:outputText value="Attribute.list" />
+				<p:commandButton value="刪除屬性清單" icon="ui-icon-trash"
+					rendered="#{ListAlnvalueCommonBean.alnvalueCommonForm.listAlndomainCommon.size()>0}"
+					oncomplete="PF('deleteConfirmDialog').show();" />
+			</f:facet>
+			<p:column selectionMode="multiple" exportable="false"
+				style="text-align:center;width:20px" />
+			<p:column>
+				<f:facet name="header">
+						ITEMTYPE(料號類型)
+				</f:facet>
+				<h:outputText value="#{listAlndomainCommon.itemtype}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+						ASSETATTRID(屬性)
+				</f:facet>
+				<h:outputText value="#{listAlndomainCommon.assetattrid}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+						VALUE(清單編號)
+				</f:facet>
+				<h:outputText value="#{listAlndomainCommon.value}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+						DESCRIPTION(清單敘述)
+				</f:facet>
+				<h:outputText value="#{listAlndomainCommon.description}" />
+			</p:column>
+		</p:dataTable>
+		<p:panelGrid columns="2">
+			<p:panel header="Export All Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="listAlndomainCommon"
+						fileName="buyer" />
+				</h:commandLink>
+			</p:panel>
+			<p:panel header="Upload Data">
+				<i18n:outputText value="upload.excel" />：
+					<p:commandButton icon="ui-icon-disk"
+					update=":fileUploadExcelForm"
+					action="#{FileUploadExcelBean.excel(3,1)}"
+					 
+					oncomplete="PF('ExcelFileUploadDialog').show();">
+					<f:setPropertyActionListener target="#{FileUploadExcelBean.object}"
+						value="#{ListAlnvalueCommonBean}" />
+					<f:setPropertyActionListener
+						target="#{FileUploadExcelBean.updateView}"
+						value="tabView:listAlndomainCommonForm" />
+				</p:commandButton>
+			</p:panel>
+		</p:panelGrid>
+	</h:form>
+	
+	
+		
+		<p:confirmDialog id="deleteConfirmDialog" message="確定刪除屬性清單?" width="300"
+			header="確定刪除屬性清單" widgetVar="deleteConfirmDialog" appendTo="@(body)">
+			<h:form id="deleteConfirmDialogForm" prependId="false">
+				<p:commandButton value="Yes Sure"
+					oncomplete="PF('deleteConfirmDialog').hide();"
+					actionListener="#{ListAlnvalueCommonBean.onDelete}"
+					update=":tabView:listAlndomainCommonForm"
+					 
+					icon="ui-icon-circle-check" />
+				<p:commandButton value="Not Yet"
+					onclick="PF('deleteConfirmDialog').hide();" type="button"
+					icon="ui-icon-close" />
+			</h:form>
+		</p:confirmDialog>
+
+</ui:composition>

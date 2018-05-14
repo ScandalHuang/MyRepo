@@ -1,0 +1,283 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:i18n="http://innolux.com/i18n"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+
+		<p:tabView id="tabView" cache="true">
+			<p:tab id="tab1">
+				<f:facet name="title">
+					<i18n:outputText value="lamp.control.list" />
+				</f:facet>
+				<h:form id="LampForm" prependId="false">
+					<div align="center">
+						<p:panelGrid id="search"
+							style="width:100%;word-break:break-all;text-align:center;">
+							<f:facet name="header">
+								<p:row>
+									<p:column>
+										<i18n:outputText style="color:red;" value="NonNullMark" />
+										<i18n:outputText value="siteid" />
+									</p:column>
+									<p:column>
+										<i18n:outputText value="dept_code" />
+									</p:column>
+									<p:column>
+										<i18n:outputText value="itemnum" />
+									</p:column>
+									<p:column>
+										<i18n:outputText value="need.date.start" />
+									</p:column>
+									<p:column>
+									</p:column>
+								</p:row>
+							</f:facet>
+							<p:row>
+								<p:column>
+									<p:selectOneMenu filter="true" filterMatchMode="contains"
+										value="#{ListLampControlBean.lampControlForm.organizationCode}"
+										style="text-align:left;">
+										<f:selectItem itemValue="" itemLabel="請選擇" />
+										<f:selectItems value="#{LoginInfoBean.lOptionByGroup}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+
+									<p:inputText
+										value="#{ListLampControlBean.lampControlForm.deptCode}" />
+								</p:column>
+								<p:column>
+									<p:inputText
+										value="#{ListLampControlBean.lampControlForm.itemnum}" />
+								</p:column>
+								<p:column>
+									<p:calendar id="createDate"
+										value="#{ListLampControlBean.lampControlForm.createDate}"
+										size="10" showOn="button" readonlyInput="true" />
+								</p:column>
+								<p:column>
+									<p:commandButton icon="ui-icon-search" value="Search"
+										update="list"
+										actionListener="#{ListLampControlBean.search}" />
+								</p:column>
+							</p:row>
+						</p:panelGrid>
+						<p:dataTable var="list" paginatorPosition="bottom"
+							id="list" paginator="true" rows="10" editable="true"
+							style="text-align:center;"
+							value="#{ListLampControlBean.lampControlForm.list}">
+							<p:ajax event="rowEdit" update="list"
+								listener="#{ListLampControlBean.onEditLine}" />
+							<f:facet name="header">
+									搜尋筆數：#{ListLampControlBean.lampControlForm.list.size()}
+							</f:facet>
+							<p:columnGroup type="header">
+					            <p:row>
+					                <p:column colspan="5" headerText="" />
+					                <p:column colspan="4" >
+					                	<f:facet name="header">
+					                		<h:outputText value="#{ListLampControlBean.lampControlForm.weekInterval[0].dateStart}" >
+												<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+											</h:outputText> 
+											~
+					                		<h:outputText value="#{ListLampControlBean.lampControlForm.weekInterval[0].dateEnd}" >
+												<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+											</h:outputText> 
+					                	</f:facet>
+					                </p:column>
+					                <p:column colspan="4" >
+					                	<f:facet name="header">
+					                		<h:outputText value="#{ListLampControlBean.lampControlForm.weekInterval[1].dateStart}" >
+												<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+											</h:outputText> 
+											~
+					                		<h:outputText value="#{ListLampControlBean.lampControlForm.weekInterval[1].dateEnd}" >
+												<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+											</h:outputText> 
+										</f:facet>
+					                </p:column>
+					                <p:column >
+					                	<f:facet name="header">
+					                		<h:outputText value="#{ListLampControlBean.lampControlForm.weekInterval[2].dateStart}" >
+												<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+											</h:outputText> 
+											~
+					                		<h:outputText value="#{ListLampControlBean.lampControlForm.weekInterval[2].dateEnd}" >
+												<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+											</h:outputText> 
+										</f:facet>
+					                </p:column>
+					                <p:column >
+					                	<f:facet name="header">
+					                		<h:outputText value="#{ListLampControlBean.lampControlForm.weekInterval[3].dateStart}" >
+												<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+											</h:outputText> 
+											~
+					                		<h:outputText value="#{ListLampControlBean.lampControlForm.weekInterval[3].dateEnd}" >
+												<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+											</h:outputText> 
+										</f:facet>
+									</p:column>
+					            </p:row>
+					            <p:row>
+					            	<p:column style="width:20px;">
+										
+									</p:column>
+					                <p:column> 
+					                	<f:facet name="header"> <i18n:outputText value="itemnum" /> </f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="siteid" /> </f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="dept_code" /></f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> SHOP</f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="request.quantity" /></f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="require.date" /></f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="mcQty" /></f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="matuseQty" /></f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="request.quantity" /></f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="require.date" /></f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="mcQty" /></f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="matuseQty" /></f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="request.quantity" /></f:facet>
+									</p:column>
+									<p:column>
+										<f:facet name="header"> <i18n:outputText value="request.quantity" /></f:facet>
+									</p:column>
+					            </p:row>
+					        </p:columnGroup>
+					        	<p:column style="width:20px;">
+										<p:rowEditor  />
+									</p:column>
+					            <p:column>
+									<h:outputText value="#{list.header.itemnum}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{list.header.organizationCode}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{list.header.deptCode}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{list.mroOrgFacility.fab}" />
+								</p:column>
+	            				<p:column>
+	            					<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{list.listLampControlLine[0].needQty}" />
+										</f:facet>
+										<f:facet name="input">
+											<pe:inputNumber decimalPlaces="0" minValue="0" emptyValue="0"
+												style="width:30px"
+												value="#{list.listLampControlLine[0].needQty}" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column>
+	            					<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{list.listLampControlLine[0].needDate}" >
+												<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+											</h:outputText> 
+										</f:facet>
+										<f:facet name="input">
+											<p:calendar  value="#{list.listLampControlLine[0].needDate}" size="10"
+												showOn="button" readonlyInput="true" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column>
+									<h:outputText value="#{list.listLampControlLine[0].mcQty}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{list.listLampControlLine[0].matuseQty}" />
+								</p:column>
+								<p:column>
+	            					<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{list.listLampControlLine[1].needQty}" />
+										</f:facet>
+										<f:facet name="input">
+											<pe:inputNumber decimalPlaces="0" minValue="0" emptyValue="0"
+												style="width:30px"
+												value="#{list.listLampControlLine[1].needQty}" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column>
+	            					<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{list.listLampControlLine[1].needDate}" >
+												<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+											</h:outputText> 
+										</f:facet>
+										<f:facet name="input">
+											<p:calendar value="#{list.listLampControlLine[1].needDate}" size="10"
+												showOn="button" readonlyInput="true" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column>
+									<h:outputText value="#{list.listLampControlLine[1].mcQty}" />
+								</p:column>
+								<p:column>
+									<h:outputText value="#{list.listLampControlLine[1].matuseQty}" />
+								</p:column>
+								<p:column>
+	            					<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{list.listLampControlLine[2].needQty}" />
+										</f:facet>
+										<f:facet name="input">
+											<pe:inputNumber decimalPlaces="0" minValue="0" emptyValue="0"
+												style="width:30px"
+												value="#{list.listLampControlLine[2].needQty}" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								<p:column>
+									
+	            					<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{list.listLampControlLine[3].needQty}" />
+										</f:facet>
+										<f:facet name="input">
+											<pe:inputNumber decimalPlaces="0" minValue="0" emptyValue="0"
+												style="width:30px"
+												value="#{list.listLampControlLine[3].needQty}" />
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+						</p:dataTable>
+					</div>
+				</h:form>
+			</p:tab>
+		</p:tabView>
+
+	</ui:define>
+</ui:composition>

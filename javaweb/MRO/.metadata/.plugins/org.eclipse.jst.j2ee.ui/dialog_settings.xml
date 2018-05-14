@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="true" key="J2EE_EXPORT_OVERWRITE"/>
+	<item value="false" key="J2EE_EXPORT_SOURCE"/>
+	<list key="J2EE_EXPORT_JST_WEB">
+		<item value="D:\apache-tomcat-7.0.67\webapps\MRO.war"/>
+		<item value="d:\MRO.war"/>
+		<item value="D:\workspaces\MRO\MRO\MRO.war"/>
+	</list>
+</section>

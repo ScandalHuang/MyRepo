@@ -1,0 +1,120 @@
+﻿
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="listInventoryIdelForm" prependId="false">
+		<c:set var="bean" value="#{ListMroInventoryIdleBean}" />
+		<c:set var="form" value="#{bean.form}" />
+		<i18n:outputText value="location.site" />：
+		<p:selectOneMenu style="width:250px;" converter="SerializesConverter"
+			value="#{form.sLocationSiteMap}" filter="true"
+			filterMatchMode="startsWith">
+			<f:selectItem itemLabel="請選擇" itemValue="" />
+			<f:selectItems value="#{LoginInfoBean.userLSMap.values()}"
+				var="userLSMap" itemLabel="#{userLSMap.locationSite}"
+				itemValue="#{userLSMap}" />
+			<p:ajax update="@form" listener="#{bean.onSearch}" process="@form" />
+		</p:selectOneMenu>
+		<br />
+		<font color="red">*重複的ITEMNUM、LOCATION與ORGANIZATION_CODE會在上傳後自動覆蓋</font>
+		<p:dataTable var="listInventoryIdle" value="#{form.list}"
+			filterDelay="#{SystemConfigBean.filetDelay}"
+			filteredValue="#{form.filterList}" paginator="true" rows="10"
+			id="listInventoryIdle" rowKey="#{listInventoryIdle.uuid}"
+			selection="#{form.deleteList}" paginatorPosition="bottom"
+			style="text-align:center">
+			<f:facet name="header">
+				<i18n:outputText value="List.invetory.idle" />
+				<p:commandButton value="選取全部" icon="ui-icon-circle-check"
+					rendered="#{form.list.size()>0}"
+					actionListener="#{bean.onSelectAll}" update="listInventoryIdle" />
+				<p:commandButton value="刪除清單" icon="ui-icon-trash"
+					rendered="#{form.list.size()>0}"
+					oncomplete="PF('deleteConfirmIIDialog').show();" />
+			</f:facet>
+			<p:column selectionMode="multiple" exportable="false"
+				style="text-align:center;width:20px" />
+			<p:column filterMatchMode="contains"
+				filterBy="#{listInventoryIdle.itemnum}">
+				<f:facet name="header">
+						ITEMNUM(料號)
+				</f:facet>
+				<h:outputText value="#{listInventoryIdle.itemnum}" />
+			</p:column>
+			<p:column filterMatchMode="contains"
+				filterBy="#{listInventoryIdle.organizationCode}">
+				<f:facet name="header">
+						ORGANIZATION_CODE(廠區)
+				</f:facet>
+				<h:outputText value="#{listInventoryIdle.organizationCode}" />
+			</p:column>
+			<p:column filterMatchMode="contains"
+				filterBy="#{listInventoryIdle.location}">
+				<f:facet name="header">
+						LOCATION(倉別)
+				</f:facet>
+				<h:outputText value="#{listInventoryIdle.location}" />
+			</p:column>
+			<p:column filterMatchMode="contains"
+				filterBy="#{listInventoryIdle.remark}">
+				<f:facet name="header">
+						Remark(備註)
+				</f:facet>
+				<h:outputText value="#{listInventoryIdle.remark}" />
+			</p:column>
+			<p:column exportable="false">
+				<f:facet name="header">
+					最後更新人
+				</f:facet>
+				<h:outputText value="#{listInventoryIdle.createBy}" />
+			</p:column>
+			<p:column filterMatchMode="contains"
+				filterBy="#{listInventoryIdle.createDate}">
+				<f:facet name="header">
+					建立日期
+				</f:facet>
+				<h:outputText value="#{listInventoryIdle.createDate}">
+					<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>
+		<p:panelGrid columns="2">
+			<p:panel header="Export All Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="listInventoryIdle"
+						fileName="#{currentDate.getTime()}E" />
+				</h:commandLink>
+			</p:panel>
+			<p:panel header="Upload Data">
+				<i18n:outputText value="upload.excel" />：
+					<p:commandButton icon="ui-icon-disk" update=":fileUploadExcelForm"
+					action="#{FileUploadExcelBean.excel(6,1)}"
+					oncomplete="PF('ExcelFileUploadDialog').show();">
+					<f:setPropertyActionListener target="#{FileUploadExcelBean.object}"
+						value="#{bean}" />
+					<f:setPropertyActionListener
+						target="#{FileUploadExcelBean.updateView}"
+						value="tabView:listInventoryIdelForm" />
+				</p:commandButton>
+			</p:panel>
+		</p:panelGrid>
+	</h:form>
+
+	<p:confirmDialog id="deleteConfirmIIDialog" message="確定刪除清單?"
+		width="300" header="確定刪除清單" widgetVar="deleteConfirmIIDialog"
+		appendTo="@(body)">
+		<h:form id="deleteConfirmIIForm" prependId="false">
+			<p:commandButton value="Yes Sure"
+				oncomplete="PF('deleteConfirmIIDialog').hide();"
+				actionListener="#{ListMroInventoryIdleBean.onDelete}"
+				update=":tabView:listInventoryIdelForm" icon="ui-icon-circle-check" />
+			<p:commandButton value="Not Yet"
+				onclick="PF('deleteConfirmIIDialog').hide();" type="button"
+				icon="ui-icon-close" />
+		</h:form>
+	</p:confirmDialog>
+</ui:composition>

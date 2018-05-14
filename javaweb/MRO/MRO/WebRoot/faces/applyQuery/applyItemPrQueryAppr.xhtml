@@ -1,0 +1,619 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="PrHeaderForm" prependId="false">
+		<h:panelGrid columns="6" cellpadding="2">
+			<p:commandButton value="儲存" update=":tabView" icon="ui-icon-disk"
+				rendered="#{view.saveButton}"
+				actionListener="#{ApplyItemPrQueryApprBean.onApplySave}" />
+			<p:commandButton value="取消申請單" icon="ui-icon-close"
+				rendered="#{view.canButton}" update=":CanConfirmDialogForm"
+				oncomplete="PF('CanConfirmDialog').show();" />
+			<c:set var="transType"
+				value="#{form.pr.transferFlag=='Y'?true:false}" />
+			<p:commandButton value="#{transType?'重新開啟拋轉':'關閉拋轉'}"
+				update=":tabView" icon="ui-icon-disk"
+				rendered="#{view.prTransferFlag}"
+				actionListener="#{ApplyItemPrQueryApprBean.updatePr(transType)}" />
+		</h:panelGrid>
+		<p:separator />
+		<p:panelGrid id="header" style="width:100%;word-break:break-all;">
+			<p:row>
+				<p:column style="vertical-align:top;width:50%">
+					<p:panelGrid style="width:100%;word-break:break-all;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="line.info" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:120px">
+								<i18n:outputText value="apply.num" style="font-weight: bold;" />  :
+									</p:column>
+							<p:column>
+										#{form.pr.prnum}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="item_status" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{SystemConfigBean.parameterMap[form.pr.status]}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="prline.status"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{SystemConfigBean.prlineStatusMap[form.pr.prlineStatus]}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="apply.command"
+									style="font-weight: bold;" />  :
+									</p:column>
+							<p:column>
+										#{form.pr.description}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="apply.keyin.by"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{form.pr.requestedby}
+										<h:outputText value="(#{form.prNameMap[form.pr.requestedby]})"
+									rendered="#{form.pr.requestedby!=null}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="apply.by" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+									#{form.pr.requestedby2}
+									<h:outputText value="(#{form.prNameMap[form.pr.requestedby2]})"
+									rendered="#{form.pr.requestedby2!=null}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="site" style="font-weight: bold;" />  :
+									</p:column>
+							<p:column>
+								<h:outputText
+									value="#{SystemConfigBean.locationMapALL[form.pr.siteid]}"
+									rendered="#{form.pr.siteid!=null}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="Department.Supervisor"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{form.pr.deptsupervisor}
+										<h:outputText
+									value="(#{form.prNameMap[form.pr.deptsupervisor]})"
+									rendered="#{form.pr.deptsupervisor!=null}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="dept_code" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{form.pr.MDept}
+									</p:column>
+						</p:row>
+
+						<!-- 2015/05/06  測試報告中決議取消 -->
+						<!-- <p:row>
+							<p:column>
+								<i18n:outputText value="order" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{form.pr.cmopriority}
+									</p:column>
+						</p:row> -->
+						<p:row>
+							<p:column>
+								<i18n:outputText value="apply.classification"
+									style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+										#{SystemConfigBean.parameterMap[form.pr.prtype]}
+									</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="apply_date" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+								<h:outputText value="#{form.pr.issuedate}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>
+								<i18n:outputText value="change_date" style="font-weight: bold;" /> :
+									</p:column>
+							<p:column>
+								<h:outputText value="#{form.pr.changedate}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="font-weight: bold;">
+								<i18n:outputText value="total_cost" />
+										(<i18n:outputText value="current.code" />):
+									</p:column>
+							<p:column>
+
+								<h:outputText id="totalbasecost2"
+									value="#{form.pr.totalbasecost2}">
+									<f:convertNumber groupingUsed="true" />
+								</h:outputText>
+							</p:column>
+						</p:row>
+						<p:row rendered="#{form.reasonFlag}">
+							<p:column>
+								<i18n:outputText value="apply.purpose"
+									style="font-weight: bold;" />  :
+							</p:column>
+							<p:column>
+									#{SystemConfigBean.parameterMap[form.pr.reasoncode]}
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:column>
+				<p:column style="vertical-align:top;width:50%">
+					<p:panelGrid id="countersign"
+						style="width:100%;word-break:break-all;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="other.sign" style="font-weight: bold;" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:120px;text-align:left;">
+								<i18n:outputText value="other.sign1" style="font-weight: bold;" />1  :
+									</p:column>
+							<p:column>
+									#{form.pr.countersign1}
+									<h:outputText value="(#{form.prNameMap[form.pr.countersign1]})"
+									rendered="#{form.pr.countersign1!=null}" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column style="width:120px;text-align:left;">
+								<i18n:outputText value="other.sign1" style="font-weight: bold;" />2  :
+									</p:column>
+							<p:column>
+									#{form.pr.countersign2}
+									<h:outputText value="(#{form.prNameMap[form.pr.countersign2]})"
+									rendered="#{form.pr.countersign2!=null}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid id="file"
+						style="margin-top:20px;width:100%;word-break:break-all;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="file" style="font-weight: bold;" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:100px;text-align:left;">
+								<i18n:outputText value="attachmentList"
+									style="font-weight: bold;" />  :
+									</p:column>
+							<p:column>
+								<p:commandButton icon="ui-icon-disk"
+									value="(#{form.dowloadFileMap[
+									form.fileHeaderType]})"
+									action="#{FileUploadBean.view(
+									form.pr.prid,
+									form.fileHeaderType)}"
+									rendered="#{form.pr.prid!=null}" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+					<p:panelGrid style="margin-top:20px;width:100%;">
+						<f:facet name="header">
+							<p:row>
+								<p:column colspan="2">
+									<i18n:outputText value="extra.remark"
+										style="font-weight: bold;" />
+								</p:column>
+							</p:row>
+						</f:facet>
+						<p:row>
+							<p:column style="width:100px;text-align:left;">
+								<i18n:outputText value="extra.remark" style="font-weight: bold;" />  :
+									</p:column>
+							<p:column>
+								<p:inputTextarea rows="7" cols="50"
+									value="#{form.pr.extraRemark}" autoResize="false"
+									readonly="true" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+
+		<br />
+		<p:separator />
+		<br />
+		<p:dataTable var="listPrline" id="listPrline"
+			value="#{form.listPrline}" paginatorPosition="bottom"
+			paginator="true" rows="10" rowKey="#{listPrline.prlinenum}"
+			editable="true">
+			<f:facet name="header">
+				<p:row>
+					<p:column>
+						<i18n:outputText value="Apply.Detail" />
+					</p:column>
+				</p:row>
+			</f:facet>
+			<p:ajax event="rowEdit"
+				listener="#{ApplyItemPrQueryApprBean.onEditPrline}"
+				update="listPrline 
+        				:tabView:PrHeaderForm:totalbasecost2
+        				:tabView:form:listPr" />
+			<p:column style="text-align: center;width:20px;"
+				rendered="#{view.editButton}">
+				<p:rowEditor />
+			</p:column>
+			<p:column style="text-align: center;width:20px;"
+				rendered="#{view.closePrline}">
+				<p:commandButton icon="ui-icon-trash"
+					style="width:20px;height:20px;"
+					actionListener="#{ApplyItemPrQueryApprBean.closePrLine(listPrline)}"
+					update=":tabView:PrHeaderForm" />
+			</p:column>
+			<p:column style="text-align:center;width:20px;">
+				<f:facet name="header">
+
+				</f:facet>
+				<p:commandButton icon="ui-icon-search"
+					style="width:20px;height:20px;" update=":listPrLineForm"
+					actionListener="#{ListPrlineBean.onPrLine(listPrline,
+						form.editButton,form)}"
+					oncomplete="PF('listPrlineDialog').show();" />
+			</p:column>
+			<p:column filterMatchMode="contains" style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="line" />
+				</f:facet>
+				<h:outputText value="#{listPrline.prlinenum}" />
+
+			</p:column>
+			<p:column filterMatchMode="contains" style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="itemnum" />
+				</f:facet>
+				<h:outputText value="#{listPrline.itemnum}" />
+			</p:column>
+			<p:column filterMatchMode="contains">
+				<f:facet name="header">
+					<i18n:outputText value="item.description" />
+					<i18n:outputText value="description" />
+				</f:facet>
+				<h:outputText value="#{listPrline.description}"
+					style="white-space: pre-wrap; word-wrap: break-word; " />
+
+
+			</p:column>
+
+			<p:column filterMatchMode="contains" style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="request.quantity" />
+				</f:facet>
+				<p:cellEditor>
+					<f:facet name="output">
+						<h:outputText value="#{listPrline.pmreqqty}" />
+					</f:facet>
+					<f:facet name="input">
+						<pe:inputNumber decimalPlaces="0" minValue="1"
+							value="#{listPrline.pmreqqty}" />
+					</f:facet>
+				</p:cellEditor>
+
+			</p:column>
+			<p:column filterMatchMode="contains" style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="unit_cost" />
+				</f:facet>
+				<h:outputText value="#{listPrline.unitcost}">
+					<f:convertNumber groupingUsed="true" />
+				</h:outputText>
+
+			</p:column>
+			<p:column filterMatchMode="contains" style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="pr_line_cost" />
+				</f:facet>
+				<h:outputText value="#{listPrline.linecost}">
+					<f:convertNumber groupingUsed="true" />
+				</h:outputText>
+
+			</p:column>
+			<p:column filterMatchMode="contains" style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="file" />
+				</f:facet>
+				<p:commandButton icon="ui-icon-disk"
+					value="(#{form.dowloadFileMap[listPrline.prlineid]})"
+					action="#{FileUploadBean.view(listPrline.prlineid,
+									form.fileLineType)}" />
+			</p:column>
+		</p:dataTable>
+		
+		<br rendered="#{form.listClosePrline.size()>0}"/>
+		<p:separator rendered="#{form.listClosePrline.size()>0}"/>
+		<br rendered="#{form.listClosePrline.size()>0}"/>
+		
+		<p:dataTable var="listClosePrline" id="listClosePrline"
+			value="#{form.listClosePrline}" paginatorPosition="bottom"
+			paginator="true" rows="10" rowKey="#{listClosePrline.prlineid}">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="2">
+						<i18n:outputText value="Delete.Detail" />
+					</p:column>
+				</p:row>
+			</f:facet>
+			<p:column style="text-align:center;width:20px;">
+				<f:facet name="header">
+
+				</f:facet>
+				<p:commandButton icon="ui-icon-search"
+					style="width:20px;height:20px;" update=":listPrLineForm"
+					actionListener="#{ListPrlineBean.onPrLine(listClosePrline,
+							      form.editButton,form)}"
+					oncomplete="PF('listPrlineDialog').show();" />
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="line" />
+				</f:facet>
+				<h:outputText value="#{listClosePrline.prlinenum}" />
+
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="itemnum" />
+				</f:facet>
+				<h:outputText value="#{listClosePrline.itemnum}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<i18n:outputText value="item.description" />
+					<i18n:outputText value="description" />
+				</f:facet>
+				<h:outputText value="#{listClosePrline.description}"
+					style="white-space: pre-wrap; word-wrap: break-word; " />
+
+
+			</p:column>
+			<!-- added by r.c -->
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="min.Basic.Unit" />
+				</f:facet>
+				<h:outputText value="#{listClosePrline.minBasicUnit}" />
+
+			</p:column>
+			<!-- end of added -->
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="request.quantity" />
+				</f:facet>
+				<h:outputText value="#{listClosePrline.pmreqqty}" />
+
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="unit_cost" />
+				</f:facet>
+				<h:outputText value="#{listClosePrline.unitcost}">
+					<f:convertNumber groupingUsed="true" />
+				</h:outputText>
+
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="pr_line_cost" />
+				</f:facet>
+				<h:outputText value="#{listClosePrline.linecost}">
+					<f:convertNumber groupingUsed="true" />
+				</h:outputText>
+
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="file" />
+				</f:facet>
+				<p:commandButton icon="ui-icon-disk"
+					value="(#{form.dowloadFileMap[listClosePrline.prlineid]})"
+					action="#{FileUploadBean.view(listClosePrline.prlineid,
+									form.fileLineType)}"
+					rendered="#{listClosePrline.prlineid!=null}" />
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="signer" />
+				</f:facet>
+				<h:outputText value="#{form.prNameMap[listClosePrline.changeBy]}" />
+
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<i18n:outputText value="close.remark" />
+				</f:facet>
+				<h:outputText value="#{listClosePrline.closeRemark}"
+					style="white-space: pre-wrap; word-wrap: break-word; "
+					rendered="#{!prView.closeRemarkMap[listClosePrline.prlineid]}" />
+				<p:inputText value="#{listClosePrline.closeRemark}" maxlength="120"
+					rendered="#{prView.closeRemarkMap[listClosePrline.prlineid]}" />
+			</p:column>
+		</p:dataTable>
+		
+		<br rendered="#{form.listCombinePrline.size()>0}"/>
+		<p:separator rendered="#{form.listCombinePrline.size()>0}"/>
+		<br rendered="#{form.listCombinePrline.size()>0}"/>
+		
+		<p:dataTable var="listCombinePrline" id="listCombinePrline"
+			value="#{form.listCombinePrline}" paginatorPosition="bottom"
+			paginator="true" rows="10" rowKey="#{listCombinePrline.prlineid}">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="2">
+						<i18n:outputText value="Combine.Detail" />						
+						<h:outputText style="color:red;" value="(該物料入貨當週無領出，視同取消需求)"/>
+						
+					</p:column>
+				</p:row>
+			</f:facet>
+			<p:column style="text-align:center;width:20px;">
+				<f:facet name="header">
+
+				</f:facet>
+				<p:commandButton icon="ui-icon-search"
+					style="width:20px;height:20px;" update=":listPrLineForm"
+					actionListener="#{ListPrlineBean.onPrLine(listCombinePrline,
+							      form.editButton,form)}"
+					oncomplete="PF('listPrlineDialog').show();" />
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="line" />
+				</f:facet>
+				<h:outputText value="#{listCombinePrline.prlinenum}" />
+
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="itemnum" />
+				</f:facet>
+				<h:outputText value="#{listCombinePrline.itemnum}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<i18n:outputText value="item.description" />
+					<i18n:outputText value="description" />
+				</f:facet>
+				<h:outputText value="#{listCombinePrline.description}"
+					style="white-space: pre-wrap; word-wrap: break-word; " />
+			</p:column>
+			<!-- added by r.c -->
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="min.Basic.Unit" />
+				</f:facet>
+				<h:outputText value="#{listCombinePrline.minBasicUnit}" />
+
+			</p:column>
+			<!-- end of added -->
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="request.quantity" />
+				</f:facet>
+				<h:outputText value="#{listCombinePrline.pmreqqty}" />
+
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="unit_cost" />
+				</f:facet>
+				<h:outputText value="#{listCombinePrline.unitcost}">
+					<f:convertNumber groupingUsed="true" />
+				</h:outputText>
+
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="pr_line_cost" />
+				</f:facet>
+				<h:outputText value="#{listCombinePrline.linecost}">
+					<f:convertNumber groupingUsed="true" />
+				</h:outputText>
+
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="file" />
+				</f:facet>
+				<p:commandButton icon="ui-icon-disk"
+					value="(#{form.dowloadFileMap[listCombinePrline.prlineid]})"
+					action="#{FileUploadBean.view(listCombinePrline.prlineid,
+									form.fileLineType)}"
+					rendered="#{listCombinePrline.prlineid!=null}" />
+			</p:column>
+            <p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="signer" />
+				</f:facet>
+				<h:outputText value="#{form.prNameMap[listCombinePrline.changeBy]}" />
+
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="combine.indate" />
+				</f:facet>
+				<h:outputText value="#{listCombinePrline.combineIndate}" >
+					<f:convertDateTime pattern="yyyy-MM-dd"
+										timeZone="GMT+8" />
+				</h:outputText>
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText value="combine.inplant" />
+				</f:facet>
+				<h:outputText value="#{listCombinePrline.combineInplant}" />
+
+			</p:column>
+            <p:column>
+				<f:facet name="header">
+					<i18n:outputText value="combine.remark" />
+				</f:facet>
+				<h:outputText value="#{listCombinePrline.combineRemark}"
+					style="white-space: pre-wrap; word-wrap: break-word; "
+					rendered="#{!prView.combineRemarkMap[listCombinePrline.prlineid]}" />
+				<p:inputText value="#{listCombinePrline.combineRemark}" maxlength="120"
+					rendered="#{prView.combineRemarkMap[listCombinePrline.prlineid]}" />
+			</p:column>
+						
+		</p:dataTable>
+	</h:form>
+	<br />
+	<p:separator />
+	<br />
+	<iframe width="100%" frameborder="0" name="ifrm01" id="ifrm01"
+		src="#{form.signHistoryUrl}"
+		onload="document.getElementById('ifrm01').height=ifrm01.document.body.scrollHeight+'px'" />
+</ui:composition>
+

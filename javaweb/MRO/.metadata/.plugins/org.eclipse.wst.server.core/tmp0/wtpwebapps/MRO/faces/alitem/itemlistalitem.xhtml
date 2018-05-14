@@ -1,0 +1,61 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<p:tabView id="tabView" dynamic="true" cache="true" >
+			<p:tab id="tab1" title="料號與替代料號對應總覽">
+				<h:panelGrid columns="1" cellpadding="10">
+					<h:outputText value="說明: " />
+					<h:outputText
+						value="顯示/輸入查詢條件(AND):
+									a. 料號   (free key-In/ 模糊搜尋)
+									b. 品名   (free key-In/ 模糊收尋)
+									c. 替代料號   (free key-In/ 模糊收尋)
+									d. 替代料號品名   (free key-In/ 模糊收尋)" />
+				</h:panelGrid>
+
+				<p:panel id="panelSearch" header="Search Alt. Item"
+					toggleable="true" toggleSpeed="500" widgetVar="panelSearch">
+					<div align="center">
+						<h:form id="form" prependId="false">
+							<p:panelGrid columns="6" style="word-break:break-all;">
+								<i18n:outputText value="ItemCategory" />
+								<i18n:outputText value="itemnum" />
+								<i18n:outputText value="itemnum_description" />
+								<i18n:outputText value="alt_itemnum" />
+								<i18n:outputText value="alt_itemnum_description" />
+								<i18n:outputText value="" />
+								<p:selectOneMenu
+									value="#{ItemListALItemBean.selectItemCategory}"
+									style="width:100px">
+									<f:selectItems value="#{ItemListALItemBean.itemCategoryOption}" />
+								</p:selectOneMenu>
+								<p:inputText value="#{ItemListALItemBean.itemnum}" />
+								<p:inputText value="#{ItemListALItemBean.itemnumDescription}" />
+								<p:inputText value="#{ItemListALItemBean.altitemnum}" />
+								<p:inputText value="#{ItemListALItemBean.altItemnumDescription}" />
+
+								<p:commandButton value="Search"
+									actionListener="#{ItemListALItemBean.onSearch}"
+									update=":tabView:listSecondItemform" style="margin-top:5px" />
+							</p:panelGrid>
+						</h:form>
+					</div>
+				</p:panel>
+				<br />
+				<ui:include src="../CommonView/listSecondItem.xhtml" />
+				
+			</p:tab>
+			<p:tab id="tab2">
+				<f:facet name="title">
+					<i18n:outputText value="2nd.mapping.list" />
+				</f:facet>
+				<ui:include src="classstructure2ndList.xhtml" />
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>

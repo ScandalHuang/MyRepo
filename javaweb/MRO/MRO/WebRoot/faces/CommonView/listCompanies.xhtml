@@ -1,0 +1,57 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:i18n="http://innolux.com/i18n"> 
+		
+	<h:form id="listSupplierHeaderForm" prependId="false">
+			             <div align="center">
+			             <p:panelGrid columns="3" rendered="#{ListCompaniesBean.searchButton}">
+			             		
+								<i18n:outputText value="basic.vendor.vat_registration" />
+								<i18n:outputText value="basic.vendor.name" />
+								<i18n:outputText value="" />
+								
+								<p:inputText value="#{ListCompaniesBean.vatRegistration}" /> 
+								<p:inputText value="#{ListCompaniesBean.name}" /> 
+								<p:commandButton  value="Search"  
+			                actionListener="#{ListCompaniesBean.onSearch}" update="listSupplierHeader" style="margin-top:5px" /> 
+			             </p:panelGrid>
+			             </div>
+					<br />
+						<p:dataTable var="listSupplierHeader" id="listSupplierHeader" 
+						value="#{ListCompaniesBean.listVwNewvendorcodeEpmall}"
+						rowKey="#{listSupplierHeader.nvcid}" paginator="true" rows="10" 
+						paginatorPosition="bottom">
+			                    
+							<p:column sortBy="#{listSupplierHeader.nvcid}" >
+								<f:facet name="header">
+									<i18n:outputText value="basic.vendor.company" />
+								</f:facet>
+								<h:outputText value="#{listSupplierHeader.nvcid}" />
+							</p:column> 
+
+							<p:column  sortBy="#{listSupplierHeader.registrationnum}" >
+								<f:facet name="header">
+									<i18n:outputText value="basic.vendor.vat_registration" />
+								</f:facet>
+								<h:outputText value="#{listSupplierHeader.registrationnum}" />
+							</p:column>
+
+							<p:column  sortBy="#{listSupplierHeader.newvendorname}" >
+								<f:facet name="header">
+									<i18n:outputText value="basic.vendor.name" />
+								</f:facet>
+								<h:outputText value="#{listSupplierHeader.newvendorname}" />
+							</p:column>
+  							<p:column headerText="Add" style="width:80px;text-align:center;" >
+				                <p:commandButton  
+				                oncomplete="PF('listCompaniesDialog2').hide();"  style="width:20px;height:20px;"
+				                actionListener="#{ListCompaniesBean.save(listSupplierHeader)}"
+				                icon="ui-icon-contact" />    
+				         	</p:column>
+							</p:dataTable>
+ </h:form>
+</ui:composition>

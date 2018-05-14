@@ -1,0 +1,66 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="listSecondItemform" prependId="false">
+		<p:dataTable var="itemAltitemList" paginatorPosition="bottom"
+			value="#{ItemListALItemBean.itemAltitemList}" paginator="true"
+			rows="10">
+
+<!-- 			<p:column sortBy="#{itemAltitemList.itemnum}">
+				<f:facet name="header">
+					<i18n:outputText value="itemnum" />
+				</f:facet>
+				<h:outputText value="#{itemAltitemList.itemnum}" />
+			</p:column>
+
+			<p:column sortBy="#{itemAltitemList.itemnumDescription}">
+				<f:facet name="header">
+					<i18n:outputText value="itemnum_description" />
+
+				</f:facet>
+				<h:outputText value="#{itemAltitemList.itemnumDescription}" />
+
+			</p:column> -->
+<p:column sortBy="#{itemAltitemList.itemnum}">
+
+				<f:facet name="header">
+					<i18n:outputText value="itemnum" />
+				</f:facet>
+
+				<h:outputText value="#{itemAltitemList.itemnum}" />
+
+			</p:column>
+
+			<p:column sortBy="#{itemAltitemList.itemnumDescription}">
+				<f:facet name="header">
+					<i18n:outputText value="description" />
+
+				</f:facet>
+				<h:outputText value="#{itemAltitemList.itemnumDescription}" />
+
+			</p:column>
+			<p:column sortBy="#{itemAltitemList.altitemnum}">
+
+				<f:facet name="header">
+					<i18n:outputText value="alt_itemnum" />
+				</f:facet>
+
+				<h:outputText value="#{itemAltitemList.altitemnum}" />
+
+			</p:column>
+
+			<p:column sortBy="#{itemAltitemList.altItemnumDescription}">
+				<f:facet name="header">
+					<i18n:outputText value="alt_itemnum_description" />
+
+				</f:facet>
+				<h:outputText value="#{itemAltitemList.altItemnumDescription}" />
+
+			</p:column>
+		</p:dataTable>
+		
+	</h:form>
+</ui:composition>

@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="fileUploadExcelForm" prependId="false" enctype="multipart/form-data">
+		<p:outputPanel   >
+			<font color="red">
+				*檔案大小限制：#{FileUploadExcelBean.sizeLimit/1024/1024}MB <BR />
+				*檔案型態限制：#{FileUploadExcelBean.allowTypesText}
+			</font>
+		</p:outputPanel>
+		<p:fileUpload fileUploadListener="#{FileUploadExcelBean.handleFileUpload}"
+			auto="true" mode="advanced"  showButtons="false" update="fileName"
+			sizeLimit="#{FileUploadExcelBean.sizeLimit}"
+			allowTypes="#{FileUploadExcelBean.allowTypes}" />
+			
+		<br />
+		<p:panelGrid style="width:100%;word-break:break-all;">
+		<f:facet name="header">
+			<p:row>
+				<p:column style="text-align:left">	
+					Upload Excel File
+				</p:column>
+			</p:row>
+		</f:facet>
+		<p:row>
+			<p:column style="text-align:center">
+					<font color="red">
+						檔案名稱：<h:outputText value="#{FileUploadExcelBean.fileName}" id="fileName" />
+					</font>
+			</p:column>
+		</p:row>
+		<f:facet name="footer">
+			<p:row>
+				<p:column style="text-align:center">
+			<p:commandButton value="確定"  icon="ui-icon-refresh"
+				actionListener="#{FileUploadExcelBean.confirm}" 
+				  
+				oncomplete="PF('ExcelFileUploadDialog').hide();"  />&#160;&#160;&#160;&#160;
+			<p:commandButton value="取消" icon="ui-icon-newwin"
+				oncomplete="PF('ExcelFileUploadDialog').hide();" />
+				</p:column>
+			</p:row>
+		</f:facet>
+		</p:panelGrid>
+		
+	</h:form>
+</ui:composition>

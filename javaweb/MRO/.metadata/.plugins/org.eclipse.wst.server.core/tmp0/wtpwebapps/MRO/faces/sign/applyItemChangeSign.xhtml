@@ -1,0 +1,55 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="applyItemChangeForm" prependId="false">
+		<h:panelGrid columns="6" cellpadding="5">
+			<p:commandButton value="異動前明細" icon="ui-icon-search"
+				actionListener="#{ApplyItemQueryBean.selectApply(ApplyItemChangeSignBean.itemForm.aItem.preEaudittransid)}"
+				update=":preItemForm"
+				rendered="#{ApplyItemChangeSignBean.itemForm.aItem.itemnum!=null and 
+							ApplyItemChangeSignBean.itemForm.aItem.preEaudittransid!=null}"
+				oncomplete="PF('preApplyItemDialog').show();" />
+		</h:panelGrid>
+		<p:separator />
+			<ui:include src="../item/aItemChange.xhtml" />
+
+		<p:panelGrid style="width:100%;text-align:center;word-break:break-all;" id="sign"
+			rendered="#{ApplyItemChangeSignBean.itemForm.aItem.itemnum!=null}">
+			<p:row>
+				<p:column style="background:#ff9900;border: none;">
+					<p:commandButton value="同意簽核" icon="ui-icon-circle-check"
+						update=":SubmitConfirmDialogForm"
+						oncomplete="PF('submitConfirmDialog').show();" />
+				</p:column>
+				<p:column style="background:#ff9900;border: none;">
+					<p:commandButton value="退回申請單" icon="ui-icon-arrowrefresh-1-w"
+						update=":RejectToNewConfirmDialogForm"
+						oncomplete="PF('RejectToNewConfirmDialog').show();" />
+				</p:column>
+				<p:column style="background:#ff9900;border: none;">
+					<p:inputText size="23" readonly="true"
+						value="#{ApplyItemChangeSignBean.itemForm.transferInfo}" />
+					<p:commandButton icon="ui-icon-search"
+						oncomplete="PF('listEmployeeDialog').show();">
+						<f:setPropertyActionListener
+								target="#{ListEmployeeBean.activeStatus}" value="true" />
+						<f:setPropertyActionListener target="#{ListEmployeeBean.object}"
+							value="#{ApplyItemChangeSignBean}" />
+						<f:setPropertyActionListener
+							target="#{ListEmployeeBean.updateView}"
+							value="tabView:sign" />
+					</p:commandButton>
+					<p:commandButton value="轉呈申請單" icon="ui-icon-arrowrefresh-1-w"
+						process="@form"
+						update=":TransferConfirmDialog"
+						oncomplete="PF('TransferConfirmDialog').show();" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</h:form>
+</ui:composition>

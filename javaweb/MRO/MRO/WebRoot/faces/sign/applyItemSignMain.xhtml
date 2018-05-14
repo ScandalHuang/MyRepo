@@ -1,0 +1,181 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<ui:include src="../CommonView/fileUpload.xhtml" />
+			<p:tabView id="tabView" cache="true"
+				activeIndex="#{ApplyItemSignBean.itemForm.activeIndex}" >
+
+
+				<p:tab id="tab1" title="料號申請簽核清單">
+				<h:form id="form" prependId="false">
+
+					<p:dataTable var="listAItem" paginatorPosition="bottom"
+						value="#{ApplyItemSignBean.itemForm.listAItem}"
+						sortBy="#{ApplyItemSignBean.itemForm.signMap[listAItem.taskId].fromDate}"
+						rowKey="#{listAItem.eaudittransid}" paginator="true" rows="10"
+						selection="#{ApplyItemSignBean.itemForm.aItem}"
+						selectionMode="single" id="listAItem">
+
+						<p:ajax event="rowSelect" listener="#{ApplyItemSignBean.selectApply}"
+							update=":tabView" 
+							  />
+							
+						<p:column 
+							sortBy="#{listAItem.itemnum}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.num" />
+							</f:facet>
+							<h:outputText value="#{listAItem.itemnum}" />
+
+						</p:column>
+						<p:column sortBy="#{SystemConfigBean.parameterMap[listAItem.status]}">
+							<f:facet name="header">
+								<i18n:outputText value="status" />
+							</f:facet>
+							<h:outputText value="#{SystemConfigBean.parameterMap[listAItem.status]}" />
+
+						</p:column>
+						<p:column style="text-align:center">
+							<f:facet name="header">
+								<i18n:outputText value="siteid" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.locationMapALL[listAItem.organizationCode]}" />
+						</p:column>
+						<p:column sortBy="#{listAItem.description}">
+							<f:facet name="header">
+								<i18n:outputText value="description" />
+
+							</f:facet>
+							<h:outputText value="#{listAItem.description}" />
+
+						</p:column>
+						<p:column sortBy="#{ApplyItemSignBean.itemForm.signMap[listAItem.taskId].fromDate}">
+							<f:facet name="header">
+								<i18n:outputText value="from.date" />
+							</f:facet>
+							<h:outputText value="#{ApplyItemSignBean.itemForm.signMap[listAItem.taskId].fromDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd hh:mm:ss" timeZone="GMT+8" />
+							</h:outputText>
+						</p:column>	
+						<p:column sortBy="#{listAItem.classstructureid}">
+							<f:facet name="header">
+								<i18n:outputText value="class_structure_id" />
+
+							</f:facet>
+							<h:outputText value="#{listAItem.classstructureid}" />
+
+						</p:column>
+						<p:column sortBy="#{listAItem.createDate}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.date" />
+
+							</f:facet>
+							<h:outputText value="#{listAItem.createDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+							</h:outputText>
+						</p:column>	
+						
+						<p:column sortBy="#{listAItem.remark}">
+							<f:facet name="header">
+								<i18n:outputText value="use.msg" />
+
+							</f:facet>
+							<h:outputText value="#{listAItem.remark}" />
+
+						</p:column>
+					</p:dataTable>
+					</h:form>
+				</p:tab>
+
+
+				<p:tab id="tab2" title="申請料號">
+					<ui:include src="applyItemSign.xhtml" />
+					       
+				</p:tab>
+			</p:tabView>
+		<p:dialog id="listEmployeeDialog"  widgetVar="listEmployeeDialog"  modal="true"  
+		appendTo="@(body)" width="600">
+		<f:facet name="header"><i18n:outputText value="List of Employee"/></f:facet>
+			<ui:include src="../CommonView/listEmployee.xhtml" />
+		</p:dialog>
+		<p:confirmDialog id="RejectToNewConfirmDialog" message="確定退回申請單重新修改?"  
+			     header="退回申請單" widgetVar="RejectToNewConfirmDialog" appendTo="@(body)">  
+			 <h:form id="RejectToNewConfirmDialogForm" prependId="false">
+<!-- added by r.c. -->
+				<p:panelGrid style="width:100%;text-align:center;word-break:break-all;">
+					<p:row>
+						<p:column colspan="3"> 簽核說明<i18n:outputText style="color:red;" value="NonNullMark.Notice" /> : </p:column> 
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+						 <p:inputTextarea rows="6" cols="60"
+								value="#{ApplyItemSignBean.itemForm.signComment}" maxlength="350" 
+								style="width:100%" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+<!-- end of added-->			   
+			      <p:commandButton  value="Yes Sure" onclick="PF('RejectToNewConfirmDialog').hide();" 
+			                actionListener="#{ApplyItemSignBean.onRejectToNew}" 
+			                update=":tabView"
+			                   icon="ui-icon-circle-check"/>  
+			      <p:commandButton  value="Not Yet" onclick="PF('RejectToNewConfirmDialog').hide();" type="button" icon="ui-icon-close"/>   
+			 </h:form>       
+		</p:confirmDialog> 
+		<p:confirmDialog id="submitConfirmDialog" message="確定同意簽核此申請單?"  
+			     header="同意簽核申請單" widgetVar="submitConfirmDialog" appendTo="@(body)">  
+			 <h:form id="SubmitConfirmDialogForm" prependId="false"> 
+<!-- added by r.c. -->
+				<p:panelGrid style="width:100%;text-align:center;word-break:break-all;">
+					<p:row>
+						<p:column colspan="3"> 簽核說明 : </p:column> 
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+						 <p:inputTextarea rows="6" cols="60"
+								value="#{ApplyItemSignBean.itemForm.signComment}" maxlength="350" 
+								style="width:100%" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+<!-- end of added-->			  
+			      <p:commandButton  value="Yes Sure" onclick="PF('submitConfirmDialog').hide();" 
+			                actionListener="#{ApplyItemSignBean.onAccept}" 
+			                update=":tabView"
+			                   icon="ui-icon-circle-check"/>  
+			      <p:commandButton  value="Not Yet" onclick="PF('submitConfirmDialog').hide();" type="button" icon="ui-icon-close"/>   
+			 </h:form>       
+		</p:confirmDialog> 
+		<p:confirmDialog id="TransferConfirmDialog" message="確定轉呈申請單?"  
+			     header="轉呈申請單" widgetVar="TransferConfirmDialog" appendTo="@(body)">  
+			 <h:form id="TransferConfirmDialogForm" prependId="false"> 
+<!-- added by r.c. -->
+				<p:panelGrid style="width:100%;text-align:center;word-break:break-all;">
+					<p:row>
+						<p:column colspan="3"> 簽核說明 : </p:column> 
+					</p:row>
+					<p:row>
+						<p:column colspan="3">
+						 <p:inputTextarea rows="6" cols="60"
+								value="#{ApplyItemSignBean.itemForm.signComment}" maxlength="350" 
+								style="width:100%" />
+						</p:column>
+					</p:row>
+				</p:panelGrid>
+<!-- end of added-->			  
+			      <p:commandButton  value="Yes Sure" onclick="PF('TransferConfirmDialog').hide();" 
+			                actionListener="#{ApplyItemSignBean.onTransfer}" 
+			                update=":tabView"
+			                   icon="ui-icon-circle-check"/>  
+			      <p:commandButton  value="Not Yet" onclick="PF('TransferConfirmDialog').hide();" type="button" icon="ui-icon-close"/>   
+			 </h:form>       
+		</p:confirmDialog> 
+	</ui:define>
+</ui:composition>

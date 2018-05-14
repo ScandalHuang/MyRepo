@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="signSourceForm" prependId="false">
+		<h:panelGrid columns="5" cellpadding="2">
+			<p:commandButton value="New" update=":tabView"
+				icon="ui-icon-plus" actionListener="#{SignSourceBean.onNew}"
+				
+				 />
+			<p:commandButton value="儲存" update=":tabView"
+				icon="ui-icon-disk" actionListener="#{SignSourceBean.onSave}"
+				rendered="#{SignSourceBean.signSourceForm.signSourceSystem!=null}"
+				
+				 />
+		</h:panelGrid>
+		<p:separator />
+		<p:panelGrid id="header" style="width:100%;word-break:break-all;">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="4">
+					請在下方欄位輸入簽核清單的設定，有註記<i18n:outputText style="color:red;"
+							value="NonNull" />，請務必填寫，完成後請點選「儲存」按鍵進行儲存
+				</p:column>
+				</p:row>
+			</f:facet>
+			<p:row>
+				<p:column style="width:120px">
+				<i18n:outputText style="color:red;" value="NonNullMark" />系統名稱
+					<font color="red">([a-z_])</font>：
+			</p:column>
+				<p:column colspan="3">
+					
+					<p:inputText
+						value="#{SignSourceBean.signSourceForm.signSourceSystem.sourceSystemKey}"
+						rendered="#{SignSourceBean.signSourceForm.signSourceSystem!=null}" >
+						<pe:keyFilter regEx="/[a-z_]/i" />
+					</p:inputText>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:120px">
+				系統說明：
+			</p:column>
+				<p:column colspan="3">
+					<p:inputText
+						value="#{SignSourceBean.signSourceForm.signSourceSystem.description}"
+						size="50" maxlength="100"
+						rendered="#{SignSourceBean.signSourceForm.signSourceSystem!=null}" />
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column style="width:120px">
+				<i18n:outputText style="color:red;" value="NonNullMark" />狀態：
+			</p:column>
+				<p:column style="width:120px">
+				<p:selectOneMenu 
+					rendered="#{SignSourceBean.signSourceForm.signSourceSystem!=null}"
+					value="#{SignSourceBean.signSourceForm.signSourceSystem.delted}">
+					<f:selectItem itemLabel="ACTIVE" itemValue="0" />
+					<f:selectItem itemLabel="INACTIVE" itemValue="1" />
+				</p:selectOneMenu>
+			</p:column>
+				<p:column style="width:120px">
+				異動日期：
+			</p:column>
+				<p:column style="width:120px">
+					<h:outputText
+						value="#{SignSourceBean.signSourceForm.signSourceSystem.lastUpdate}">
+						<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+					</h:outputText>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<br/>
+		<p:separator />
+		<br/>
+		<p:dataTable var="listSignSourceCategory" paginatorPosition="bottom"
+			rowKey="#{listSignSourceCategory.sourceCategoryId}" id="listSignSourceCategory"
+			value="#{SignSourceBean.signSourceForm.listSignSourceCategory}"
+			rowIndexVar="inx">
+			<f:facet name="header">  
+				簽核類別清單
+					<p:commandButton icon="ui-icon-plus" value="新增"
+					rendered="#{SignSourceBean.signSourceForm.signSourceSystem.sourceSystemId!=null}"
+					actionListener="#{SignSourceBean.addLine}"
+					update="listSignSourceCategory"
+					
+					 />
+			</f:facet>
+			<p:column >
+				<f:facet name="header">
+				</f:facet>
+				<p:commandButton icon="ui-icon-close" style="width:20px;height:20px;" 
+				update="listSignSourceCategory" 
+				actionListener="#{SignSourceBean.deleteLine(listSignSourceCategory)}" />
+			</p:column>
+			<p:column >
+				<f:facet name="header">
+					<i18n:outputText style="color:red;" value="NonNullMark" />類別KEY值
+					<font color="red">([a-z_])</font>
+				</f:facet>
+				<p:inputText size="30" value="#{listSignSourceCategory.sourceCategoryKey}" >
+						<pe:keyFilter regEx="/[a-z_]/i" />
+					</p:inputText>
+			</p:column>
+			<p:column >
+				<f:facet name="header">
+					<i18n:outputText style="color:red;" value="NonNullMark" />類別描述
+				</f:facet>
+				<p:inputText size="30" maxlength="100" value="#{listSignSourceCategory.description}" />
+			</p:column>
+			<p:column style="text-align:center;">
+				<f:facet name="header">
+					<i18n:outputText style="color:red;" value="NonNullMark" />狀態：
+				</f:facet>
+				<p:selectOneMenu 
+					value="#{listSignSourceCategory.delted}">
+					<f:selectItem itemLabel="ACTIVE" itemValue="0" />
+					<f:selectItem itemLabel="INACTIVE" itemValue="1" />
+				</p:selectOneMenu>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</ui:composition>

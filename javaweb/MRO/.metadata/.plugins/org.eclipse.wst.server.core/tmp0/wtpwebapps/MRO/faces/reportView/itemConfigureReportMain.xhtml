@@ -1,0 +1,47 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<p:tabView scrollable="true" dynamic="true" cache="true">
+			<p:tab id="tab1">
+			<f:facet name="title">
+				類別結構清單
+				</f:facet>
+				<ui:include src="classstructureList.xhtml" />
+			</p:tab>
+			<p:tab id="tab2">
+			<f:facet name="title">
+				類別結構對應屬性表
+				</f:facet>
+				<ui:include src="classSpectList.xhtml" />
+			</p:tab>
+			<p:tab id="tab3">
+				<f:facet name="title">
+					類別結構屬性清單
+				</f:facet>
+				<ui:include src="alndomainList.xhtml" />
+			</p:tab><p:tab id="tab4">
+				<f:facet name="title">
+					MRO屬性參照表
+				</f:facet>
+				<ui:include src="assetAttributeList.xhtml" />
+			</p:tab>
+			<p:tab id="tab5">
+				<f:facet name="title">
+					UNIT清單
+				</f:facet>
+				<ui:include src="unitList.xhtml" />
+			</p:tab>
+			<p:tab id="tab6">
+				<f:facet name="title">
+					共用清單
+				</f:facet>
+				<ui:include src="alndomainCommontList.xhtml" />
+			</p:tab>
+		</p:tabView>
+	</ui:define>
+</ui:composition>

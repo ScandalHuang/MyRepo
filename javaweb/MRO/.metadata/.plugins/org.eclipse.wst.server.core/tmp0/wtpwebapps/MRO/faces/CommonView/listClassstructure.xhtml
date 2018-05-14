@@ -1,0 +1,105 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="listClassstructureForm" prependId="false">
+		<p:panel id="panelAdd" header="新增子分類" toggleable="true"
+			toggleSpeed="500" widgetVar="panelSearch" collapsed="true"
+			rendered="#{ListClassstructureBean.editButton}">
+
+			<div align="center">
+				<p:panelGrid style="margin-top:20px;word-break:break-all;">
+					<p:row>
+						<p:column>*<i18n:outputText value="cat_id" />
+						</p:column>
+						<p:column>
+							<h:outputLabel
+								rendered="#{ListClassstructureBean.classstructure.classstructureid != null}">#{ListClassstructureBean.classstructure.classstructureid}-</h:outputLabel>
+							<p:inputText
+								value="#{ListClassstructureBean.addClassstructure.classstructureid}"
+								size="2" />
+						</p:column>
+						<p:column>
+							<i18n:outputText value="childrenCat.YN" />(Y/N)</p:column>
+						<p:column>
+							<p:selectBooleanCheckbox
+								value="#{ListClassstructureBean.addHasChildren}" />
+						</p:column>
+						<p:column>TYPE</p:column>
+						<p:column>
+							<p:inputText
+								value="#{ListClassstructureBean.addClassstructure.type}"
+								size="5" maxlength="10" />
+						</p:column>
+
+						<p:column>*<i18n:outputText value="cat_description" />
+						</p:column>
+						<p:column>
+							<p:inputText
+								value="#{ListClassstructureBean.addClassstructure.description}" />
+						</p:column>
+					</p:row>
+					<f:facet name="footer">
+						<p:row>
+							<p:column colspan="8" style="text-align:center">
+								<p:commandButton value="Save" icon="ui-icon-check"
+									style="margin:0"
+									actionListener="#{ListClassstructureBean.onAdd}"
+									update=":listClassstructureForm" />
+							</p:column>
+						</p:row>
+					</f:facet>
+				</p:panelGrid>
+			</div>
+		</p:panel>
+
+
+		<p:dataTable var="listClassstructure"
+			value="#{ListClassstructureBean.listClassstructure}"
+			filterDelay="#{SystemConfigBean.filetDelay}"
+			filteredValue="#{ListClassstructureBean.filterlistClassstructure}"
+			paginator="true" rows="10" id="listClassstructure"
+			paginatorPosition="bottom">
+
+			<f:facet name="header">
+				<i18n:outputText value="childrenCat" />
+			</f:facet>
+
+			<p:column headerText="Add" style="width:80px;text-align:center;"
+				rendered="#{ListClassstructureBean.addButton}">
+				<p:commandButton
+					oncomplete="PF('listClassstructureFormDialog').hide();"
+					style="width:20px;height:20px;"
+					actionListener="#{ListClassstructureBean.setClassstructureuid(listClassstructure)}"
+					icon="ui-icon-contact" />
+			</p:column>
+			<p:column filterMatchMode="contains"
+				filterBy="#{listClassstructure.classificationid}">
+				<f:facet name="header">
+					<i18n:outputText value="cat_id" />
+				</f:facet>
+				<h:outputText value="#{listClassstructure.classificationid}" />
+			</p:column>
+
+			<p:column filterMatchMode="contains"
+				filterBy="#{listClassstructure.description}">
+				<f:facet name="header">
+					<i18n:outputText value="cat_description" />
+				</f:facet>
+				<h:outputText value="#{listClassstructure.description}" />
+			</p:column>
+
+			<p:column rendered="#{ListClassstructureBean.editButton}">
+				<f:facet name="header">
+					<i18n:outputText value="inactive.date" />
+				</f:facet>
+				<h:outputText name="output"
+					value="#{listClassstructure.inactiveDate}">
+					<f:convertDateTime pattern="yyyy/MM/dd" timeZone="GMT+8" />
+				</h:outputText>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</ui:composition>

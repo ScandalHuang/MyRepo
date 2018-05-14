@@ -1,0 +1,123 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+	<h:head>
+		<META http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<META HTTP-EQUIV="EXPIRES" CONTENT="0" />
+		<h:outputStylesheet library="css/menu" name="default.css" />
+		<h:outputStylesheet library="css/menu" name="syntaxhighlighter.css" />
+		<style type="text/css">
+               .ui-datatable table {
+               	   font-size:12px !important;
+				   table-layout: auto !important;
+				   white-space:nowrap;
+				}
+</style>
+	</h:head>
+	<h:body>
+	<p:panelGrid style="width:100%;" rendered="#{SignHistoryBean.signHistoryList!=null}">
+	<p:row><p:column>
+					<p:panelGrid style="width:100%;">
+						<f:facet name="header">
+							<p:row>
+								<p:column>◆目前處理人員◆</p:column>
+							</p:row>
+						</f:facet>
+					</p:panelGrid>
+					<p:dataTable var="signToDoList"
+						value="#{SignHistoryBean.signToDoList}">
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="簽核人員" />
+							</f:facet>
+							<h:outputText value="#{signToDoList.actor}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="簽核人部門" />
+							</f:facet>
+							<h:outputText value="#{signToDoList.actorDeptName}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="通知時間" />
+
+							</f:facet>
+							<h:outputText value="#{signToDoList.fromDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+									timeZone="GMT+8" />
+							</h:outputText>
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="代理人" />
+
+							</f:facet>
+							<h:outputText value="#{signToDoList.deputy}" />
+						</p:column>
+					</p:dataTable>
+					<p:panelGrid style="margin-top:20px;width:100%;">
+						<f:facet name="header">
+							<p:row>
+								<p:column>◆處理歷程◆</p:column>
+							</p:row>
+						</f:facet>
+					</p:panelGrid>
+					<p:dataTable var="signHistoryList"
+						value="#{SignHistoryBean.signHistoryList}">
+						<p:column style="text-align:center;">
+							<f:facet name="header">
+								<h:outputText value="項次" />
+							</f:facet>
+							<h:outputText value="#{signHistoryList.signSeqId+1}" />
+						</p:column>
+						<p:column style="text-align:center;">
+							<f:facet name="header">
+								<h:outputText value="簽核點" />
+							</f:facet>
+							<h:outputText value="#{signHistoryList.signDescription}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="簽核人員" />
+							</f:facet>
+							<h:outputText value="#{signHistoryList.actor}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="簽核人部門" />
+							</f:facet>
+							<h:outputText value="#{signHistoryList.actorDeptName}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="意見" />
+							</f:facet>
+							<h:outputText value="#{signHistoryList.signerComment}"
+								style="white-space: pre-wrap; word-wrap: break-word; " />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="簽核時間" />
+							</f:facet>
+							<h:outputText value="#{signHistoryList.signDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+									timeZone="GMT+8" />
+							</h:outputText>
+						</p:column>
+						<p:column>
+							<f:facet name="header" style="text-align:center;">
+								<h:outputText value="狀態" />
+							</f:facet>
+							<h:outputText value="#{signHistoryList.actionName}" />
+						</p:column>
+					</p:dataTable>
+		</p:column></p:row>
+	</p:panelGrid>
+	</h:body>
+</f:view>
+</html>

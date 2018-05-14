@@ -1,0 +1,139 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		
+		<!-- Panel-TabView-Dynamic Content(Change Listener) -->
+		<h:form id="form" prependId="false">
+			
+ 			<p:tabView id="tabView">
+
+				<p:tab id="tab1" title="供應商清單">
+					 <h:panelGrid columns="1" >
+						<h:outputText value="說明: " />
+						<h:outputText
+							value="顯示/輸入查詢條件(AND):
+									a. 統編  (free key-In/ 模糊收尋)
+									b. 名稱  (free key-In/ 模糊收尋)" />
+						<!-- <h:outputText
+							value="顯示/輸入查詢條件(AND):
+									a. 供應商  (free key-In/ 模糊收尋)
+									b. 統編  (free key-In/ 模糊收尋)
+									c. 名稱  (free key-In/ 模糊收尋)
+									d. SITE (All/ 可複選)
+									f. 取消資格? (All/ YorN)" /> -->
+<!-- 						<h:outputText
+							value="click Enter後，於[頁籤:供應商清單] 輸出清單結果: 
+									供應商/ 統編/ 名稱/ SITE/ 取消資格?" />
+						<h:outputText
+							value="點擊 單一項後，於[頁籤:供應商明細] 輸出該筆供應商明細資料: 
+									供應商/ 名稱/ [聯絡人/ 地址/ 電話/ 傳真] (可以多筆)" /> -->
+					</h:panelGrid>
+
+					<p:panel id="panelSearch" 
+			             header="Search Vendor"
+			             toggleable="true"
+			             toggleSpeed="500"
+			             widgetVar="panelSearch">
+			             <div align="center">
+			             <p:panelGrid columns="3" style="width:100%;word-break:break-all;">
+			             		
+								<i18n:outputText value="basic.vendor.vat_registration" />
+								<i18n:outputText value="basic.vendor.name" />
+								<i18n:outputText value="" />
+								
+								<p:inputText value="#{ListVendorBean.vatRegistration}" /> 
+								<p:inputText value="#{ListVendorBean.name}" /> 
+								<p:commandButton  value="Search"  
+			                actionListener="#{ListVendorBean.onSearch}" update="@form" style="margin-top:5px" /> 
+			             </p:panelGrid>
+			             </div>
+			             </p:panel>
+					
+						<p:dataTable var="vendorList" value="#{ListVendorBean.vwNewvendorcodeEpmallList}"
+							rowKey="#{vendorList.nvcid}" paginator="true" rows="10"
+						paginatorPosition="bottom"
+							selectionMode="single" id="vendorList">
+							
+							<p:column sortBy="#{vendorList.nvcid}" >
+								<f:facet name="header">
+									<i18n:outputText value="basic.vendor.company" />
+								</f:facet>
+								<h:outputText value="#{vendorList.nvcid}" />
+							</p:column>
+
+							<p:column  sortBy="#{vendorList.registrationnum}" >
+								<f:facet name="header">
+									<i18n:outputText value="basic.vendor.vat_registration" />
+								</f:facet>
+								<h:outputText value="#{vendorList.registrationnum}" />
+							</p:column>
+
+							<p:column  sortBy="#{vendorList.newvendorname}">
+								<f:facet name="header">
+									<i18n:outputText value="basic.vendor.name" />
+								</f:facet>
+								<h:outputText value="#{vendorList.newvendorname}" />
+							</p:column>
+						</p:dataTable>
+				 </p:tab> 
+
+				<!-- <p:tab id="tab2" title="供應商明細" >
+						<h:panelGrid id="display" columns="2" cellpadding="4">
+							<i18n:outputText var="i18n" value="basic.vendor.company">
+									<h:outputText value="#{i18n}" />
+								</i18n:outputText>
+								<h:outputText value="#{ListVendorBean.comapny.company}" id="company" />					
+							<i18n:outputText var="i18n" value="basic.vendor.name">
+									<h:outputText value="#{i18n}" />
+								</i18n:outputText>
+								<h:outputText value="#{ListVendorBean.comapny.name}" id="name" />
+						</h:panelGrid>
+							
+							<p:dataTable var="vendor" value="#{ListVendorBean.compContactList}"
+								rowKey="#{vendor.compcontactId}" paginator="true" rows="20" id="vendor">
+								<p:column id="contact">
+									<f:facet name="header">
+										<i18n:outputText var="i18n" value="Contact">
+											<h:outputText value="#{i18n}" />
+										</i18n:outputText>
+									</f:facet>
+									<h:outputText value="#{vendor.contact}"/>
+								</p:column>
+								
+								<p:column id="address">
+									<f:facet name="header">
+										<i18n:outputText var="i18n" value="Address">
+											<h:outputText value="#{i18n}" />
+										</i18n:outputText>
+									</f:facet>
+									<h:outputText value="#{vendor.address}"/>
+								</p:column>
+								<p:column id="phone_no">
+									<f:facet name="header">
+										<i18n:outputText var="i18n" value="Phone No.">
+											<h:outputText value="#{i18n}" />
+										</i18n:outputText>
+									</f:facet>
+									<h:outputText value="#{vendor.homePhone}"/>
+								</p:column>
+								<p:column id="fax_no">
+									<f:facet name="header">
+										<i18n:outputText var="i18n" value="Fax No.">
+											<h:outputText value="#{i18n}" />
+										</i18n:outputText>
+									</f:facet>
+									<h:outputText value="#{vendor.faxPhone}"/>
+								</p:column>								
+							</p:dataTable>
+				</p:tab> -->
+			</p:tabView>
+		</h:form>
+		<!-- end of Panel-TabView-Dynamic Content(Change Listener) -->
+	</ui:define>
+</ui:composition>

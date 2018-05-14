@@ -1,0 +1,280 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<ui:include src="../CommonView/fileUpload.xhtml" />
+		<p:tabView id="tabView" cache="true"
+			activeIndex="#{ApplyItemPrQueryBean.prForm.activeIndex}">
+
+
+			<p:tab id="tab1">
+				<f:facet name="title">
+					<i18n:outputText value="pr.apply.sign.query" />
+					<i18n:outputText value="list" />
+				</f:facet>
+				<h:form id="form" prependId="false">
+					<div align="center">
+						<p:panelGrid id="search" style="width:100%;word-break:break-all;">
+							<f:facet name="header">
+								<p:row>
+									<p:column colspan="6" style="text-align: center">
+										<i18n:outputText value="Search.Condition" />
+									</p:column>
+								</p:row>
+							</f:facet>
+							<p:row>
+								<p:column>申請區域</p:column>
+								<p:column>
+									<p:selectOneMenu
+										value="#{ApplyItemPrQueryBean.prForm.SLocationSite}"
+										filter="true" filterMatchMode="startsWith">
+										<f:selectItem itemLabel="請選擇" itemValue="" />
+										<f:selectItem itemLabel="失效區域" itemValue="失效區域" />
+										<f:selectItems value="#{SystemConfigBean.lSiteOption}" />
+										<p:ajax update="SSiteid" process="@this" />
+									</p:selectOneMenu>
+								</p:column>site
+									<p:column>
+									<i18n:outputText value="site" />
+								</p:column>
+								<p:column>
+									<p:selectOneMenu style="width:250px;"  id="SSiteid"
+										value="#{ApplyItemPrQueryBean.prForm.SSiteid}" filter="true"
+										filterMatchMode="startsWith">
+										<f:selectItem itemLabel="請選擇" itemValue="" />
+										<f:selectItems value="#{SystemConfigBean.getLocationMaps(ApplyItemPrQueryBean.prForm.SLocationSite)}" 
+											var="maps" itemLabel="#{maps.organizationName}"  itemValue="#{maps.siteId}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<i18n:outputText value="apply.by" />
+								</p:column>
+								<p:column>
+									<p:inputText value="#{ApplyItemPrQueryBean.prForm.requestby2}" />
+									<p:commandButton icon="ui-icon-search"
+										oncomplete="PF('listEmployeeDialog').show();">
+										<f:setPropertyActionListener
+											target="#{ListEmployeeBean.object}"
+											value="#{ApplyItemPrQueryBean}" />
+										<f:setPropertyActionListener
+											target="#{ListEmployeeBean.updateView}"
+											value="tabView:search" />
+									</p:commandButton>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<i18n:outputText value="apply.classification" />
+								</p:column>
+								<p:column>
+									<p:selectOneMenu
+										value="#{ApplyItemPrQueryBean.prForm.selectPrtype}">
+										<f:selectItem itemValue="" itemLabel="請選擇" />
+										<f:selectItems
+											value="#{ApplyItemPrQueryBean.prForm.prtypeOption}" />
+									</p:selectOneMenu>
+								</p:column>
+								<p:column>
+									<i18n:outputText value="apply.num" /> /
+											<i18n:outputText value="itemnum" />
+								</p:column>
+								<p:column>
+									<p:inputText value="#{ApplyItemPrQueryBean.prForm.prnum}" />
+								</p:column>
+								<p:column>
+									<i18n:outputText value="status" />
+								</p:column>
+								<p:column>
+									<p:selectOneMenu id="status"
+										value="#{ApplyItemPrQueryBean.prForm.status}"
+										style="width:90px;text-align:left;">
+										<f:selectItem itemValue="" itemLabel="請選擇" />
+										<f:selectItems
+											value="#{ApplyItemPrQueryBean.prForm.selectStatus}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:row>
+							<p:row>
+								<p:column>
+									<i18n:outputText value="dept_code" />
+								</p:column>
+								<p:column>
+									<p:inputText value="#{ApplyItemPrQueryBean.prForm.MDept}" />
+								</p:column>
+								<p:column>
+									<i18n:outputText value="change_date" />
+								</p:column>
+								<p:column>
+									<p:calendar id="beginDate"
+										value="#{ApplyItemPrQueryBean.prForm.beginDate}"
+										showOn="button" readonlyInput="true" />
+									<p:commandButton icon="ui-icon-close" update="beginDate"
+										style="width:24px;height:24px;">
+										<f:setPropertyActionListener
+											target="#{ApplyItemPrQueryBean.prForm.beginDate}" value="" />
+									</p:commandButton>
+											 ~
+									<p:calendar id="endDate"
+										value="#{ApplyItemPrQueryBean.prForm.endDate}" showOn="button"
+										readonlyInput="true" />
+									<p:commandButton icon="ui-icon-close" update="endDate"
+										style="width:24px;height:24px;">
+										<f:setPropertyActionListener
+											target="#{ApplyItemPrQueryBean.prForm.endDate}" value="" />
+									</p:commandButton>
+								</p:column>
+								<p:column>
+								</p:column>
+								<p:column>
+								</p:column>
+							</p:row>
+
+							<f:facet name="footer">
+								<p:row>
+									<p:column colspan="6" style="text-align: center">
+										<p:commandButton icon="ui-icon-search" value="Search"
+											id="Search" actionListener="#{ApplyItemPrQueryBean.query}"
+											update=":tabView" style="margin-top:5px" />
+										<p:defaultCommand target="Search" />
+									</p:column>
+								</p:row>
+							</f:facet>
+						</p:panelGrid>
+					</div>
+					<br />
+					<p:dataTable var="listPr" paginatorPosition="bottom"
+						value="#{ApplyItemPrQueryBean.prForm.listPr}"
+						selection="#{ApplyItemPrQueryBean.prForm.pr}"
+						rowKey="#{listPr.prid}" paginator="true" rows="10"
+						selectionMode="single" id="listPr">
+
+						<p:ajax event="rowSelect"
+							listener="#{ApplyItemPrQueryBean.selectApply}" update=":tabView" />
+						<f:facet name="header" style="text-align:left;">  
+					          	 搜索結果：  #{ApplyItemPrQueryBean.prForm.listPr.size()} 筆
+					    </f:facet>
+						<p:column style="text-align:center" sortBy="#{listPr.prnum}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.num" />
+							</f:facet>
+							<h:outputText value="#{listPr.prnum}" />
+						</p:column>
+						<p:column style="text-align:center" sortBy="#{listPr.prtype}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.classification" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[listPr.prtype]}" />
+
+						</p:column>
+						<p:column style="text-align:center"
+							sortBy="#{SystemConfigBean.parameterMap[listPr.status]}">
+							<f:facet name="header">
+								<i18n:outputText value="status" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.parameterMap[listPr.status]}" />
+						</p:column>
+						<p:column
+							sortBy="#{SystemConfigBean.locationMap[listPr.siteid].locationSiteMap.locationSite}">
+							<f:facet name="header">申請區域
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.locationMap[listPr.siteid].locationSiteMap.locationSite}" />
+						</p:column>
+						<p:column style="text-align:center"
+							sortBy="#{SystemConfigBean.locationMapALL[listPr.siteid]}">
+							<f:facet name="header">
+								<i18n:outputText value="siteid" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.locationMapALL[listPr.siteid]}" />
+						</p:column>
+						<!-- 						<p:column style="text-align:center"
+							sortBy="#{SystemConfigBean.prlineStatusMap[listPr.prlineStatus]}">
+							<f:facet name="header">
+								<i18n:outputText value="prline.status" />
+							</f:facet>
+							<h:outputText
+								value="#{SystemConfigBean.prlineStatusMap[listPr.prlineStatus]}" />
+						</p:column> -->
+						<p:column style="text-align:center"
+							sortBy="#{listPr.requestedby2}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.by" />
+							</f:facet>
+							<h:outputText value="#{listPr.requestedby2}" />
+						</p:column>
+						<!-- 						<p:column 
+							sortBy="#{listPr.requestedby}" filterStyle="width:60px;"
+							filterBy="#{listPr.requestedby}">
+							<f:facet name="header">
+								<i18n:outputText value="apply.keyin.by" />
+							</f:facet>
+							<h:outputText value="#{listPr.requestedby}" />
+
+						</p:column> -->
+						<p:column style="text-align:center" sortBy="#{listPr.MDept}">
+							<f:facet name="header">
+								<i18n:outputText value="dept_code" />
+							</f:facet>
+							<h:outputText value="#{listPr.MDept}" />
+
+						</p:column>
+						<p:column sortBy="#{listPr.totalbasecost2}"
+							style="text-align:center">
+							<f:facet name="header">
+								<i18n:outputText value="total_cost" />
+								<br />
+								(<i18n:outputText value="current.code" />)
+							</f:facet>
+							<h:outputText value="#{listPr.totalbasecost2}">
+								<f:convertNumber groupingUsed="true" />
+							</h:outputText>
+
+						</p:column>
+						<p:column sortBy="#{listPr.changedate}">
+							<f:facet name="header">
+								<i18n:outputText value="change_date" />
+							</f:facet>
+							<h:outputText value="#{listPr.changedate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+							</h:outputText>
+
+						</p:column>
+						<p:column sortBy="#{listPr.description}">
+							<f:facet name="header">
+								<i18n:outputText value="command" />
+							</f:facet>
+							<h:outputText value="#{listPr.description}" />
+						</p:column>
+					</p:dataTable>
+				</h:form>
+			</p:tab>
+			<p:tab id="tab2">
+				<f:facet name="title">
+					<i18n:outputText value="Apply.Info" />
+				</f:facet>
+				<ui:include src="applyItemPrQuery.xhtml" />
+			</p:tab>
+		</p:tabView>
+		<p:dialog id="listPrlineDialog" widgetVar="listPrlineDialog"
+			modal="true" appendTo="@(body)" height="500">
+			<f:facet name="header">PrLine <i18n:outputText
+					style="color:red;" value="NonNull" />
+			</f:facet>
+			<ui:include src="../CommonView/listPrline.xhtml" />
+		</p:dialog>
+		<p:dialog id="listEmployeeDialog" widgetVar="listEmployeeDialog"
+			modal="true" appendTo="@(body)" width="600">
+			<f:facet name="header">
+				<i18n:outputText value="List of Employee" />
+			</f:facet>
+			<ui:include src="../CommonView/listEmployee.xhtml" />
+		</p:dialog>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,165 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="listHighlightLogForm" prependId="false">
+		<center>
+			<p:panelGrid >
+				<f:facet name="header">
+					<p:row>
+						<p:column colspan="2">
+							料號：#{ListHighlightLogBean.highlightForm.mroInvbalancesHighlightV.itemnum} &#160; 
+							<i18n:outputText value="highlight.reason.type" />
+						</p:column>
+					</p:row>
+				</f:facet>
+				<p:row>
+					<p:column style="text-align: center">
+						<p:selectOneMenu
+							rendered="#{!ListHighlightLogBean.highlightForm.editButton}"
+							value="#{ListHighlightLogBean.highlightForm.invbalancesHighlightLog.reasonType}"
+							style="width:250px;">
+							<f:selectItems
+								value="#{ListHighlightLogBean.highlightForm.reasonOption[
+								ListHighlightLogBean.highlightForm.mroInvbalancesHighlightV.commoditygroup]}" />
+						</p:selectOneMenu>
+						<p:inputText rendered="#{ListHighlightLogBean.highlightForm.editButton}" 
+						size="40"
+						value="#{ListHighlightLogBean.highlightForm.invbalancesHighlightLog.remark}" />
+					</p:column>
+					<p:column style="text-align: center">
+						<p:commandButton value="確定"
+							rendered="#{!ListHighlightLogBean.highlightForm.editButton}"
+							oncomplete="PF('responseDialog').show();" process="@form" >
+						</p:commandButton>
+						<p:commandButton value="重新啟動highLight"
+							rendered="#{ListHighlightLogBean.highlightForm.editButton}"
+							oncomplete="PF('reHighlightDialog').show();" process="@form" >
+						</p:commandButton>
+						<p:commandButton value="下修控管量"
+							rendered="#{ListHighlightLogBean.highlightForm.editButton}"
+							update=":initalMinlevelForm"
+							oncomplete="PF('initalMinlevelDialog').show();" process="@form" >
+						</p:commandButton>
+					</p:column>
+				</p:row>
+			</p:panelGrid>
+			<p:dataTable var="listHighlightLog" paginatorPosition="bottom"
+				id="listHighlightLog" paginator="true" rows="10"
+				value="#{ListHighlightLogBean.highlightForm.listInvbalancesHighlightLog}">
+				<p:column style="text-align:center;width:20px;" 
+				rendered="#{ListHighlightLogBean.highlightForm.editButton}" >
+				<f:facet name="header">
+					Delete
+				</f:facet>
+				<p:commandButton icon="ui-icon-trash"
+					style="width:20px;height:20px;"
+					update="listHighlightLog"
+					actionListener="#{ListHighlightLogBean.onDelete(listHighlightLog)}" />
+			</p:column>
+				<p:column>
+					<f:facet name="header">
+								料號
+							</f:facet>
+					<h:outputText value="#{listHighlightLog.itemnum}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+								部門
+					</f:facet>
+					<h:outputText value="#{listHighlightLog.deptcode}" />
+				</p:column>
+				
+				<p:column sortBy="#{listHighlightLog.type}">
+					<f:facet name="header">
+								回覆角色
+					</f:facet>
+					<h:outputText value="管理者" rendered="#{listHighlightLog.type=='M'}" />
+					<h:outputText value="一般USER" rendered="#{listHighlightLog.type=='U'}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+								原因
+					</f:facet>
+					<h:outputText rendered="#{listHighlightLog.type=='U'}"
+					value="#{SystemConfigBean.parameterMap[listHighlightLog.reasonType]}" />
+					<h:outputText rendered="#{listHighlightLog.type=='M'}"
+					value="#{listHighlightLog.remark}" style="white-space:pre;" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+								回覆人員
+					</f:facet>
+					<h:outputText value="#{listHighlightLog.createBy}" />
+				</p:column>
+				<p:column sortBy="#{listHighlightLog.createDate}">
+					<f:facet name="header">
+								回覆日期
+					</f:facet>
+					<h:outputText value="#{listHighlightLog.createDate}">
+						<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
+
+			<p:panelGrid columns="2">
+				<p:panel header="Export All Data">
+					<h:commandLink>
+						<p:graphicImage value="../../resources/images/excel.png" />
+						<p:dataExporter type="xls" target="listHighlightLog"
+							fileName="Highlight_Log_ALL" />
+					</h:commandLink>
+				</p:panel>
+
+				<p:panel header="Export Page Data">
+					<h:commandLink>
+						<p:graphicImage value="../../resources/images/excel.png" />
+						<p:dataExporter type="xls" target="listHighlightLog"
+							fileName="Highlight_Log_Page" pageOnly="true" />
+					</h:commandLink>
+				</p:panel>
+			</p:panelGrid>
+		</center>
+	</h:form>
+	
+			<p:confirmDialog id="responseDialog" message="確定回覆?"  width="300"
+			     header="確定回覆" widgetVar="responseDialog" appendTo="@(body)">  
+			 <h:form id="responseDialogForm" prependId="false">  
+			      <p:commandButton  value="Yes Sure" oncomplete="PF('responseDialog').hide();" 
+			                actionListener="#{ListHighlightLogBean.onUpdate('response')}" 
+			                update=":listHighlightLogForm:listHighlightLog"
+			                   icon="ui-icon-circle-check"/>  
+			      <p:commandButton  value="Not Yet" onclick="PF('responseDialog').hide();" type="button" icon="ui-icon-close"/>   
+			 </h:form>       
+		</p:confirmDialog>
+		<p:confirmDialog id="reHighlightDialog" message="確定重新啟動highLight?"  width="300" 
+			     header="確定確定重新啟動highLight" widgetVar="reHighlightDialog" appendTo="@(body)">  
+			 <h:form id="reHighlightForm" prependId="false">  
+			      <p:commandButton  value="Yes Sure" oncomplete="PF('reHighlightDialog').hide();" 
+			                actionListener="#{ListHighlightLogBean.onUpdate('reHighlight')}" 
+			                update=":listHighlightLogForm:listHighlightLog"
+			                   icon="ui-icon-circle-check"/>  
+			      <p:commandButton  value="Not Yet" onclick="PF('reHighlightDialog').hide();" type="button" icon="ui-icon-close"/>   
+			 </h:form>       
+		</p:confirmDialog>
+		<p:confirmDialog id="initalMinlevelDialog" message="確定下修控管量?"  width="300" 
+			     header="確定下修控管量" widgetVar="initalMinlevelDialog" appendTo="@(body)">  
+			 <h:form id="initalMinlevelForm" prependId="false">  
+			 	  建議量：
+				 <p:inputText id="changeQty" value="#{ListHighlightLogBean.highlightForm.changeQty}"
+				 	converterMessage="請輸入數值!!" >
+				 	<f:validateDoubleRange minimum="0" />
+				 </p:inputText>
+	             <p:growl for="changeQty" autoUpdate="true"/><br/>
+			      <p:commandButton  value="Yes Sure" oncomplete="PF('initalMinlevelDialog').hide();" 
+			                actionListener="#{ListHighlightLogBean.onUpdate('initalMinlevel')}" 
+			                update=":listHighlightLogForm:listHighlightLog "
+			                   icon="ui-icon-circle-check"/>  
+			      <p:commandButton  value="Not Yet" onclick="PF('initalMinlevelDialog').hide();" type="button" icon="ui-icon-close"/>   
+			 </h:form>       
+		</p:confirmDialog>
+</ui:composition>

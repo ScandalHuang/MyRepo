@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+	
+	<p:tabView id="tabView" cache="true" activeIndex="#{SignSourceBean.signSourceForm.activeIndex}">
+		<p:tab id="tab1" title="系統來源清單"> 
+			<h:form id="form" prependId="false">
+			<p:dataTable var="listSignSourceSystem" paginatorPosition="bottom"
+						value="#{SignSourceBean.signSourceForm.listSignSourceSystem}"
+						rowKey="#{listSignSourceSystem.sourceSystemId}" paginator="true" rows="10"
+						selection="#{SignSourceBean.signSourceForm.signSourceSystem}"
+						selectionMode="single" id="listSignSourceSystem">
+
+						<p:ajax event="rowSelect" listener="#{SignSourceBean.onSelect}"
+							update=":tabView" 
+							  />
+							
+						<p:column>
+							<f:facet name="header">
+								系統名稱
+							</f:facet>
+							<h:outputText value="#{listSignSourceSystem.sourceSystemKey}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								系統說明
+							</f:facet>
+							<h:outputText value="#{listSignSourceSystem.description}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								狀態
+							</f:facet>
+							<h:outputText value="INACTIVE" rendered="#{listSignSourceSystem.delted==1}" />
+							<h:outputText value="ACTIVE" rendered="#{listSignSourceSystem.delted!=1}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">
+								異動日期
+							</f:facet>
+							<h:outputText value="#{listSignSourceSystem.lastUpdate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+							</h:outputText>
+
+						</p:column>
+					</p:dataTable>
+			</h:form>
+		</p:tab>
+		<p:tab id="tab2" title="系統設定">
+			<ui:include src="signSource.xhtml"></ui:include>
+		</p:tab>
+	</p:tabView>	
+	</ui:define>
+</ui:composition>

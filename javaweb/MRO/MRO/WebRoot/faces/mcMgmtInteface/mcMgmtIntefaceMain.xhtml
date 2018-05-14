@@ -1,0 +1,122 @@
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template/template.xhtml">
+	<ui:define name="page-content">
+		<p:tabView id="tabView" cache="true" dynamic="true">
+			<p:tab id="tab1">
+				<f:facet name="title">
+					<i18n:outputText value="Store.category.change" />
+				</f:facet>
+				<ui:include src="listStoreCategoryChange.xhtml" />
+			</p:tab>
+			<!-- <p:tab id="tab2">
+				<f:facet name="title">
+					<i18n:outputText value="item.disable.mgmt" />
+				</f:facet>
+				<ui:include src="listItemDisable.xhtml" />
+			</p:tab> -->
+			<!--
+			<p:tab id="tab3">
+				<f:facet name="title">
+					<i18n:outputText value="ClassstructureUnit.mgmt" />
+				</f:facet>
+				<ui:include src="listClassstructureUnit.xhtml" />
+			</p:tab>
+			-->
+			<p:tab id="tab5">
+				<f:facet name="title">
+					<i18n:outputText value="item.reorder.mgmt" />
+				</f:facet>
+				<ui:include src="listItemR2ReOrder.xhtml" />
+			</p:tab>
+			<p:tab id="tab6">
+				<f:facet name="title">
+					<i18n:outputText value="fab.mgmt" />
+				</f:facet>
+				<ui:include src="listMroOrgFacility.xhtml" />
+			</p:tab>
+			<p:tab id="tab7">
+				<f:facet name="title">
+					<i18n:outputText value="reasoncode.eqid.mgmt" />
+				</f:facet>
+				<ui:include src="listMroOrgFacilityEq.xhtml" />
+			</p:tab>
+			<p:tab id="tab8">
+				<f:facet name="title">
+					<i18n:outputText value="apply.inactive.dept.minlevel" />
+					<i18n:outputText value="list" />
+				</f:facet>
+				<ui:include src="applyInactiveDeptMinLevel.xhtml" />
+			</p:tab>
+			<p:tab id="tab9">
+				<f:facet name="title">
+					<i18n:outputText value="apply.prtype.category.mgmt" />
+				</f:facet>
+				<ui:include src="listClassstructurePrtype.xhtml" />
+			</p:tab>	
+			<p:tab id="tab10">
+				<f:facet name="title">
+					<i18n:outputText value="sumcounter.disable.list" />
+				</f:facet>
+				<ui:include src="listDisableSumcounter.xhtml" />
+			</p:tab>	
+			<p:tab id="tab11">
+				<f:facet name="title">
+					<i18n:outputText value="List.Exclusive.Return" />
+				</f:facet>
+				<ui:include src="listExclusiveReturn.xhtml" />
+			</p:tab>	
+			<p:tab id="tab12">
+				<f:facet name="title">
+					<i18n:outputText value="epr.manage" />
+				</f:facet>
+				<ui:include src="PrtypeEprEdit.xhtml" />
+			</p:tab>
+			<p:tab id="tab13">
+				<f:facet name="title">
+					<i18n:outputText value="control.mgmt" />
+				</f:facet>
+				<ui:include src="PrControlConfigEdit.xhtml" />
+			</p:tab>
+			<p:tab id="tab14">
+				<f:facet name="title">
+					<i18n:outputText value="inactive.dept" />MAPPING
+				</f:facet>
+				<ui:include src="inactiveDeptMapping.xhtml" />
+			</p:tab>
+			<p:tab id="tab15">
+				<f:facet name="title">
+					<i18n:outputText value="List.invetory.idle" />
+				</f:facet>
+				<ui:include src="listMroInventoryIdle.xhtml" />
+			</p:tab>
+		</p:tabView>
+		<p:dialog id="listItemCommonFormDialog"
+			widgetVar="listItemCommonFormDialog" modal="true" appendTo="@(body)"
+			width="800" height="500">
+			<f:facet name="header">
+				<i18n:outputText value="itemnum" />
+			</f:facet>
+			<ui:include src="../CommonView/listItemCommon.xhtml" />
+		</p:dialog>
+		<p:dialog id="listReOrderItemDisableDialog" header="停用Reorder料號"
+				widgetVar="listReOrderItemDisableDialog" modal="true" appendTo="@(body)"
+				width="900" height="400">
+			<ui:include src="listReOrderItemDisable.xhtml" />
+		</p:dialog>
+		<p:dialog id="inactiveMinLevelDialog" header="三年內下修控管量為0記錄"
+			widgetVar="inactiveMinLevelDialog" modal="true" appendTo="@(body)"
+			width="1000" height="400">
+			<ui:include src="listInvbalancesInactiveRecode.xhtml" />
+		</p:dialog>
+	<p:dialog id="ExcelFileUploadDialog" header="ExcelFileUpload"
+		widgetVar="ExcelFileUploadDialog" modal="true" appendTo="@(body)"
+		width="600">
+		<ui:include src="../CommonView/fileUploadExcel.xhtml" />
+	</p:dialog>
+	</ui:define>
+</ui:composition>

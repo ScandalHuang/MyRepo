@@ -1,0 +1,152 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:i18n="http://innolux.com/i18n">
+	<h:form id="ExclusiveReturnReportForm" prependId="false">
+		<p:panelGrid id="search" style="width:100%;">
+			<f:facet name="header">
+				<p:row>
+					<p:column colspan="6">
+						<i18n:outputText value="Exclusive.Return.Report" />
+					</p:column>
+				</p:row>
+			</f:facet>
+				<p:row>
+					<p:column>區域：
+					</p:column>
+					<p:column>
+						<p:selectOneMenu filter="true" filterMatchMode="contains" 
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.slocationSite}">
+							<f:selectItem itemValue="" itemLabel="請選擇" />
+							<f:selectItem itemLabel="失效區域" itemValue="失效區域" />
+							<f:selectItems value="#{SystemConfigBean.lSiteOption}" />
+							<!-- <p:ajax update="sOrganizationCode" process="@this" /> -->
+						</p:selectOneMenu>
+					</p:column>
+					<p:column>
+						<!-- <i18n:outputText value="siteid" />： -->
+					</p:column>
+					<p:column>
+						<!--<p:selectOneMenu filter="true" filterMatchMode="contains" id="sOrganizationCode"
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.organizationCode}"
+							style="text-align:left;width:200px;">
+							<f:selectItem itemValue="" itemLabel="請選擇" />
+							<f:selectItems value="#{SystemConfigBean.getLocationMaps(ExclusiveReturnReportBean.exclusiveReturnReportForm.slocationSite)}" 
+								var="maps" itemLabel="#{maps.organizationName}"  itemValue="#{maps.organizationCode}" />
+						</p:selectOneMenu>  -->
+					</p:column>
+					<p:column></p:column><p:column></p:column>
+					</p:row>
+					<p:row>
+					<p:column>
+						<i18n:outputText value="dept_code" />：
+					</p:column>
+					<p:column>
+						<p:inputText
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.deptNo}" />
+					</p:column>
+					<p:column>
+						<i18n:outputText value="itemnum" />：
+					</p:column>
+					<p:column>
+						<p:inputText
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.itemnum}" />
+					</p:column>
+					<p:column></p:column><p:column></p:column>
+				</p:row>
+				<p:row>
+					<p:column>
+						<i18n:outputText style="color:red;" value="NonNullMark" />
+						<i18n:outputText value="start.date" />：
+					</p:column>
+					<p:column>
+						<p:calendar
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.stDate}"
+							showOn="button" readonlyInput="true" />
+					</p:column>
+					<p:column>
+						<i18n:outputText style="color:red;" value="NonNullMark" />
+						<i18n:outputText value="issue.ed.date" />：
+					</p:column>
+					<p:column>
+						<p:calendar
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.issueEdDate}"
+							showOn="button" readonlyInput="true" />
+					</p:column>
+					<p:column>
+						<i18n:outputText style="color:red;" value="NonNullMark" />
+						<i18n:outputText value="return.ed.date" />：
+					</p:column>
+					<p:column colspan="3">
+						<p:calendar
+							value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.returnEdDate}"
+							showOn="button" readonlyInput="true" />
+					</p:column>
+				</p:row>
+			<p:row>
+				<p:column colspan="8" style="text-align:center;">
+					<p:commandButton icon="ui-icon-search" value="Search"
+						update="errlist"
+						actionListener="#{ExclusiveReturnReportBean.search}" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+		<BR />
+		<p:dataTable var="errlist" paginatorPosition="bottom" id="errlist"
+			paginator="true" rows="10" style="width:100%;"
+			value="#{ExclusiveReturnReportBean.exclusiveReturnReportForm.list}">
+			<f:facet name="header">
+						搜尋筆數：#{ExclusiveReturnReportBean.exclusiveReturnReportForm.list.size()}
+				</f:facet>
+				<!-- <h:outputText value="#{SystemConfigBean.locationMap[errlist['ORGANIZATION_CODE']].locationSiteMap.locationSite}" /> -->
+			<!--<p:column style="text-align:center">
+				<f:facet name="header">區域</f:facet>				
+				<h:outputText value="#{errlist['LOCATION_SITE']}" />
+			</p:column>
+			 <p:column style="text-align:center">
+				<f:facet name="header">廠區</f:facet>
+				<h:outputText value="#{errlist['ORGANIZATION_CODE']}" />
+			</p:column> 
+			-->
+			<p:column style="text-align:center">
+				<f:facet name="header">部門</f:facet>
+				<h:outputText value="#{errlist['MANAGE_BINNUM']}" />
+			</p:column>
+			<p:column style="text-align:center">
+				<f:facet name="header">FAB</f:facet>
+				<h:outputText value="#{errlist['FAB']}" />
+			</p:column>
+			<p:column style="text-align:center">
+				<f:facet name="header">料號</f:facet>
+				<h:outputText value="#{errlist['IM_ITEMNUM']}" />
+			</p:column>
+			<p:column style="text-align:center">
+				<f:facet name="header">品名</f:facet>
+				<h:outputText value="#{errlist['DESCRIPTION']}" />
+			</p:column>
+			<p:column style="text-align:center">
+				<f:facet name="header">領料數量</f:facet>
+				<h:outputText value="#{errlist['ISSUE_QTY']}" />
+			</p:column>
+			<p:column style="text-align:center">
+				<f:facet name="header">退料數量</f:facet>
+				<h:outputText value="#{errlist['RETURN_QTY']}" />
+			</p:column>
+			<p:column style="text-align:center">
+				<f:facet name="header">排外料號說明</f:facet>
+				<h:outputText value="#{errlist['ECLUSIVE_REMARK']}" />
+			</p:column>
+		</p:dataTable>
+
+		<p:panelGrid columns="2">
+			<p:panel header="Export All Data">
+				<h:commandLink>
+					<p:graphicImage value="../../resources/images/excel.png" />
+					<p:dataExporter type="xls" target="errlist"
+						fileName="#{currentDate.getTime()}E" />
+				</h:commandLink>
+			</p:panel>
+		</p:panelGrid>
+	</h:form>
+</ui:composition>

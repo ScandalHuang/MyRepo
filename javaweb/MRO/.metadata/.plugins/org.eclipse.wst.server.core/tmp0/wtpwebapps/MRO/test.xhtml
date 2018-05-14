@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:i18n="http://innolux.com/i18n"
+	template="/faces/template.xhtml">
+	<ui:define name="page-content">
+        <h:form id="form" prependId="false">
+				<p:commandButton value="Finally規格異動(免簽核)" update="@form"
+				icon="ui-icon-plus" actionListener="#{TempCreateItem.onFinalApprNoSignByChange}"
+				/>
+				<br />
+				<p:separator />
+				<p:commandButton value="建立新料號申請單" update="@form"
+				icon="ui-icon-plus" actionListener="#{TempCreateItem.createApplyItem}"/><br />
+				<p:separator />
+				<p:commandButton value="送審料號區域申請單" update="@form"
+				icon="ui-icon-plus" actionListener="#{TempCreateItem.submitItemTransferHeader}"/>
+				<p:commandButton value="inprt to sync料號區域申請單" update="@form"
+				icon="ui-icon-plus" actionListener="#{TempCreateItem.syncItemTransferHeader}"/>
+				<br />
+				<p:separator />
+        	#{TempCreateItem.status}
+        </h:form>
+	</ui:define>
+</ui:composition>
+
