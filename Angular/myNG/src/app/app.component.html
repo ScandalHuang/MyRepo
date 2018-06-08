@@ -1,3 +1,11 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<app-record-datepicker></app-record-datepicker>
-<app-record-table></app-record-table>
+<h1>{{title}}</h1>
+<nav>
+    <a routerLink="/list">List</a>
+</nav>
+<nav>
+    <a routerLink="/dash">Dash</a>
+</nav>
+<router-outlet></router-outlet>
+<app-record-search></app-record-search>
+<app-message></app-message>

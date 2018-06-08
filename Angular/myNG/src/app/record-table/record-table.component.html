@@ -1,3 +1,10 @@
-<p>
-  record-table works!
-</p>
+<hr/>
+<h2>Table</h2>
+
+
+<p>records:</p>
+<ul class="records">
+  <li *ngFor="let r of records" routerLink="/detail/{{r.id}}">
+  <span class="badge">{{r.employee|uppercase}}</span>{{ r.content }} in {{r.time}}
+  </li>
+</ul>

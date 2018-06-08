@@ -1,0 +1,15 @@
+<hr/>
+<h2>Lastest Records</h2>
+
+<div class="grid grid-pad">
+  <a *ngFor="let r of records" class="col-1-4" 
+      routerLink="/detail/{{r.id}}">
+    <div class="module hero">
+      <h4>{{r.time}}<br/>{{r.employee}}</h4>
+    </div>
+  </a>
+</div>
+
+
+
+

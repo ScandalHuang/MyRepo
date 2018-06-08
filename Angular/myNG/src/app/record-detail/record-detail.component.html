@@ -1,0 +1,14 @@
+<div *ngIf="record">
+    <h2>Selected Record Details</h2>
+    <div>
+      <span>{{record.content|uppercase}} in {{record.time}}</span>
+    </div>
+    <div>
+      <label>name:
+        <input [(ngModel)]="record.employee" placeholder="employee">
+      </label>
+    </div>
+    <button (click)="goBack()">Back</button>
+    <br/>
+    <button (click)="save()">Save</button>
+  </div>

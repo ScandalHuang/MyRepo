@@ -84,6 +84,8 @@ namespace GetToken
             start().GetAwaiter().GetResult();
             
             Console.ReadKey();
+
+
         }
     }
 }
